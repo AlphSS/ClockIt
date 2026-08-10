@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { User, Phone } from "lucide-react";
-import { sendPhoneOtp } from "../../services/authService";
+import { sendOtp } from "../../services/authApi";
+
 import OtpVerification from "./OtpVerification";
 import SetPassword from "./SetPassword";
 import AccountCreated from "./AccountCreated";
+import { registerUser } from "../../services/authApi";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -11,6 +13,7 @@ function Register() {
     fullName: "",
     phone: "",
   });
+  const [registrationToken, setRegistrationToken] = useState(null);
   const [step, setStep] = useState(1);
   const [errors, setErrors] = useState({});
 
@@ -66,29 +69,60 @@ function Register() {
     }
     try {
       const formattedPhone = `+91${formData.phone}`;
-      await sendPhoneOtp(formattedPhone);
-      setStep(2)
+      await sendOtp(formattedPhone);
+      setStep(2);
     } catch (error) {
       setErrors({
         phone: error.message || "Unable to send OTP",
       });
     }
   }
-  if(step===2){
-    return(
-      <OtpVerification phone={formData.phone} onBack={() => setStep(1)} onVerified={() => setStep(3)}/>
-    )
+
+  async function handleAccountCreation(password) {
+    try {
+      const result = await registerUser({
+        username: formData.username,
+        fullName: formData.fullName,
+        phone: `+91${formData.phone}`,
+        password,
+        registrationToken,
+      });
+
+      console.log("Account created:", result);
+
+      setStep(4);
+    } catch (error) {
+      console.error(error);
+
+      alert(error.message);
+    }
+  }
+
+  if (step === 2) {
+    return (
+      <OtpVerification
+        phone={formData.phone}
+        onBack={() => setStep(1)}
+        onVerified={(token) => {
+          setRegistrationToken(token);
+          setStep(3);
+        }}
+      />
+    );
   }
   if (step === 3) {
     return (
-      <SetPassword onBack={() => setStep(2)} onComplete={() => setStep(4)} />
+      <SetPassword
+        onBack={() => setStep(2)}
+        onComplete={handleAccountCreation}
+      />
     );
   }
   if (step === 4) {
     return (
       <AccountCreated
+        name={formData.fullName}
         onContinue={() => {
-          // For now we'll navigate to home.
           window.location.href = "/";
         }}
       />

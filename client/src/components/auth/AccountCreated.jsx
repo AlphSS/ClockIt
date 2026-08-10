@@ -1,51 +1,75 @@
-import { CheckCircle2 } from "lucide-react";
+import { useEffect } from "react";
+import confetti from "canvas-confetti";
 
-function AccountCreated({ onContinue }) {
+function AccountCreated({ onContinue, name }) {
+  useEffect(() => {
+    const duration = 2500;
+    const end = Date.now() + duration;
+
+    const interval = setInterval(() => {
+      if (Date.now() > end) {
+        clearInterval(interval);
+        return;
+      }
+
+      // Left blaster
+      confetti({
+        particleCount: 6,
+        angle: 60,
+        spread: 55,
+        origin: {
+          x: 0,
+          y: 0.7,
+        },
+      });
+
+      // Right blaster
+      confetti({
+        particleCount: 6,
+        angle: 120,
+        spread: 55,
+        origin: {
+          x: 1,
+          y: 0.7,
+        },
+      });
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4 py-8">
-      <div className="w-full max-w-md">
-
-        <div className="rounded-2xl border border-border bg-surface p-8 text-center shadow-sm">
-
+    <div className="min-h-screen bg-background px-4 py-8">
+      <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
+        <div className="w-full max-w-md text-center">
           {/* Success Icon */}
-          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-success/10">
-            <CheckCircle2
-              size={44}
-              className="text-success"
-            />
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-primary/10">
+            <span className="text-4xl">✓</span>
           </div>
 
-          {/* Logo */}
-          <h1 className="text-3xl font-bold text-primary">
-            UniNest
+          {/* Heading */}
+          <h1 className="mt-7 text-3xl font-bold text-text-primary">
+            Account Created!
           </h1>
 
-          {/* Heading */}
-          <h2 className="mt-6 text-2xl font-bold text-text-primary">
-            Account Created!
-          </h2>
-
-          <p className="mt-3 text-sm leading-6 text-text-secondary">
-            Welcome to UniNest. Your account has been
-            created successfully.
+          <p className="mt-3 text-text-secondary">
+            Welcome to UniNest
+            {name ? `, ${name}` : ""}! 👋
           </p>
 
-          <p className="mt-2 text-sm text-text-secondary">
-            You can now explore deals, find roommates,
-            and discover stays.
+          <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-text-muted">
+            Your campus community starts here.
           </p>
 
           {/* Continue */}
           <button
             type="button"
             onClick={onContinue}
-            className="mt-8 w-full rounded-xl bg-primary py-3.5 text-sm font-semibold text-white transition hover:bg-primary-hover active:scale-[0.99]"
+            className="mt-8 w-full rounded-xl bg-primary py-3.5 text-sm font-semibold text-white transition hover:bg-primary-hover"
           >
             Go to Home
           </button>
-
         </div>
-
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import { ArrowLeft, Eye, EyeOff, Lock, Check } from "lucide-react";
 function SetPassword({ onBack, onComplete }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -68,16 +68,12 @@ function SetPassword({ onBack, onComplete }) {
 
     setError("");
 
-    console.log("Password created successfully.");
-
-    onComplete();
+    onComplete(password);
   }
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4 py-8">
-
       <div className="w-full max-w-md">
-
         {/* Back */}
         <button
           type="button"
@@ -90,12 +86,9 @@ function SetPassword({ onBack, onComplete }) {
 
         {/* Card */}
         <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm sm:p-8">
-
           {/* Logo */}
           <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold text-primary">
-              UniNest
-            </h1>
+            <h1 className="text-3xl font-bold text-primary">UniNest</h1>
 
             <p className="mt-1 text-sm text-text-secondary">
               Your Campus, Your Community
@@ -114,7 +107,6 @@ function SetPassword({ onBack, onComplete }) {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
-
             {/* Password */}
             <div>
               <label
@@ -146,17 +138,9 @@ function SetPassword({ onBack, onComplete }) {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary"
-                  aria-label={
-                    showPassword
-                      ? "Hide password"
-                      : "Show password"
-                  }
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
-                  {showPassword ? (
-                    <EyeOff size={18} />
-                  ) : (
-                    <Eye size={18} />
-                  )}
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
             </div>
@@ -174,8 +158,8 @@ function SetPassword({ onBack, onComplete }) {
                       strength <= 2
                         ? "text-danger"
                         : strength <= 4
-                        ? "text-warning"
-                        : "text-success"
+                          ? "text-warning"
+                          : "text-success"
                     }`}
                   >
                     {getStrengthText()}
@@ -191,8 +175,8 @@ function SetPassword({ onBack, onComplete }) {
                           ? strength <= 2
                             ? "bg-danger"
                             : strength <= 4
-                            ? "bg-warning"
-                            : "bg-success"
+                              ? "bg-warning"
+                              : "bg-success"
                           : "bg-surface-muted"
                       }`}
                     />
@@ -208,7 +192,6 @@ function SetPassword({ onBack, onComplete }) {
               </p>
 
               <div className="space-y-2">
-
                 <Requirement
                   valid={requirements.length}
                   text="At least 8 characters"
@@ -224,16 +207,12 @@ function SetPassword({ onBack, onComplete }) {
                   text="One lowercase letter"
                 />
 
-                <Requirement
-                  valid={requirements.number}
-                  text="One number"
-                />
+                <Requirement valid={requirements.number} text="One number" />
 
                 <Requirement
                   valid={requirements.special}
                   text="One special character"
                 />
-
               </div>
             </div>
 
@@ -262,8 +241,7 @@ function SetPassword({ onBack, onComplete }) {
                   }}
                   placeholder="Re-enter your password"
                   className={`w-full rounded-xl border ${
-                    confirmPassword &&
-                    password !== confirmPassword
+                    confirmPassword && password !== confirmPassword
                       ? "border-danger"
                       : "border-border"
                   } bg-surface py-3 pl-10 pr-11 text-sm text-text-primary outline-none transition placeholder:text-text-muted focus:border-primary focus:ring-2 focus:ring-primary/10`}
@@ -271,14 +249,10 @@ function SetPassword({ onBack, onComplete }) {
 
                 <button
                   type="button"
-                  onClick={() =>
-                    setShowConfirmPassword(!showConfirmPassword)
-                  }
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary"
                   aria-label={
-                    showConfirmPassword
-                      ? "Hide password"
-                      : "Show password"
+                    showConfirmPassword ? "Hide password" : "Show password"
                   }
                 >
                   {showConfirmPassword ? (
@@ -291,22 +265,17 @@ function SetPassword({ onBack, onComplete }) {
             </div>
 
             {/* Error */}
-            {error && (
-              <p className="text-sm text-danger">
-                {error}
-              </p>
-            )}
+            {error && <p className="text-sm text-danger">{error}</p>}
 
             {/* Create Account */}
             <button
               type="submit"
+              disabled={loading}
               className="w-full rounded-xl bg-primary py-3.5 text-sm font-semibold text-white transition hover:bg-primary-hover active:scale-[0.99]"
             >
-              Create Account
+              {loading ? "Creating Account..." : "Create Account"}
             </button>
-
           </form>
-
         </div>
       </div>
     </div>
@@ -318,20 +287,14 @@ function Requirement({ valid, text }) {
     <div className="flex items-center gap-2">
       <div
         className={`flex h-4 w-4 items-center justify-center rounded-full ${
-          valid
-            ? "bg-success text-white"
-            : "border border-border"
+          valid ? "bg-success text-white" : "border border-border"
         }`}
       >
         {valid && <Check size={10} />}
       </div>
 
       <span
-        className={`text-xs ${
-          valid
-            ? "text-success"
-            : "text-text-secondary"
-        }`}
+        className={`text-xs ${valid ? "text-success" : "text-text-secondary"}`}
       >
         {text}
       </span>
