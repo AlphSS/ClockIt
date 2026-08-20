@@ -1,6 +1,6 @@
-# UniNest — Project Setup & Developer README
+# ClockIt — Project Setup & Developer README
 
-UniNest is a student-focused platform that brings multiple campus services into one application.
+ClockIt is a student-focused platform that brings multiple campus services into one application.
 
 ## 🚀 Platform Modules
 
@@ -46,7 +46,7 @@ Twilio/SMS integration has **not** been added yet.
 # 📁 Project Structure
 
 ```text
-UniNest/
+ClockIt/
 │
 ├── client/
 │   ├── src/
@@ -84,7 +84,7 @@ UniNest/
 
 ```bash
 git clone <REPOSITORY_URL>
-cd UniNest
+cd ClockIt
 ```
 
 ## Frontend
@@ -517,7 +517,7 @@ The project is feature-based. The common authentication foundation should be sha
 Planned modules:
 
 ```text
-UniNest
+ClockIt
 │
 ├── Authentication
 ├── Home
@@ -838,4 +838,4 @@ Development OTP:
 
 ## Important
 
-Authentication is the shared foundation of UniNest. Before changing authentication-related code, check the impact on every module because UniMart, Roomies, Stays, Chat, Profile and ownership/authorization will depend on the central authenticated user.
+Authentication is the shared foundation of ClockIt. Before changing authentication-related code, check the impact on every module because UniMart, Roomies, Stays, Chat, Profile and ownership/authorization will depend on the central authenticated user.
