@@ -1,9 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
-// Auth
+// Auth / Registration
 import Register from "./components/auth/RegistrationForm";
+import Home from "./pages/Home/Home";
+
+// Login — our full-featured login (Stays module)
 import Login from "./pages/Login/Login";
 
 // Stays
@@ -20,9 +24,18 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* Auth */}
-          <Route path="/" element={<Register />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+
+          {/* Home (protected) */}
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Stays module */}
           <Route path="/stays" element={<StaysHome />} />

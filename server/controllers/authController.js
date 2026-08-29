@@ -6,10 +6,18 @@ import {
 
 export async function registerUser(req, res) {
   try {
-    const { username, fullName, phone, password, registrationToken } = req.body;
+    const { username, fullName, email, phone, password, registrationToken } =
+      req.body;
 
     // Basic validation
-    if (!username || !fullName || !phone || !password || !registrationToken) {
+    if (
+      !username ||
+      !fullName ||
+      !email ||
+      !phone ||
+      !password ||
+      !registrationToken
+    ) {
       return res.status(400).json({
         success: false,
         message: "All fields are required.",
@@ -21,6 +29,14 @@ export async function registerUser(req, res) {
       return res.status(400).json({
         success: false,
         message: "Username can only contain letters, numbers and underscores.",
+      });
+    }
+
+    // Email validation
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email address.",
       });
     }
 
@@ -64,9 +80,11 @@ export async function registerUser(req, res) {
     // Create Supabase Auth user
     const { data: authData, error: authError } =
       await supabaseAdmin.auth.admin.createUser({
+        email,
         phone,
         password,
         phone_confirm: true,
+        email_confirm: true,
       });
 
     if (authError) {
@@ -117,6 +135,52 @@ export async function registerUser(req, res) {
     });
   } catch (error) {
     console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong.",
+    });
+  }
+}
+
+export async function loginUser(req, res) {
+  try {
+    const { email, password } = req.body;
+
+    // Basic validation
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Email and password are required.",
+      });
+    }
+
+    // Login through Supabase Auth
+    const { data, error } = await supabaseAdmin.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      console.error("Login error:", error);
+
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Login successful.",
+      user: {
+        id: data.user.id,
+        email: data.user.email,
+      },
+      session: data.session,
+    });
+  } catch (error) {
+    console.error("Login error:", error);
 
     return res.status(500).json({
       success: false,

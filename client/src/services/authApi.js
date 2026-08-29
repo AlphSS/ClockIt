@@ -15,7 +15,7 @@ export async function sendOtp(phone) {
     throw new Error(data.message || "Unable to send OTP.");
   }
 
-  return data;
+  return { data: data, status: response.status };
 }
 
 export async function verifyOtp(phone, otp) {
@@ -57,6 +57,27 @@ export async function registerUser(userData) {
 
   if (!response.ok) {
     throw new Error(data.message || "Registration failed.");
+  }
+
+  return data;
+}
+
+export async function loginUser(email, password) {
+  const response = await fetch("http://localhost:5800/api/auth/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email,
+      password,
+    }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "Login failed.");
   }
 
   return data;

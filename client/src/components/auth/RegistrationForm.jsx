@@ -11,6 +11,7 @@ function Register() {
   const [formData, setFormData] = useState({
     username: "",
     fullName: "",
+    email: "",
     phone: "",
   });
   const [registrationToken, setRegistrationToken] = useState(null);
@@ -50,6 +51,12 @@ function Register() {
       newErrors.fullName = "Name can only contain letters and spaces";
     }
 
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Enter a valid email address.";
+    }
+
     if (!formData.phone.trim()) {
       newErrors.phone = "Phone number is required";
     } else if (!/^[6-9]\d{9}$/.test(formData.phone)) {
@@ -83,6 +90,7 @@ function Register() {
       const result = await registerUser({
         username: formData.username,
         fullName: formData.fullName,
+        email: formData.email,
         phone: `+91${formData.phone}`,
         password,
         registrationToken,
@@ -218,6 +226,26 @@ function Register() {
 
               {errors.fullName && (
                 <p className="mt-1.5 text-xs text-danger">{errors.fullName}</p>
+              )}
+            </div>
+
+            {/* Email ID */}
+            <div>
+              <label className="block text-sm font-medium text-text-primary">
+                Email
+              </label>
+
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+                className="mt-2 w-full rounded-xl border border-border bg-background px-4 py-3 text-text-primary outline-none focus:border-primary"
+              />
+
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-500">{errors.email}</p>
               )}
             </div>
 
