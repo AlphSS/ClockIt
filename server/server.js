@@ -13,7 +13,7 @@ app.use("/api/auth", authRoutes);
 app.get("/", (req, res) => {
   res.json({
     success: true,
-    message: "UniNest API is running",
+    message: "ClockIt API is running",
   });
 });
 

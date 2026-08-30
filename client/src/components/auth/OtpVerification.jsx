@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ShieldCheck } from "lucide-react";
+
 import { verifyOtp, sendOtp } from "../../services/authApi";
 
 function OtpVerification({ phone, onBack, onVerified }) {
@@ -91,9 +92,6 @@ function OtpVerification({ phone, onBack, onVerified }) {
 
     const enteredOtp = otp.join("");
 
-    console.log("OTP entered:", enteredOtp);
-    console.log("Phone received:", phone);
-
     if (enteredOtp.length !== 6) {
       setError("Please enter all 6 digits.");
       return;
@@ -105,16 +103,10 @@ function OtpVerification({ phone, onBack, onVerified }) {
 
       const formattedPhone = phone.startsWith("+91") ? phone : `+91${phone}`;
 
-      console.log("Phone sent to backend:", formattedPhone);
-
       const result = await verifyOtp(formattedPhone, enteredOtp);
-
-      console.log("OTP verification result:", result);
 
       onVerified(result.registrationToken);
     } catch (error) {
-      console.error("OTP verification failed:", error);
-
       setError(error.message || "Unable to verify OTP.");
     } finally {
       setLoading(false);
@@ -139,137 +131,143 @@ function OtpVerification({ phone, onBack, onVerified }) {
       setError(error.message || "Unable to resend OTP.");
     }
   }
+
   const maskedPhone =
     phone.length >= 4 ? `+91 ******${phone.slice(-4)}` : `+91 ${phone}`;
 
   return (
-    <div className="min-h-screen bg-background px-4 py-8">
-      <div className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-md items-center">
-        <div className="w-full">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-md">
+        {/* Logo */}
+        <div className="mb-8 text-center">
+          <h1 className="text-3xl font-bold text-gray-900">ClockIt</h1>
+
+          <p className="mt-2 text-sm text-gray-500">
+            Your Campus, Your Community
+          </p>
+        </div>
+
+        {/* Card */}
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
           {/* Back */}
           <button
             type="button"
             onClick={onBack}
-            className="mb-6 flex items-center gap-2 text-sm font-medium text-text-secondary transition hover:text-primary"
+            className="mb-7 flex items-center gap-2 text-sm font-medium text-gray-500 transition hover:text-gray-900"
           >
             <ArrowLeft size={17} />
             Change phone number
           </button>
 
-          {/* Card */}
-          <div className="rounded-3xl border border-border bg-surface p-7 shadow-sm sm:p-9">
-            {/* Icon */}
-            <div className="mb-7 flex justify-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
-                <ShieldCheck size={32} className="text-primary" />
-              </div>
-            </div>
-
-            {/* Heading */}
-            <div className="text-center">
-              <h1 className="text-2xl font-bold tracking-tight text-text-primary">
-                Verify your phone
-              </h1>
-
-              <p className="mx-auto mt-3 max-w-xs text-sm leading-6 text-text-secondary">
-                Enter the 6-digit verification code sent to
-              </p>
-
-              <p className="mt-1 text-sm font-semibold text-text-primary">
-                {maskedPhone}
-              </p>
-            </div>
-
-            {/* OTP */}
-            <form onSubmit={handleVerify} className="mt-8">
-              <div
-                className="flex justify-center gap-2 sm:gap-3"
-                onPaste={handlePaste}
-              >
-                {otp.map((digit, index) => (
-                  <input
-                    key={index}
-                    ref={(element) => {
-                      inputRefs.current[index] = element;
-                    }}
-                    type="text"
-                    inputMode="numeric"
-                    autoComplete={index === 0 ? "one-time-code" : "off"}
-                    maxLength={1}
-                    value={digit}
-                    onChange={(e) => handleChange(index, e.target.value)}
-                    onKeyDown={(e) => handleKeyDown(index, e)}
-                    className={`h-13 w-11 rounded-xl border bg-background text-center text-xl font-semibold text-text-primary outline-none transition sm:h-14 sm:w-12 ${
-                      error
-                        ? "border-danger"
-                        : digit
-                          ? "border-primary"
-                          : "border-border"
-                    } focus:border-primary focus:ring-4 focus:ring-primary/10`}
-                    aria-label={`OTP digit ${index + 1}`}
-                  />
-                ))}
-              </div>
-
-              {/* Error */}
-              {error && (
-                <p className="mt-4 text-center text-sm font-medium text-danger">
-                  {error}
-                </p>
-              )}
-
-              {/* Verify */}
-              <button
-                type="submit"
-                disabled={loading}
-                className="mt-7 w-full rounded-xl bg-primary py-3.5 text-sm font-semibold text-white transition hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {loading ? "Verifying..." : "Verify & Continue"}
-              </button>
-            </form>
-
-            {/* Resend */}
-            <div className="mt-6 text-center">
-              <p className="text-sm text-text-secondary">
-                Didn't receive the code?
-              </p>
-
-              {countdown > 0 ? (
-                <p className="mt-2 text-sm">
-                  <span className="text-text-secondary">
-                    Resend available in{" "}
-                  </span>
-
-                  <span className="font-semibold text-text-primary">
-                    {String(Math.floor(countdown / 60)).padStart(2, "0")}:
-                    {String(countdown % 60).padStart(2, "0")}
-                  </span>
-                </p>
-              ) : (
-                <button
-                  type="button"
-                  onClick={handleResend}
-                  className="mt-2 text-sm font-semibold text-primary transition hover:text-primary-hover"
-                >
-                  Resend OTP
-                </button>
-              )}
-            </div>
-
-            {/* Development Notice */}
-            <div className="mt-7 rounded-xl border border-border bg-surface-muted px-4 py-3 text-center">
-              <p className="text-xs text-text-muted">
-                Development mode: use OTP{" "}
-                <span className="font-semibold text-text-primary">123456</span>
-              </p>
+          {/* Icon */}
+          <div className="mb-7 flex justify-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100">
+              <ShieldCheck size={32} className="text-gray-900" />
             </div>
           </div>
 
-          {/* Footer */}
-          <p className="mt-6 text-center text-xs text-text-muted">
-            Your phone number helps keep your UniNest account secure.
-          </p>
+          {/* Heading */}
+          <div className="text-center">
+            <h2 className="text-2xl font-semibold tracking-tight text-gray-900">
+              Verify your phone
+            </h2>
+
+            <p className="mx-auto mt-3 max-w-xs text-sm leading-6 text-gray-500">
+              Enter the 6-digit verification code sent to
+            </p>
+
+            <p className="mt-1 text-sm font-semibold text-gray-900">
+              {maskedPhone}
+            </p>
+          </div>
+
+          {/* OTP */}
+          <form onSubmit={handleVerify} className="mt-8">
+            <div
+              className="flex justify-center gap-2 sm:gap-3"
+              onPaste={handlePaste}
+            >
+              {otp.map((digit, index) => (
+                <input
+                  key={index}
+                  ref={(element) => {
+                    inputRefs.current[index] = element;
+                  }}
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete={index === 0 ? "one-time-code" : "off"}
+                  maxLength={1}
+                  value={digit}
+                  onChange={(e) => handleChange(index, e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(index, e)}
+                  className={`h-13 w-11 rounded-xl border bg-white text-center text-xl font-semibold text-gray-900 outline-none transition sm:h-14 sm:w-12 ${
+                    error
+                      ? "border-red-500"
+                      : digit
+                        ? "border-black"
+                        : "border-gray-300"
+                  } focus:border-black focus:ring-4 focus:ring-gray-200`}
+                  aria-label={`OTP digit ${index + 1}`}
+                />
+              ))}
+            </div>
+
+            {/* Error */}
+            {error && (
+              <div className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3">
+                <p className="text-center text-sm font-medium text-red-600">
+                  {error}
+                </p>
+              </div>
+            )}
+
+            {/* Verify */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="mt-7 w-full rounded-xl bg-black py-3.5 text-sm font-semibold text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {loading ? "Verifying..." : "Verify & Continue"}
+            </button>
+          </form>
+
+          {/* Resend */}
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-500">Didn't receive the code?</p>
+
+            {countdown > 0 ? (
+              <p className="mt-2 text-sm">
+                <span className="text-gray-500">Resend available in </span>
+
+                <span className="font-semibold text-gray-900">
+                  {String(Math.floor(countdown / 60)).padStart(2, "0")}:
+                  {String(countdown % 60).padStart(2, "0")}
+                </span>
+              </p>
+            ) : (
+              <button
+                type="button"
+                onClick={handleResend}
+                className="mt-2 text-sm font-semibold text-gray-900 transition hover:underline"
+              >
+                Resend OTP
+              </button>
+            )}
+          </div>
+
+          {/* Development Notice */}
+          <div className="mt-7 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-center">
+            <p className="text-xs text-gray-500">
+              Development mode: use OTP{" "}
+              <span className="font-semibold text-gray-900">123456</span>
+            </p>
+          </div>
         </div>
+
+        {/* Footer */}
+        <p className="mt-6 text-center text-xs text-gray-400">
+          Your phone number helps keep your ClockIt account secure.
+        </p>
       </div>
     </div>
   );

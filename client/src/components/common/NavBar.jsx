@@ -16,33 +16,53 @@ function Navbar() {
   }
 
   return (
-    <nav>
-      <div>
-        <h2>UniNest</h2>
-      </div>
+    <nav className="flex items-center justify-between border-b border-gray-200 px-8 py-4">
+      {/* Logo */}
+      <button onClick={() => navigate("/")} className="text-2xl font-bold">
+        ClockIt
+      </button>
 
-      <div>
-        <button onClick={() => navigate("/")}>
+      {/* Navigation */}
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() => navigate("/")}
+          className="rounded-lg px-4 py-2 hover:bg-gray-100"
+        >
           Home
         </button>
 
-        <button onClick={() => navigate("/marketplace")}>
+        <button
+          onClick={() => navigate("/marketplace")}
+          className="rounded-lg px-4 py-2 hover:bg-gray-100"
+        >
           Marketplace
         </button>
 
-        <button onClick={() => navigate("/roomies")}>
+        <button
+          onClick={() => navigate("/roomies")}
+          className="rounded-lg px-4 py-2 hover:bg-gray-100"
+        >
           Roomies
         </button>
 
-        <button onClick={() => navigate("/stay")}>
+        <button
+          onClick={() => navigate("/stay")}
+          className="rounded-lg px-4 py-2 hover:bg-gray-100"
+        >
           Stay
         </button>
 
-        <button onClick={() => navigate("/profile")}>
+        <button
+          onClick={() => navigate("/profile")}
+          className="rounded-lg px-4 py-2 hover:bg-gray-100"
+        >
           Profile
         </button>
 
-        <button onClick={handleLogout}>
+        <button
+          onClick={handleLogout}
+          className="ml-2 rounded-lg px-4 py-2 hover:bg-gray-100"
+        >
           Logout
         </button>
       </div>

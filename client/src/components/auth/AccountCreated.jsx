@@ -39,25 +39,35 @@ function AccountCreated({ onContinue, name }) {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background px-4 py-8">
-      <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
-        <div className="w-full max-w-md text-center">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-md">
+        {/* Logo */}
+        <div className="mb-8 text-center">
+          <h1 className="text-3xl font-bold text-gray-900">ClockIt</h1>
+
+          <p className="mt-2 text-sm text-gray-500">
+            Your Campus, Your Community
+          </p>
+        </div>
+
+        {/* Success Card */}
+        <div className="rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-sm">
           {/* Success Icon */}
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-primary/10">
-            <span className="text-4xl">✓</span>
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-green-50">
+            <span className="text-4xl text-green-600">✓</span>
           </div>
 
           {/* Heading */}
-          <h1 className="mt-7 text-3xl font-bold text-text-primary">
+          <h2 className="mt-7 text-3xl font-bold text-gray-900">
             Account Created!
-          </h1>
+          </h2>
 
-          <p className="mt-3 text-text-secondary">
-            Welcome to UniNest
+          <p className="mt-3 text-gray-500">
+            Welcome to ClockIt
             {name ? `, ${name}` : ""}! 👋
           </p>
 
-          <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-text-muted">
+          <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-gray-400">
             Your campus community starts here.
           </p>
 
@@ -65,7 +75,7 @@ function AccountCreated({ onContinue, name }) {
           <button
             type="button"
             onClick={onContinue}
-            className="mt-8 w-full rounded-xl bg-primary py-3.5 text-sm font-semibold text-white transition hover:bg-primary-hover"
+            className="mt-8 w-full rounded-xl bg-black py-3.5 text-sm font-semibold text-white transition hover:bg-gray-800 active:scale-[0.99]"
           >
             Go to Home
           </button>
