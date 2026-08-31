@@ -1,28 +1,19 @@
-import { useNavigate } from "react-router-dom";
-import { supabase } from "../../services/supabase";
+import Navbar from "../../components/common/NavBar";
 
 function Home() {
-  const navigate = useNavigate();
-
-  async function handleLogout() {
-    const { error } = await supabase.auth.signOut();
-
-    if (error) {
-      console.error("Logout failed:", error);
-      return;
-    }
-
-    navigate("/login", { replace: true });
-  }
-
   return (
     <div>
-      <h1>Welcome to UniNest</h1>
-      <p>You are logged in.</p>
+      <Navbar />
 
-      <button onClick={handleLogout}>
-        Logout
-      </button>
+      <main className="px-8 py-12">
+        <h1 className="text-4xl font-bold">
+          Welcome to ClockIt
+        </h1>
+
+        <p className="mt-3 text-gray-600">
+          Your student community starts here.
+        </p>
+      </main>
     </div>
   );
 }

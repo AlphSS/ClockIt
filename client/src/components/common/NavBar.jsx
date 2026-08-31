@@ -35,7 +35,7 @@ export default function NavBar() {
                 <Building2 size={18} className="text-white" />
               </div>
               <div>
-                <span className="text-lg font-bold text-gray-900">UniNest</span>
+                <span className="text-lg font-bold text-gray-900">ClockIt</span>
                 <p className="text-[10px] text-gray-400 leading-none hidden sm:block">Your Campus, Your Community</p>
               </div>
             </div>
@@ -47,7 +47,7 @@ export default function NavBar() {
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search flats, areas, colleges..."
+                placeholder="Search flats, areas, marketplace..."
                 className="w-full pl-9 pr-4 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500 transition"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -145,7 +145,13 @@ export default function NavBar() {
 
         {/* Main nav */}
         <nav className="hidden md:flex items-center gap-1 pb-0 border-t border-gray-100">
-          {navLinks.map((link) => (
+          {[
+            { label: "Home", path: "/" },
+            { label: "Marketplace", path: "/marketplace" },
+            { label: "Roomies", path: "/roomies" },
+            { label: "Stays", path: "/stays" },
+            { label: "Deals", path: "/deals" },
+          ].map((link) => (
             <Link
               key={link.path}
               to={link.path}
@@ -172,7 +178,13 @@ export default function NavBar() {
                 className="w-full pl-9 pr-4 py-2 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-cyan-500 transition"
               />
             </div>
-            {navLinks.map((link) => (
+            {[
+              { label: "Home", path: "/" },
+              { label: "Marketplace", path: "/marketplace" },
+              { label: "Roomies", path: "/roomies" },
+              { label: "Stays", path: "/stays" },
+              { label: "Deals", path: "/deals" },
+            ].map((link) => (
               <Link
                 key={link.path}
                 to={link.path}

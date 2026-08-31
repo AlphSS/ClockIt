@@ -1,3 +1,4 @@
+import { log } from "console";
 import { supabaseAdmin } from "../config/supabase.js";
 import {
   verifyRegistrationToken,
@@ -111,7 +112,11 @@ export async function registerUser(req, res) {
       .single();
 
     if (profileError) {
-      console.error(profileError);
+      console.error("PROFILE CREATION ERROR:");
+      console.error("Code:", profileError.code);
+      console.error("Message:", profileError.message);
+      console.error("Details:", profileError.details);
+      console.error("Hint:", profileError.hint);
 
       // Roll back Auth user if profile creation fails
       await supabaseAdmin.auth.admin.deleteUser(user.id);
