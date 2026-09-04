@@ -1,0 +1,335 @@
+/* ========================================
+   CLOCKIT — ROOMIES
+   ======================================== */
+
+.roomies-page {
+  min-height: 100vh;
+  background: #f5eee6;
+  color: #280b0f;
+}
+
+
+/* ========================================
+   HERO
+   ======================================== */
+
+.roomies-hero {
+  min-height: calc(100vh - 80px);
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+
+  gap: 70px;
+
+  padding: 80px 8%;
+
+  background: #f5eee6;
+}
+
+
+/* ========================================
+   HERO CONTENT
+   ======================================== */
+
+.roomies-hero-content {
+  max-width: 620px;
+}
+
+
+.roomies-eyebrow {
+  margin-bottom: 22px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  letter-spacing: 3px;
+
+  color: #8d3a3c;
+}
+
+
+.roomies-hero h1 {
+  margin: 0;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: clamp(48px, 6vw, 82px);
+
+  font-weight: 400;
+
+  line-height: 0.98;
+
+  letter-spacing: -2px;
+
+  color: #280b0f;
+}
+
+
+.roomies-description {
+  max-width: 500px;
+
+  margin-top: 30px;
+
+  font-size: 17px;
+
+  line-height: 1.7;
+
+  color: #7b694e;
+}
+
+
+/* ========================================
+   BUTTONS
+   ======================================== */
+
+.roomies-actions {
+  display: flex;
+
+  gap: 14px;
+
+  margin-top: 38px;
+}
+
+
+.roomies-primary-btn,
+.roomies-secondary-btn {
+  padding: 15px 26px;
+
+  border-radius: 2px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  letter-spacing: 0.5px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+
+/* Primary Button */
+
+.roomies-primary-btn {
+  border: 1px solid #3b1319;
+
+  background: #3b1319;
+
+  color: #f5eee6;
+}
+
+
+.roomies-primary-btn:hover {
+  background: #8d3a3c;
+
+  border-color: #8d3a3c;
+
+  transform: translateY(-2px);
+}
+
+
+/* Secondary Button */
+
+.roomies-secondary-btn {
+  border: 1px solid #7b694e;
+
+  background: transparent;
+
+  color: #3b1319;
+}
+
+
+.roomies-secondary-btn:hover {
+  background: #c6b39a;
+
+  border-color: #c6b39a;
+
+  transform: translateY(-2px);
+}
+
+
+/* ========================================
+   HERO VISUAL
+   ======================================== */
+
+.roomies-hero-visual {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+}
+
+
+/* ========================================
+   ROOMIES IMAGE
+   ======================================== */
+
+.roomies-image-placeholder {
+  position: relative;
+
+  width: min(440px, 100%);
+
+  aspect-ratio: 0.82;
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: center;
+
+  overflow: hidden;
+
+  /*
+     Main dark-pink / Rubine color
+  */
+  background: #8d3a3c;
+
+  /*
+     Elegant arched shape
+  */
+  border-radius: 220px 220px 12px 12px;
+
+  /*
+     Camel Coat offset shadow
+  */
+  box-shadow:
+    20px 25px 0 #c6b39a;
+}
+
+
+/* Inner Decorative Border */
+
+.roomies-image-placeholder::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 18px;
+
+  border: 1px solid #f5eee6;
+
+  border-radius: 205px 205px 5px 5px;
+
+  pointer-events: none;
+}
+
+
+/* Image Placeholder Text */
+
+.roomies-image-placeholder span {
+  position: relative;
+
+  margin-bottom: 45px;
+
+  color: #f5eee6;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 18px;
+
+  letter-spacing: 5px;
+}
+
+
+/* ========================================
+   OPTIONAL DECORATIVE GLOW
+   ======================================== */
+
+.roomies-hero-visual::after {
+  content: "";
+
+  position: absolute;
+
+  width: 180px;
+  height: 180px;
+
+  background: #c6b39a;
+
+  opacity: 0.18;
+
+  border-radius: 50%;
+
+  filter: blur(50px);
+
+  pointer-events: none;
+}
+
+
+/* ========================================
+   RESPONSIVE — TABLET
+   ======================================== */
+
+@media (max-width: 900px) {
+
+  .roomies-hero {
+    grid-template-columns: 1fr;
+
+    padding: 70px 7%;
+
+    text-align: center;
+  }
+
+
+  .roomies-hero-content {
+    margin: 0 auto;
+  }
+
+
+  .roomies-description {
+    margin-left: auto;
+
+    margin-right: auto;
+  }
+
+
+  .roomies-actions {
+    justify-content: center;
+  }
+
+
+  .roomies-hero-visual {
+    margin-top: 20px;
+  }
+}
+
+
+/* ========================================
+   RESPONSIVE — MOBILE
+   ======================================== */
+
+@media (max-width: 500px) {
+
+  .roomies-hero {
+    padding: 50px 6%;
+  }
+
+
+  .roomies-hero h1 {
+    font-size: 48px;
+  }
+
+
+  .roomies-actions {
+    flex-direction: column;
+  }
+
+
+  .roomies-primary-btn,
+  .roomies-secondary-btn {
+    width: 100%;
+  }
+
+
+  .roomies-image-placeholder {
+    width: 85%;
+
+    box-shadow:
+      12px 16px 0 #c6b39a;
+  }
+}

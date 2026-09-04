@@ -10,7 +10,6 @@ import AccountCreated from "./components/auth/AccountCreated";
 import Profile from "./components/common/Profile";
 
 import Roomies from "./pages/Roomies/Roomies";
-import GoToTop from "./components/common/GoToTop";
 
 function App() {
   return (
@@ -62,7 +61,7 @@ function App() {
           }
         />
       </Routes>
-          <GoToTop />
+
     </BrowserRouter>
   );
 }
