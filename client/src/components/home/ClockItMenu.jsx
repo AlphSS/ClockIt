@@ -26,7 +26,7 @@ const defaultItems = [
   },
 ];
 
-export const Component = ({ items = defaultItems, className }) => {
+export const ClockItMenu = ({ items = defaultItems, className }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef(null);
   const imageRef = useRef(null);
@@ -197,3 +197,5 @@ export const Component = ({ items = defaultItems, className }) => {
     </div>
   );
 };
+
+export default ClockItMenu;
