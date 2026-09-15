@@ -75,7 +75,7 @@ function Navbar({ theme = "dark" }) {
             Marketplace
           </NavLink>
 
-          <NavLink to="/profile" className={navLinkStyle}>
+          <NavLink to="/about" className={navLinkStyle}>
             About Us
           </NavLink>
 

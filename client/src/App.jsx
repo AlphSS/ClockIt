@@ -11,6 +11,7 @@ import Profile from "./components/common/Profile";
 
 import Roomies from "./pages/Roomies/Roomies";
 import GoToTop from "./components/common/GoToTop";
+import About from "./pages/About/About";
 
 function App() {
   return (
@@ -61,7 +62,12 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+          <Route path="/about" element={<About />} />
+
       </Routes>
+
+      
 
       <GoToTop />
 
