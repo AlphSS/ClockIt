@@ -1,5 +1,5 @@
 /* ========================================
-   CLOCKIT — ROOMIES
+   CLOCKIT — ROOMIES PAGE
    ======================================== */
 
 .roomies-page {
@@ -14,31 +14,37 @@
    ======================================== */
 
 .roomies-hero {
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 88px);
 
   display: grid;
   grid-template-columns: 1fr 1fr;
+
   align-items: center;
 
-  gap: 70px;
+  gap: 60px;
 
-  padding: 80px 8%;
+  padding: 70px 8% 80px;
 
-  background: #f5eee6;
+  background:
+    radial-gradient(
+      circle at 85% 20%,
+      rgba(198, 179, 154, 0.35),
+      transparent 30%
+    ),
+    #f5eee6;
 }
 
 
 /* ========================================
-   HERO CONTENT
+   LEFT CONTENT
    ======================================== */
 
 .roomies-hero-content {
   max-width: 620px;
 }
 
-
 .roomies-eyebrow {
-  margin-bottom: 22px;
+  margin: 0 0 24px;
 
   font-size: 12px;
   font-weight: 600;
@@ -48,11 +54,13 @@
   color: #8d3a3c;
 }
 
-
 .roomies-hero h1 {
   margin: 0;
 
-  font-family: Georgia, "Times New Roman", serif;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
 
   font-size: clamp(48px, 6vw, 82px);
 
@@ -65,11 +73,10 @@
   color: #280b0f;
 }
 
-
 .roomies-description {
-  max-width: 500px;
+  max-width: 510px;
 
-  margin-top: 30px;
+  margin-top: 32px;
 
   font-size: 17px;
 
@@ -91,7 +98,6 @@
   margin-top: 38px;
 }
 
-
 .roomies-primary-btn,
 .roomies-secondary-btn {
   padding: 15px 26px;
@@ -99,6 +105,7 @@
   border-radius: 2px;
 
   font-size: 14px;
+
   font-weight: 600;
 
   letter-spacing: 0.5px;
@@ -106,14 +113,14 @@
   cursor: pointer;
 
   transition:
-    transform 0.2s ease,
-    background 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease;
+    transform 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
 }
 
 
-/* Primary Button */
+/* Primary */
 
 .roomies-primary-btn {
   border: 1px solid #3b1319;
@@ -122,7 +129,6 @@
 
   color: #f5eee6;
 }
-
 
 .roomies-primary-btn:hover {
   background: #8d3a3c;
@@ -133,7 +139,7 @@
 }
 
 
-/* Secondary Button */
+/* Secondary */
 
 .roomies-secondary-btn {
   border: 1px solid #7b694e;
@@ -142,7 +148,6 @@
 
   color: #3b1319;
 }
-
 
 .roomies-secondary-btn:hover {
   background: #c6b39a;
@@ -158,111 +163,269 @@
    ======================================== */
 
 .roomies-hero-visual {
+  position: relative;
+
   display: flex;
 
   justify-content: center;
 
   align-items: center;
+
+  min-height: 560px;
 }
 
 
 /* ========================================
-   ROOMIES IMAGE
+   IMAGE FRAME
    ======================================== */
 
-.roomies-image-placeholder {
+.roomies-image-frame {
   position: relative;
 
-  width: min(440px, 100%);
+  width: min(440px, 90%);
 
   aspect-ratio: 0.82;
 
-  display: flex;
-
-  align-items: flex-end;
-
-  justify-content: center;
-
   overflow: hidden;
 
-  /*
-     Main dark-pink / Rubine color
-  */
   background: #8d3a3c;
 
-  /*
-     Elegant arched shape
-  */
-  border-radius: 220px 220px 12px 12px;
+  border-radius:
+    220px
+    220px
+    12px
+    12px;
 
-  /*
-     Camel Coat offset shadow
-  */
   box-shadow:
-    20px 25px 0 #c6b39a;
+    20px 25px 0 rgba(59, 19, 25, 0.14);
 }
 
 
-/* Inner Decorative Border */
+/* ========================================
+   ACTUAL PHOTO
+   ======================================== */
 
-.roomies-image-placeholder::before {
-  content: "";
-
+.roomies-hero-image {
   position: absolute;
+
+  top: 8px;
+  left: 8px;
+
+  width: calc(100% - 16px);
+
+  height: calc(100% - 16px);
+
+  object-fit: cover;
+
+  object-position: center;
+
+  display: block;
+
+  border-radius:
+    212px
+    212px
+    5px
+    5px;
+}
+
+
+/* ========================================
+   INNER BORDER
+   ======================================== */
+
+.roomies-image-border {
+  position: absolute;
+
+  z-index: 3;
 
   inset: 18px;
 
-  border: 1px solid #f5eee6;
+  border: 1px solid
+    rgba(245, 238, 230, 0.85);
 
-  border-radius: 205px 205px 5px 5px;
+  border-radius:
+    202px
+    202px
+    5px
+    5px;
 
   pointer-events: none;
 }
 
 
-/* Image Placeholder Text */
+/* ========================================
+   IMAGE LABEL
+   ======================================== */
 
-.roomies-image-placeholder span {
-  position: relative;
+.roomies-image-label {
+  position: absolute;
 
-  margin-bottom: 45px;
+  z-index: 4;
 
-  color: #f5eee6;
+  bottom: 42px;
 
-  font-family: Georgia, "Times New Roman", serif;
+  left: 0;
+
+  width: 100%;
+
+  text-align: center;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
 
   font-size: 18px;
 
   letter-spacing: 5px;
+
+  color: #f5eee6;
+
+  text-shadow:
+    0 1px 8px rgba(40, 11, 15, 0.4);
 }
 
 
 /* ========================================
-   OPTIONAL DECORATIVE GLOW
+   HANDWRITTEN DECORATION
    ======================================== */
 
-.roomies-hero-visual::after {
-  content: "";
-
+.roomies-handwritten {
   position: absolute;
 
-  width: 180px;
-  height: 180px;
+  z-index: 5;
 
-  background: #c6b39a;
+  top: 95px;
 
-  opacity: 0.18;
+  right: -15px;
 
-  border-radius: 50%;
+  font-family:
+    "Brush Script MT",
+    "Segoe Script",
+    cursive;
 
-  filter: blur(50px);
+  font-size: 23px;
+
+  line-height: 1.25;
+
+  color: #8d3a3c;
+
+  transform: rotate(-5deg);
+
+  text-align: left;
+}
+
+
+/* ========================================
+   DECORATIVE LEAF
+   ======================================== */
+
+.roomies-leaf {
+  position: absolute;
+
+  z-index: 5;
+
+  right: -20px;
+
+  bottom: 30px;
+
+  width: 100px;
+
+  height: 130px;
 
   pointer-events: none;
 }
 
+.roomies-leaf::before {
+  content: "";
+
+  position: absolute;
+
+  width: 1px;
+
+  height: 125px;
+
+  left: 48px;
+
+  top: 5px;
+
+  background: #7b694e;
+
+  transform: rotate(35deg);
+
+  transform-origin: bottom;
+}
+
+
+/* Individual leaves */
+
+.roomies-leaf span {
+  position: absolute;
+
+  width: 45px;
+
+  height: 20px;
+
+  border: 1px solid #7b694e;
+
+  border-radius: 100% 0;
+
+  transform: rotate(-25deg);
+}
+
+.roomies-leaf span:nth-child(1) {
+  top: 30px;
+  left: 5px;
+}
+
+.roomies-leaf span:nth-child(2) {
+  top: 55px;
+  left: 35px;
+
+  transform: rotate(25deg);
+}
+
+.roomies-leaf span:nth-child(3) {
+  top: 75px;
+  left: 10px;
+
+  transform: rotate(-20deg);
+}
+
+.roomies-leaf span:nth-child(4) {
+  top: 95px;
+  left: 40px;
+
+  transform: rotate(20deg);
+}
+
 
 /* ========================================
-   RESPONSIVE — TABLET
+   TABLET
+   ======================================== */
+
+@media (max-width: 1000px) {
+
+  .roomies-hero {
+    gap: 35px;
+
+    padding-left: 6%;
+    padding-right: 6%;
+  }
+
+  .roomies-handwritten {
+    right: -5px;
+  }
+
+  .roomies-leaf {
+    right: -10px;
+  }
+
+}
+
+
+/* ========================================
+   MOBILE
    ======================================== */
 
 @media (max-width: 900px) {
@@ -270,66 +433,119 @@
   .roomies-hero {
     grid-template-columns: 1fr;
 
-    padding: 70px 7%;
+    min-height: auto;
+
+    padding: 70px 7% 90px;
 
     text-align: center;
   }
-
 
   .roomies-hero-content {
     margin: 0 auto;
   }
 
-
   .roomies-description {
     margin-left: auto;
-
     margin-right: auto;
   }
-
 
   .roomies-actions {
     justify-content: center;
   }
 
-
   .roomies-hero-visual {
-    margin-top: 20px;
+    min-height: 520px;
+
+    margin-top: 10px;
   }
+
+  .roomies-handwritten {
+    right: 4%;
+  }
+
+  .roomies-leaf {
+    right: 2%;
+  }
+
 }
 
 
 /* ========================================
-   RESPONSIVE — MOBILE
+   SMALL MOBILE
    ======================================== */
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
 
   .roomies-hero {
-    padding: 50px 6%;
+    padding: 55px 6% 70px;
   }
-
 
   .roomies-hero h1 {
     font-size: 48px;
+
+    letter-spacing: -1.5px;
   }
 
+  .roomies-description {
+    font-size: 15px;
+  }
 
   .roomies-actions {
     flex-direction: column;
-  }
 
+    align-items: center;
+  }
 
   .roomies-primary-btn,
   .roomies-secondary-btn {
     width: 100%;
+
+    max-width: 320px;
   }
 
-
-  .roomies-image-placeholder {
-    width: 85%;
-
-    box-shadow:
-      12px 16px 0 #c6b39a;
+  .roomies-hero-visual {
+    min-height: 450px;
   }
+
+  .roomies-image-frame {
+    width: min(360px, 88%);
+  }
+
+  .roomies-handwritten {
+    top: 65px;
+
+    right: 0;
+
+    font-size: 18px;
+  }
+
+  .roomies-leaf {
+    right: -5px;
+
+    bottom: 15px;
+
+    transform: scale(0.75);
+  }
+
+}
+
+
+/* ========================================
+   EXTRA SMALL
+   ======================================== */
+
+@media (max-width: 400px) {
+
+  .roomies-hero h1 {
+    font-size: 42px;
+  }
+
+  .roomies-hero-visual {
+    min-height: 410px;
+  }
+
+  .roomies-image-frame {
+    width: 90%;
+  }
+
 }

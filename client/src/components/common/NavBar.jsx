@@ -76,7 +76,7 @@ function Navbar({ theme = "dark" }) {
           </NavLink>
 
           <NavLink to="/profile" className={navLinkStyle}>
-            Profile
+            About Us
           </NavLink>
 
         </div>
