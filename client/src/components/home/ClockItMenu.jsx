@@ -5,24 +5,24 @@ import gsap from "gsap";
 const defaultItems = [
   {
     num: "01",
-    name: "Gourmet Burgers",
-    clipId: "clip-original",
+    name: "Book Stays",
+    clipId: "clip-pixels",
     image:
-      "https://cdn.21st.dev/assets/mirror/53/534bb84332e13a8595670521bdcc71acd40fabbf589c1775f4028df1ca1ea96a.jpg",
+      "./fb2.jpg",
   },
   {
     num: "02",
-    name: "Fresh Desserts",
-    clipId: "clip-hexagons",
+    name: "Find Roomies",
+    clipId: "clip-original",
     image:
-      "https://cdn.21st.dev/assets/mirror/be/bec9c493cadbcd53fd0e00a0cf98f1dbb7813141c9c461b8c1b7920f6b7fa721.jpg",
+      "./fb1.jpg",
   },
   {
     num: "03",
-    name: "Artisan Waffles",
-    clipId: "clip-pixels",
+    name: "Visit Marketplace",
+    clipId: "clip-hexagons",
     image:
-      "https://cdn.21st.dev/assets/mirror/b0/b05848f9ad0d993c69b9c21c3793b3b5507eff7064b01540d196cac068101729.jpg",
+      "./fb3.jpg",
   },
 ];
 
