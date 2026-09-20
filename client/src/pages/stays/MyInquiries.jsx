@@ -7,9 +7,9 @@ import { useAuth } from "../../context/AuthContext";
 import { getFirstImage, formatRent } from "../../utils/stayHelpers";
 
 const STATUS_CONFIGS = {
-  pending: { icon: Clock, label: "Pending", classes: "bg-amber-50 text-amber-600 border-amber-200" },
-  contacted: { icon: CheckCircle, label: "Contacted", classes: "bg-emerald-50 text-emerald-600 border-emerald-200" },
-  closed: { icon: XCircle, label: "Closed", classes: "bg-gray-100 text-gray-500 border-gray-200" },
+  pending: { label: "Pending Owner Response", classes: "bg-amber-50 text-amber-800 border-amber-200" },
+  contacted: { label: "Contacted / In Touch", classes: "bg-emerald-50 text-emerald-800 border-emerald-200" },
+  closed: { label: "Inquiry Closed", classes: "bg-gray-100 text-gray-600 border-gray-200" },
 };
 
 function formatTimeAgo(dateStr) {
@@ -45,43 +45,53 @@ export default function MyInquiries() {
       }
     }
     load();
-  }, []);
+  }, [getToken]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ backgroundColor: "#F3EEE7" }}>
       <NavBar />
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-6">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">My Inquiries</h1>
-          <p className="text-sm text-gray-400">{inquiries.length} inquiries sent</p>
+
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+        {/* Header */}
+        <div className="p-6 rounded-3xl border shadow-sm" style={{ backgroundColor: "#FDFAF5", borderColor: "#E8E0D8" }}>
+          <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider mb-1" style={{ color: "#7B3045" }}>
+            <MessageSquare size={14} /> Student Inquiries
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold" style={{ fontFamily: "Georgia, serif", color: "#18100E" }}>
+            My Sent Inquiries
+          </h1>
+          <p className="text-xs text-gray-500 mt-1">
+            Track inquiries you sent to property owners on ClockIt.
+          </p>
         </div>
 
         {loading ? (
           <div className="space-y-4">
             {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-gray-100 p-5 animate-pulse">
-                <div className="flex gap-4">
-                  <div className="w-16 h-12 bg-gray-200 rounded-xl flex-shrink-0" />
-                  <div className="flex-1 space-y-2">
-                    <div className="h-4 bg-gray-200 rounded-full w-2/3" />
-                    <div className="h-3 bg-gray-200 rounded-full w-full" />
-                  </div>
+              <div key={i} className="p-5 rounded-2xl border animate-pulse flex gap-4" style={{ backgroundColor: "#FDFAF5", borderColor: "#E8E0D8" }}>
+                <div className="w-20 h-16 rounded-xl bg-gray-200" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-4 bg-gray-200 rounded-full w-2/3" />
+                  <div className="h-3 bg-gray-200 rounded-full w-full" />
                 </div>
               </div>
             ))}
           </div>
         ) : inquiries.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-16 h-16 rounded-full bg-cyan-50 flex items-center justify-center mb-4">
-              <MessageSquare size={28} className="text-cyan-300" />
+          <div className="flex flex-col items-center justify-center py-20 text-center rounded-3xl border" style={{ backgroundColor: "#FDFAF5", borderColor: "#E8E0D8" }}>
+            <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: "#F3EEE7", color: "#7B3045" }}>
+              <MessageSquare size={28} />
             </div>
-            <h3 className="font-bold text-gray-700 mb-1">No inquiries yet</h3>
-            <p className="text-sm text-gray-400 mb-4">
-              When you contact a flat owner, your inquiry will appear here.
+            <h3 className="font-bold text-xl mb-1" style={{ fontFamily: "Georgia, serif", color: "#18100E" }}>
+              No inquiries sent yet
+            </h3>
+            <p className="text-xs text-gray-500 max-w-sm mb-6">
+              When you find a flat you like, click "Contact Owner" on the details page to send a direct message.
             </p>
             <button
               onClick={() => navigate("/stays")}
-              className="px-6 py-2.5 bg-cyan-500 text-white font-semibold rounded-xl text-sm hover:bg-cyan-600 transition"
+              className="px-6 py-3 text-xs font-bold rounded-xl transition-all"
+              style={{ backgroundColor: "#18100E", color: "#F3EEE7" }}
             >
               Browse Flats
             </button>
@@ -90,13 +100,11 @@ export default function MyInquiries() {
           <div className="space-y-4">
             {inquiries.map((inq) => {
               const cfg = STATUS_CONFIGS[inq.status] || STATUS_CONFIGS.pending;
-              const Icon = cfg.icon;
               return (
-                <div key={inq.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition">
+                <div key={inq.id} className="p-5 rounded-2xl border transition-all hover:shadow-md space-y-3" style={{ backgroundColor: "#FDFAF5", borderColor: "#E8E0D8" }}>
                   <div className="flex gap-4">
-                    {/* Property thumbnail */}
                     {inq.stays && (
-                      <Link to={`/stays/${inq.stay_id}`} className="w-20 h-14 rounded-xl overflow-hidden flex-shrink-0 bg-gray-100">
+                      <Link to={`/stays/${inq.stay_id}`} className="w-20 h-16 rounded-xl overflow-hidden flex-shrink-0 relative" style={{ backgroundColor: "#E8E0D8" }}>
                         <img
                           src={getFirstImage(inq.stays.images)}
                           alt={inq.stays.title}
@@ -109,32 +117,31 @@ export default function MyInquiries() {
                       <div className="flex items-start justify-between gap-2">
                         <div>
                           {inq.stays && (
-                            <Link to={`/stays/${inq.stay_id}`} className="font-bold text-gray-900 text-sm hover:text-cyan-600 transition block truncate">
+                            <Link to={`/stays/${inq.stay_id}`} className="font-bold text-base hover:underline line-clamp-1" style={{ fontFamily: "Georgia, serif", color: "#18100E" }}>
                               {inq.stays.title}
                             </Link>
                           )}
-                          <p className="text-xs text-gray-400">
-                            {inq.stays?.location_area} · {formatRent(inq.stays?.rent)}/mo
+                          <p className="text-xs text-gray-500">
+                            {inq.stays?.location_area} &bull; {formatRent(inq.stays?.rent)}/mo
                           </p>
                         </div>
-                        <div className="flex items-center gap-2 flex-shrink-0">
-                          <span className={`flex items-center gap-1 px-2 py-0.5 text-xs font-medium border rounded-full ${cfg.classes}`}>
-                            <Icon size={10} />{cfg.label}
-                          </span>
-                        </div>
+                        <span className={`px-2.5 py-1 text-[11px] font-bold border rounded-full ${cfg.classes}`}>
+                          {cfg.label}
+                        </span>
                       </div>
 
-                      <div className="mt-2 p-3 bg-gray-50 rounded-xl">
-                        <p className="text-xs text-gray-600 italic line-clamp-2">"{inq.message}"</p>
+                      <div className="mt-3 p-3 rounded-xl border text-xs text-gray-700 italic" style={{ backgroundColor: "#F8F4EF", borderColor: "#E8E0D8" }}>
+                        "{inq.message}"
                       </div>
 
-                      <div className="flex items-center justify-between mt-2">
-                        <p className="text-xs text-gray-400">{formatTimeAgo(inq.created_at)}</p>
+                      <div className="flex items-center justify-between mt-3 text-xs text-gray-400">
+                        <span>Sent {formatTimeAgo(inq.created_at)}</span>
                         <Link
                           to={`/stays/${inq.stay_id}`}
-                          className="flex items-center gap-1 text-xs text-cyan-600 hover:underline"
+                          className="flex items-center gap-1 font-bold hover:underline"
+                          style={{ color: "#7B3045" }}
                         >
-                          View Flat <ExternalLink size={10} />
+                          View Flat <ExternalLink size={12} />
                         </Link>
                       </div>
                     </div>

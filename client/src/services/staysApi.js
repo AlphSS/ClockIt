@@ -43,6 +43,10 @@ export async function updateStay(id, stayData, token) {
   return apiFetch(`/stays/${id}`, { method: "PUT", body: JSON.stringify(stayData) }, token);
 }
 
+export async function updateStayStatus(id, status, token) {
+  return apiFetch(`/stays/${id}/status`, { method: "PATCH", body: JSON.stringify({ status }) }, token);
+}
+
 export async function deleteStay(id, token) {
   return apiFetch(`/stays/${id}`, { method: "DELETE" }, token);
 }
@@ -78,6 +82,36 @@ export async function uploadStayImage(file, token) {
   const data = await res.json();
   if (!res.ok) throw new Error(data.message || "Upload failed");
   return data;
+}
+
+// ─── Reviews ──────────────────────────────────────────────────────────────────
+
+export async function fetchStayReviews(stayId) {
+  return apiFetch(`/stays/${stayId}/reviews`);
+}
+
+export async function createStayReview(stayId, reviewData, token) {
+  return apiFetch(
+    `/stays/${stayId}/reviews`,
+    { method: "POST", body: JSON.stringify(reviewData) },
+    token
+  );
+}
+
+export async function updateStayReview(stayId, reviewId, reviewData, token) {
+  return apiFetch(
+    `/stays/${stayId}/reviews/${reviewId}`,
+    { method: "PUT", body: JSON.stringify(reviewData) },
+    token
+  );
+}
+
+export async function deleteStayReview(stayId, reviewId, token) {
+  return apiFetch(
+    `/stays/${stayId}/reviews/${reviewId}`,
+    { method: "DELETE" },
+    token
+  );
 }
 
 // ─── Users ────────────────────────────────────────────────────────────────────

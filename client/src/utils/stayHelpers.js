@@ -34,7 +34,7 @@ export function formatDate(dateStr) {
   }
 }
 
-// Get amenity icon (emoji fallback)
+// Get amenity / facility icon
 const amenityIcons = {
   WiFi: "📶",
   Parking: "🚗",
@@ -48,13 +48,25 @@ const amenityIcons = {
   Balcony: "🏡",
   Gym: "💪",
   "Swimming Pool": "🏊",
+  College: "🎓",
+  "University": "🎓",
+  "Grocery store": "🛒",
+  Hospital: "🏥",
+  Pharmacy: "💊",
+  "Bus stop": "🚌",
+  Metro: "🚇",
+  Restaurant: "🍽️",
+  Cafe: "☕",
+  ATM: "🏧",
+  Laundry: "🧺",
+  Shopping: "🛍️",
 };
 
 export function getAmenityIcon(amenity) {
   return amenityIcons[amenity] || "✓";
 }
 
-// Star rating display (returns filled/half/empty counts)
+// Star rating breakdown
 export function getRatingBreakdown(rating) {
   const full = Math.floor(rating);
   const half = rating - full >= 0.5 ? 1 : 0;
@@ -72,11 +84,17 @@ export function truncate(text, maxLength = 100) {
 // Build query string from filter state
 export function buildFilterQuery(filters) {
   const params = {};
+  if (filters.search) params.search = filters.search;
   if (filters.location) params.location = filters.location;
   if (filters.minPrice) params.minPrice = filters.minPrice;
   if (filters.maxPrice) params.maxPrice = filters.maxPrice;
   if (filters.bhk && filters.bhk !== "any") params.bhk = filters.bhk;
   if (filters.furnishing && filters.furnishing !== "all") params.furnishing = filters.furnishing;
+  if (filters.propertyType && filters.propertyType !== "all") params.propertyType = filters.propertyType;
+  if (filters.occupancy && filters.occupancy !== "any") params.occupancy = filters.occupancy;
+  if (filters.gender && filters.gender !== "any") params.gender = filters.gender;
+  if (filters.maxDistance) params.maxDistance = filters.maxDistance;
+  if (filters.bathrooms && filters.bathrooms !== "any") params.bathrooms = filters.bathrooms;
   if (filters.amenities?.length) params.amenities = filters.amenities.join(",");
   if (filters.sort) params.sort = filters.sort;
   if (filters.page) params.page = filters.page;

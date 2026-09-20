@@ -3,11 +3,17 @@ import { fetchStays } from "../services/staysApi";
 import { buildFilterQuery } from "../utils/stayHelpers";
 
 const DEFAULT_FILTERS = {
+  search: "",
   location: "",
   minPrice: "",
   maxPrice: "",
   bhk: "any",
   furnishing: "all",
+  propertyType: "all",
+  occupancy: "any",
+  gender: "any",
+  maxDistance: "",
+  bathrooms: "any",
   amenities: [],
   sort: "recommended",
 };
@@ -21,7 +27,6 @@ export function useStays(initialFilters = {}) {
   const [hasMore, setHasMore] = useState(false);
   const [total, setTotal] = useState(0);
 
-  // Debounce timer ref
   const debounceRef = useRef(null);
 
   const load = useCallback(async (currentFilters, currentPage, append = false) => {
@@ -49,11 +54,10 @@ export function useStays(initialFilters = {}) {
     debounceRef.current = setTimeout(() => {
       setPage(1);
       load(filters, 1, false);
-    }, 400);
+    }, 350);
     return () => clearTimeout(debounceRef.current);
   }, [filters, load]);
 
-  // Load more (append)
   const loadMore = useCallback(() => {
     const nextPage = page + 1;
     setPage(nextPage);

@@ -11,7 +11,7 @@ import Profile from "./components/common/Profile";
 import Register from "./components/auth/RegistrationForm";
 import Home from "./pages/Home/Home";
 
-// Login — our full-featured login (Stays module)
+// Login
 import Login from "./pages/Login/Login";
 
 // Stays
@@ -57,7 +57,7 @@ function App() {
             }
           />
 
-          {/* Home (protected) */}
+          {/* Home */}
           <Route
             path="/"
             element={
@@ -69,14 +69,16 @@ function App() {
 
           {/* Stays module */}
           <Route path="/stays" element={<StaysHome />} />
+          <Route path="/stays/create" element={<ProtectedRoute><PostStay /></ProtectedRoute>} />
           <Route path="/stays/post" element={<ProtectedRoute><PostStay /></ProtectedRoute>} />
           <Route path="/stays/my-listings" element={<ProtectedRoute><MyListings /></ProtectedRoute>} />
           <Route path="/stays/saved" element={<ProtectedRoute><SavedStays /></ProtectedRoute>} />
+          <Route path="/stays/wishlist" element={<ProtectedRoute><SavedStays /></ProtectedRoute>} />
           <Route path="/stays/inquiries" element={<ProtectedRoute><MyInquiries /></ProtectedRoute>} />
           <Route path="/stays/:id/edit" element={<ProtectedRoute><EditStay /></ProtectedRoute>} />
           <Route path="/stays/:id" element={<StayDetails />} />
 
-          {/* Placeholder routes for Deals and Roomies (other teams) */}
+          {/* Placeholder routes for Deals and Roomies */}
           <Route path="/deals" element={<div className="min-h-screen flex items-center justify-center text-gray-400">Deals module — coming soon</div>} />
           <Route path="/roomies" element={<div className="min-h-screen flex items-center justify-center text-gray-400">Roomies module — coming soon</div>} />
         </Routes>
