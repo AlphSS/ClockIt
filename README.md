@@ -1,49 +1,56 @@
-# ClockIt — Project Setup & Developer README
+# ClockIt — Developer README
 
-ClockIt is a student-focused platform that brings multiple campus services into one application.
+## 1. Project Overview
 
-## 🚀 Platform Modules
+**ClockIt** is a student-focused campus platform. The main idea is to bring useful student-to-student services into one application.
 
-- **UniMart** — students can buy and sell products.
+Current/planned modules include:
+
+- **UniMart / Marketplace** — students can buy and sell products.
 - **Roomies** — students can find suitable roommates.
-- **Stays** — students can discover/share flat listings and information.
+- **Stays** — students can discover/share accommodation and flat listings.
+- **Home** — central page that surfaces information from the other modules.
+- **Profile** — user information, university selection, and college verification.
 
-The Home page is the base platform and will surface selected content from these modules. Major services will have separate pages/routes.
+The project is being developed as a team, so feature code should remain separated and each feature should use the central authenticated user.
 
 ---
 
-# 🏗️ Technology Stack
+# 2. Current Technology Stack
 
 ## Frontend
+
 - React
 - Vite
 - Tailwind CSS
-- `canvas-confetti`
+- Lucide React icons
+- `canvas-confetti` where used by the existing UI
 
 ## Backend
+
 - Node.js
 - Express.js
 - ES Modules
+- REST APIs
 
-## Database & Authentication
+## Database / Authentication
+
 - Supabase
 - Supabase Authentication
-- Supabase/Postgres
+- Supabase PostgreSQL
 - `@supabase/supabase-js`
 
-## Development OTP
+## Email
 
-The current development OTP is:
-
-```text
-123456
-```
-
-Twilio/SMS integration has **not** been added yet.
+- Resend is currently used for college verification emails.
+- The sender/domain configuration must remain in environment variables/configuration.
+- Do not commit API keys.
 
 ---
 
-# 📁 Project Structure
+# 3. Project Structure
+
+The project is divided into frontend and backend:
 
 ```text
 ClockIt/
@@ -53,7 +60,6 @@ ClockIt/
 │   │   ├── components/
 │   │   ├── pages/
 │   │   ├── services/
-│   │   │   └── authApi.js
 │   │   ├── App.jsx
 │   │   └── ...
 │   ├── package.json
@@ -64,11 +70,17 @@ ClockIt/
 │   │   └── supabase.js
 │   ├── controllers/
 │   │   ├── authController.js
-│   │   └── otpController.js
+│   │   ├── profileController.js
+│   │   └── ...
+│   ├── middleware/
+│   │   └── authMiddleware.js
 │   ├── routes/
-│   │   └── authRoutes.js
+│   │   ├── authRoutes.js
+│   │   ├── profileRoutes.js
+│   │   └── ...
 │   ├── services/
-│   │   └── otpService.js
+│   ├── utils/
+│   │   └── email.js
 │   ├── server.js
 │   ├── .env
 │   └── package.json
@@ -76,9 +88,492 @@ ClockIt/
 └── README.md
 ```
 
+Feature-specific logic should stay inside its own controllers/routes/services instead of being added to authentication files.
+
 ---
 
-# ⚙️ Setup
+# 4. Supabase Authentication
+
+Supabase Auth is responsible for the actual authenticated user identity.
+
+The authenticated user is available through:
+
+```text
+auth.users
+```
+
+Application-specific information is stored in:
+
+```text
+profiles
+```
+
+The relationship is:
+
+```text
+Supabase Auth User
+       │
+       │ id
+       ▼
+   profiles
+       │
+       │ university_id
+       ▼
+   colleges
+```
+
+The backend protects authenticated endpoints using the user's Supabase access token.
+
+---
+
+# 5. Authentication Middleware
+
+Protected backend routes use:
+
+```text
+requireAuth
+```
+
+The middleware:
+
+1. Reads the `Authorization` header.
+2. Expects:
+
+```http
+Authorization: Bearer <access_token>
+```
+
+3. Extracts the token.
+4. Uses Supabase Auth to validate the token.
+5. Gets the authenticated user.
+6. Stores it on:
+
+```javascript
+req.user;
+```
+
+Example:
+
+```javascript
+const userId = req.user.id;
+```
+
+Therefore feature controllers should use:
+
+```javascript
+req.user.id;
+```
+
+instead of trusting a user ID sent by the frontend.
+
+---
+
+# 6. Profile Feature — COMPLETED
+
+The profile page is currently implemented.
+
+It supports displaying:
+
+- Profile picture
+- Full name
+- Username
+- Bio
+- Phone number
+- University
+- College email
+- College verification status
+
+The profile can be edited **in place**.
+
+When the user clicks:
+
+```text
+Edit Profile
+```
+
+the existing fields change into editable inputs/dropdowns.
+
+The user can:
+
+```text
+Edit
+  ↓
+Change fields
+  ↓
+Save Changes / Cancel
+```
+
+---
+
+# 7. University Selection
+
+University is **not stored as plain text** in the profile.
+
+The profile stores:
+
+```text
+university_id
+```
+
+which references:
+
+```text
+colleges.id
+```
+
+This prevents spelling inconsistencies.
+
+For example, the UI displays:
+
+```text
+MIT WPU
+```
+
+but the selected value is actually the college UUID.
+
+The flow is:
+
+```text
+Dropdown
+   ↓
+User selects MIT WPU
+   ↓
+Frontend stores college.id
+   ↓
+PUT /api/profile
+   ↓
+profiles.university_id
+   ↓
+colleges.id
+```
+
+When displaying the profile, the university name comes from the related college record.
+
+---
+
+# 8. College Database Tables
+
+The current college schema is:
+
+```sql
+create table public.colleges (
+    id uuid primary key default gen_random_uuid(),
+    name text not null unique,
+    is_active boolean not null default true,
+    created_at timestamptz not null default now()
+);
+```
+
+College email domains are stored separately:
+
+```sql
+create table public.college_domains (
+    id uuid primary key default gen_random_uuid(),
+    college_id uuid not null
+        references public.colleges(id)
+        on delete cascade,
+    domain text not null unique,
+    is_active boolean not null default true,
+    created_at timestamptz not null default now()
+);
+```
+
+Important:
+
+`email_domain` is **not a column in `colleges`**.
+
+Do not write queries such as:
+
+```javascript
+colleges.email_domain;
+```
+
+Use the `college_domains` table when domain information is required.
+
+---
+
+# 9. Profile API
+
+The profile feature uses protected API endpoints.
+
+Conceptually:
+
+```text
+GET /api/profile
+```
+
+returns the authenticated user's profile.
+
+The backend gets the user ID from:
+
+```javascript
+req.user.id;
+```
+
+and queries the `profiles` table.
+
+Profile update uses:
+
+```text
+PUT /api/profile
+```
+
+The frontend sends:
+
+```json
+{
+  "fullName": "...",
+  "username": "...",
+  "universityId": "...",
+  "bio": "..."
+}
+```
+
+The backend maps these to:
+
+```text
+full_name
+username
+university_id
+bio
+```
+
+The university value must be the UUID from `colleges.id`, not the university name.
+
+---
+
+# 10. College Email Verification — CURRENTLY IMPLEMENTED
+
+College email verification has been added to the profile flow.
+
+The user provides a college email address.
+
+The backend:
+
+1. Receives the college email.
+2. Validates the relevant college/domain information.
+3. Generates the verification OTP.
+4. Sends the OTP through the configured email service.
+5. The user enters the OTP.
+6. The backend verifies it.
+7. The profile is marked as college verified.
+
+The frontend displays:
+
+```text
+College Email
+Verification Code
+Verify
+Resend Code
+```
+
+After successful verification:
+
+```text
+✓ Verified
+```
+
+The verification state is associated with the user's profile.
+
+---
+
+# 11. Resend Configuration
+
+Resend is currently used to send college verification emails.
+
+The API key must be stored in the backend environment.
+
+Example:
+
+```env
+RESEND_API_KEY=your_resend_api_key
+```
+
+Never commit the real key to GitHub.
+
+If Resend is in testing mode, it may restrict recipients until a sending domain is verified.
+
+---
+
+# 12. Important Frontend API Rule
+
+Frontend code should not directly use:
+
+```text
+supabaseAdmin
+```
+
+The admin Supabase client belongs on the backend.
+
+Frontend services should call the Express API.
+
+For authenticated requests, the frontend gets the current Supabase session/access token and sends:
+
+```http
+Authorization: Bearer <access_token>
+```
+
+Example architecture:
+
+```text
+React
+  ↓
+profileApi.js
+  ↓
+Express API
+  ↓
+requireAuth
+  ↓
+profileController
+  ↓
+supabaseAdmin
+  ↓
+PostgreSQL
+```
+# 13. Home Page
+
+The Home page is the base platform.
+
+It should **not** contain all feature-specific business logic.
+
+Instead, it should surface selected information from the major modules.
+
+Conceptual navigation:
+
+```text
+Home
+Marketplace
+Roomies
+Stays
+Profile
+```
+
+Possible routes:
+
+```text
+/
+├── /unimart
+├── /roomies
+├── /stays
+└── /profile
+```
+
+Exact route names can change as development continues.
+
+---
+
+# 14. User Ownership Rule
+
+Every feature record that belongs to a user should reference the authenticated user.
+
+Examples:
+
+```text
+products.user_id
+roommate_profile.user_id
+flat_listing.user_id
+messages.sender_id
+```
+
+Do not accept an arbitrary user ID from the frontend for ownership.
+
+Use:
+
+```javascript
+req.user.id;
+```
+
+on the backend.
+
+This makes authorization and editing safer.
+
+---
+
+# 15. Git Workflow
+
+Always create a feature branch.
+
+```bash
+git checkout -b feature/<feature-name>
+```
+
+Examples:
+
+```bash
+git checkout -b feature/unimart
+git checkout -b feature/roomies
+git checkout -b feature/stays
+```
+
+After implementation:
+
+```bash
+git add .
+git commit -m "message"
+git push origin feature/<feature-name>
+```
+
+Create a Pull Request before merging into the shared branch.
+
+---
+
+# 16. Team Rules
+
+### Never commit secrets
+
+Do not push:
+
+```text
+.env
+SUPABASE_URL
+SUPABASE_KEY
+SUPABASE_SERVICE_ROLE_KEY
+RESEND_API_KEY
+```
+
+or any other credentials.
+
+### Don't create another authentication system
+
+Use the existing Supabase authentication system.
+
+### Don't duplicate user identities
+
+Feature records should reference the authenticated Supabase user.
+
+### Keep feature code isolated
+
+For example:
+
+```text
+UniMart
+  → unimart routes
+  → unimart controller
+  → unimart services
+
+Roomies
+  → roomies routes
+  → roomies controller
+  → roomies services
+
+Stays
+  → stays routes
+  → stays controller
+  → stays services
+```
+
+Do not put these inside:
+
+```text
+authController.js
+profileController.js
+```
+
+unless the logic genuinely belongs there.
+
+---
+
+# 17. New Teammate Setup
 
 ## Clone
 
@@ -101,741 +596,138 @@ cd ../server
 npm install
 ```
 
----
+## Environment
 
-# 🔐 Environment Variables
-
-Backend `.env`:
-
-```env
-PORT=5800
-
-SUPABASE_URL=your_supabase_project_url
-SUPABASE_KEY=your_supabase_key
-```
-
-Do **not** commit `.env`.
-
-Recommended `.gitignore`:
-
-```gitignore
-.env
-.env.*
-node_modules/
-```
-
-If the existing project uses different variable names, keep the names expected by `server/config/supabase.js`.
-
----
-
-# 🗄️ Supabase
-
-The backend creates the Supabase client from environment variables.
-
-Example:
-
-```javascript
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_KEY;
-
-export const supabase = createClient(
-  supabaseUrl,
-  supabaseKey
-);
-```
-
-Never hard-code Supabase credentials.
-
-Supabase Authentication manages the authentication identity in:
+Create:
 
 ```text
-auth.users
+server/.env
 ```
 
-Application-specific user information is stored in the application's profile table.
+Use the environment variable names expected by the existing Supabase and email configuration.
 
-Conceptually:
-
-```text
-Supabase
-│
-├── auth.users
-│      └── authentication identity
-│
-└── profiles
-       ├── username
-       ├── full name
-       ├── phone
-       └── other application data
-```
-
-Follow the actual profile schema in the project.
+Never copy real credentials into the README.
 
 ---
 
-# 🔑 Authentication Architecture
+# 18. Running the Project
 
-Current registration flow:
-
-```text
-Basic Details
-     ↓
-POST /send-otp
-     ↓
-Backend stores development OTP
-     ↓
-OTP Verification
-     ↓
-POST /verify-otp
-     ↓
-Backend verifies OTP
-     ↓
-Registration Token
-     ↓
-Set Password
-     ↓
-POST /register
-     ↓
-Verify Registration Token
-     ↓
-Supabase Auth User
-     ↓
-Profile
-     ↓
-Account Created 🎉
-```
-
-**Important:** OTP verification is performed by the Express backend. React should not independently decide whether an OTP is valid.
-
----
-
-# 📲 Send OTP API
-
-### Endpoint
-
-```http
-POST /api/auth/send-otp
-```
-
-Development URL:
-
-```text
-http://localhost:5800/api/auth/send-otp
-```
-
-### Request
-
-```json
-{
-  "phone": "+919850854759"
-}
-```
-
-### Success
-
-```json
-{
-  "success": true,
-  "message": "OTP sent successfully."
-}
-```
-
-The development backend prints the OTP in its terminal:
-
-```text
-Development OTP for +919850854759: 123456
-```
-
----
-
-# 🔢 Verify OTP API
-
-### Endpoint
-
-```http
-POST /api/auth/verify-otp
-```
-
-Development URL:
-
-```text
-http://localhost:5800/api/auth/verify-otp
-```
-
-### Request
-
-```json
-{
-  "phone": "+919850854759",
-  "otp": "123456"
-}
-```
-
-### Success
-
-```json
-{
-  "success": true,
-  "message": "Phone number verified successfully.",
-  "registrationToken": "..."
-}
-```
-
----
-
-# 🔐 Registration Token
-
-After successful OTP verification, the backend creates a short-lived registration token.
-
-The token:
-
-- proves that the phone completed OTP verification
-- is associated with the verified phone number
-- expires after the configured period
-- is consumed after successful registration
-
-Current development implementation stores tokens in an in-memory `Map`.
-
-Therefore, restarting Node.js removes active registration tokens.
-
-This is acceptable for development. For production or multiple backend instances, use a shared persistent store such as Redis or a database table.
-
----
-
-# 👤 Register API
-
-### Endpoint
-
-```http
-POST /api/auth/register
-```
-
-Development URL:
-
-```text
-http://localhost:5800/api/auth/register
-```
-
-### Request
-
-```json
-{
-  "username": "student123",
-  "fullName": "Test Student",
-  "phone": "+919850854759",
-  "password": "Password@123",
-  "registrationToken": "..."
-}
-```
-
-The backend should:
-
-1. Validate required fields.
-2. Verify the registration token.
-3. Ensure the token belongs to the submitted phone.
-4. Create the Supabase Auth user.
-5. Create the application's profile record.
-6. Consume the registration token.
-7. Return success.
-
----
-
-# 🌐 Current API Structure
-
-All authentication APIs are mounted under:
-
-```text
-/api/auth
-```
-
-| Method | Endpoint | Purpose |
-|---|---|---|
-| POST | `/api/auth/send-otp` | Start phone verification |
-| POST | `/api/auth/verify-otp` | Verify development OTP |
-| POST | `/api/auth/register` | Create account |
-
----
-
-# 🧱 Backend Architecture
-
-Keep responsibilities separated:
-
-```text
-Route
-  ↓
-Controller
-  ↓
-Service
-  ↓
-Supabase / Database
-```
-
-### Routes
-
-Define API paths and connect them to controllers.
-
-### Controllers
-
-Handle:
-
-- Request body
-- Validation
-- HTTP responses
-- Calling services
-
-### Services
-
-Contain reusable business logic.
-
-`otpService.js` currently handles:
-
-- Development OTP
-- OTP expiry
-- OTP verification
-- Registration token generation
-- Registration token validation
-- Token consumption
-
-### Config
-
-External service configuration belongs in `config/`.
-
----
-
-# 🖥️ Frontend API Service
-
-Keep frontend API calls centralized in:
-
-```text
-client/src/services/authApi.js
-```
-
-Current API base:
-
-```javascript
-const API_URL = "http://localhost:5800/api";
-```
-
-Authentication functions:
-
-```javascript
-sendOtp(phone)
-verifyOtp(phone, otp)
-registerUser(userData)
-```
-
-Avoid duplicating `fetch()` logic inside every component.
-
----
-
-# ▶️ Running the Project
-
-## Backend
+Backend development script currently uses Node's environment-file support:
 
 ```bash
-cd server
 npm run dev
 ```
 
-Current development backend:
-
-```text
-http://localhost:5800
-```
-
-## Frontend
-
-Open another terminal:
+Production/start script:
 
 ```bash
-cd client
-npm run dev
+npm start
 ```
 
-Use the URL displayed by Vite.
+The backend server is configured through:
+
+```text
+server/server.js
+```
+
+The frontend is run from the `client` directory using its package scripts.
 
 ---
 
-# 🧪 API Testing
+# 19. Before Starting a Feature
 
-Before connecting a new frontend feature, test its API with Postman or Thunder Client.
+A new teammate should:
 
-Example:
-
-```text
-POST http://localhost:5800/api/auth/send-otp
-```
-
-Then:
-
-```text
-POST http://localhost:5800/api/auth/verify-otp
-```
-
-Then:
-
-```text
-POST http://localhost:5800/api/auth/register
-```
-
-This makes backend debugging much easier.
+1. Pull the latest shared branch.
+2. Install dependencies.
+3. Configure `.env`.
+4. Start frontend and backend.
+5. Test login/authentication.
+6. Open the profile page and confirm the authenticated user works.
+7. Create a feature branch.
+8. Read the existing routes/controllers before adding new ones.
+9. Build the feature using `req.user.id` for ownership.
+10. Test both successful and failed API requests.
+11. Commit to the feature branch.
+12. Open a Pull Request.
 
 ---
 
-# 🎉 Account Created
+# 20. Current Progress
 
-After successful registration:
+## Authentication / Common Platform
 
-```text
-POST /api/auth/register
-        ↓
-Success
-        ↓
-Account Created screen
-        ↓
-Confetti / blaster animation
-        ↓
-Go to Home
-```
-
-The frontend uses `canvas-confetti`.
-
-Install:
-
-```bash
-npm install canvas-confetti
-```
+- [x] Supabase authentication integration
+- [x] Backend authentication middleware
+- [x] Bearer-token authentication for protected API routes
+- [x] User profile integration
+- [x] College database structure
+- [x] College dropdown
+- [x] University stored through `university_id`
+- [x] In-place profile editing
+- [x] Profile update API
+- [x] College email OTP flow
+- [x] College verification status
+- [x] Resend email integration
 
 ---
 
-# 👥 Team Development
+# 21. Important Development Notes
 
-The project is feature-based. The common authentication foundation should be shared by all features.
+### University
 
-Planned modules:
+Use:
 
 ```text
-ClockIt
-│
-├── Authentication
-├── Home
-│
-├── UniMart
-│   ├── Buy/Sell Products
-│   ├── Categories
-│   ├── Product Search
-│   ├── Wishlist
-│   ├── Chat
-│   ├── Offers
-│   ├── Ratings
-│   └── Mark Sold
-│
-├── Roomies
-│   ├── Listing
-│   ├── Roommate Profile
-│   ├── Bio
-│   ├── Budget
-│   ├── Gender Preference
-│   ├── Smoking/Drinking Preference
-│   ├── Food Preference
-│   ├── Occupation
-│   ├── College Year
-│   ├── Location Preference
-│   └── Contact
-│
-└── Stays
-    ├── Flat Photos
-    ├── Rent
-    ├── Deposit
-    ├── Area
-    ├── Distance From College
-    ├── Nearby Facilities
-    ├── Furnished/Unfurnished
-    ├── Availability Date
-    └── Reviews
+college.id
 ```
 
-Each feature should have its own backend routes/controllers/services as needed instead of putting feature-specific logic into authentication files.
+as the dropdown value.
 
+Do not store:
+
+```text
+"MIT WPU"
+```
+
+as the foreign-key value.
+
+### Authentication
+
+Protected APIs should use:
+
+```http
+Authorization: Bearer <access_token>
+```
+
+and backend controllers should use:
+
+```javascript
+req.user.id;
+```
+
+### Supabase Admin
+
+`supabaseAdmin` is a backend-only client.
+
+Never expose the service-role/admin key to React.
+
+### College Domains
+
+The schema uses:
+
+```text
+colleges
+college_domains
+```
+
+not:
+
+```text
+colleges.email_domain
+```
+
+### Feature Isolation
+
+Build new modules independently so that Marketplace, Roomies, and Stays do not break authentication/profile functionality.
 ---
-
-# 🌳 Git Workflow
-
-Create a feature branch:
-
-```bash
-git checkout -b feature/<feature-name>
-```
-
-Examples:
-
-```bash
-git checkout -b feature/unimart
-git checkout -b feature/roomies
-git checkout -b feature/stays
-git checkout -b feature/home
-```
-
-Commit:
-
-```bash
-git add .
-git commit -m "Add UniMart product listing"
-```
-
-Push:
-
-```bash
-git push origin feature/unimart
-```
-
-Use a Pull Request before merging into the shared branch.
-
----
-
-# ⚠️ Team Rules
-
-### 1. Never commit secrets
-
-Never push:
-
-```text
-SUPABASE_URL
-SUPABASE_KEY
-```
-
-or other credentials.
-
-### 2. Don't create another authentication system
-
-All modules should use the central authenticated user.
-
-### 3. Don't duplicate user identities
-
-Feature records should reference the authenticated user.
-
-Example:
-
-```text
-User
- │
- ├── UniMart products
- ├── Roommate profile
- ├── Flat listings
- └── Messages
-```
-
-### 4. Keep feature code isolated
-
-For example, UniMart logic should not be placed inside:
-
-```text
-authController.js
-```
-
----
-
-# 👤 User Ownership
-
-Feature data should be associated with the authenticated user.
-
-Example UniMart:
-
-```text
-Authenticated User
-       ↓
-Create Product
-       ↓
-product.user_id
-```
-
-Roomies:
-
-```text
-Authenticated User
-       ↓
-Create Roommate Profile
-       ↓
-roommate_profile.user_id
-```
-
-Stays:
-
-```text
-Authenticated User
-       ↓
-Create Flat Listing
-       ↓
-flat_listing.user_id
-```
-
-This will make ownership, editing and authorization easier to implement.
-
----
-
-# 🏠 Home Page
-
-The Home page is the base platform.
-
-It should show selected information from the other services rather than implementing every feature directly.
-
-Main navigation:
-
-```text
-Home
-Deals
-Roomies
-Stays
-```
-
-Major modules should have separate pages/routes.
-
-Possible structure:
-
-```text
-/
-├── /unimart
-├── /roomies
-└── /stays
-```
-
-The exact route names can be changed as the frontend develops.
-
----
-
-# 🏫 College Email Verification
-
-The planned platform includes college/work-email verification.
-
-The intended approach is to maintain a college-specific allowed email domain.
-
-Example:
-
-```text
-student@college.edu
-```
-
-The exact allowed domains should be configured rather than scattered through frontend code.
-
-College email verification is separate from the current development phone OTP flow.
-
----
-
-# 🔒 Current Security Limitations
-
-This is still a development implementation.
-
-Current limitations:
-
-- OTP is fixed to `123456`.
-- OTP state is stored in server memory.
-- Registration tokens are stored in server memory.
-- Real SMS provider is not integrated.
-- Production rate limiting is not implemented.
-- OTP attempt limits are not implemented.
-- Production session/auth handling still needs to be completed.
-- Refreshing during registration can lose in-memory registration state.
-
-These should be addressed before production deployment.
-
----
-
-# 📌 Planned Common Authentication Work
-
-- [ ] Real SMS OTP provider
-- [ ] College/work-email verification
-- [ ] Login
-- [ ] Logout
-- [ ] Persistent authentication session
-- [ ] Protected React routes
-- [ ] Password reset
-- [ ] Resend OTP rate limiting
-- [ ] OTP attempt limits
-- [ ] Persistent OTP/token storage
-- [ ] Production security configuration
-
----
-
-# 🧭 New Teammate Checklist
-
-1. Clone the repository.
-2. Install frontend dependencies.
-3. Install backend dependencies.
-4. Configure the backend `.env`.
-5. Start the backend.
-6. Start the frontend.
-7. Verify registration works.
-8. Use development OTP:
-
-```text
-123456
-```
-
-9. Create a feature branch.
-10. Build your feature without changing shared authentication unless necessary.
-11. Test your API separately.
-12. Commit and push your branch.
-13. Create a Pull Request.
-
----
-
-# ✅ Current Status
-
-## Authentication
-
-- [x] Registration UI
-- [x] Basic details validation
-- [x] Development OTP
-- [x] Backend Send OTP API
-- [x] Backend Verify OTP API
-- [x] OTP expiry
-- [x] OTP verification
-- [x] Registration token
-- [x] Registration token validation
-- [x] Supabase Auth user creation
-- [x] Profile creation
-- [x] Token consumption
-- [x] Account Created screen
-- [x] Confetti/blaster animation
-
-## Common Platform
-
-- [ ] Login
-- [ ] Logout
-- [ ] Persistent session handling
-- [ ] Protected routes
-- [ ] Profile page
-- [ ] Home page API/data integration
-- [ ] College email verification
-
-## Feature Modules
-
-- [ ] UniMart
-- [ ] Roomies
-- [ ] Stays
-
----
-
-# 📝 Quick Reference
-
-```text
-Backend:
-http://localhost:5800
-
-API Base:
-http://localhost:5800/api
-
-Authentication:
-POST /api/auth/send-otp
-POST /api/auth/verify-otp
-POST /api/auth/register
-
-Development OTP:
-123456
-```
-
-## Important
-
-Authentication is the shared foundation of ClockIt. Before changing authentication-related code, check the impact on every module because UniMart, Roomies, Stays, Chat, Profile and ownership/authorization will depend on the central authenticated user.

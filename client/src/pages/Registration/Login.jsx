@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../services/authApi";
 import { supabase } from "../../services/supabase";
 
-function Login() {  
+function Login() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");

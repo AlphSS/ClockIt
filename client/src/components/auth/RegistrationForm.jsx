@@ -7,6 +7,7 @@ import { sendOtp, registerUser } from "../../services/authApi";
 import OtpVerification from "./OtpVerification";
 import SetPassword from "./SetPassword";
 import AccountCreated from "./AccountCreated";
+import VerifyEmail from "./VerifyEmail";
 
 function Register() {
   const navigate = useNavigate();
@@ -102,7 +103,10 @@ function Register() {
         registrationToken,
       });
 
-      setStep(4);
+      sessionStorage.setItem("registrationFullName", formData.fullName);
+      sessionStorage.setItem("registrationEmail", formData.email);
+
+      setStep(5);
     } catch (error) {
       alert(error.message);
     }
@@ -142,6 +146,10 @@ function Register() {
         }}
       />
     );
+  }
+
+  if (step === 5) {
+    return <VerifyEmail email={formData.email} />;
   }
 
   return (

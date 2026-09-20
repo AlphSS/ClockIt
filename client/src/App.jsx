@@ -2,6 +2,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import EmailConfirmed from "./components/auth/EmailConfirmed";
+import VerifyEmail from "./components/auth/VerifyEmail";
+import AccountCreated from "./components/auth/AccountCreated";
+import Profile from "./components/common/Profile";
 
 // Auth / Registration
 import Register from "./components/auth/RegistrationForm";
@@ -26,6 +30,31 @@ function App() {
           {/* Auth */}
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/email-confirmed" element={<EmailConfirmed />} />
+          <Route
+            path="/account-created"
+            element={
+              <AccountCreated
+                name={sessionStorage.getItem("registrationFullName")}
+                onContinue={() => {
+                  sessionStorage.removeItem("registrationFullName");
+                  sessionStorage.removeItem("registrationEmail");
+                  window.location.href = "/";
+                }}
+              />
+            }
+          />
+
+          {/* Profile */}
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Home (protected) */}
           <Route

@@ -45,7 +45,6 @@ export async function verifyOtp(phone, otp) {
 }
 
 export async function registerUser(userData) {
-  console.log("Calling register API:", userData);
   const response = await fetch(`${API_URL}/auth/register`, {
     method: "POST",
     headers: {

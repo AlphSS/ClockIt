@@ -6,7 +6,14 @@ if (!globalThis.WebSocket) {
 }
 
 const supabaseUrl = process.env.SUPABASE_URL;
+const supabasePublishableKey = process.env.SUPABASE_PUBLISHABLE_KEY;
 const supabaseSecretKey = process.env.SUPABASE_SECRET_KEY;
+
+export const supabase = createClient(
+  supabaseUrl,
+  supabasePublishableKey
+);
+
 
 export const supabaseAdmin = createClient(
   supabaseUrl,
