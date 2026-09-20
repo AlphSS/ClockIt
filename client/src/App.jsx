@@ -18,11 +18,6 @@ import AddProduct from "./pages/Marketplace/AddProduct";
 
 import Navbar from "./components/common/NavBar";
 
-// Make sure these imports exist in your project
-import VerifyEmail from "./pages/Registration/VerifyEmail";
-import EmailConfirmed from "./pages/Registration/EmailConfirmed";
-import AccountCreated from "./pages/Registration/AccountCreated";
-
 function App() {
   return (
     <BrowserRouter>

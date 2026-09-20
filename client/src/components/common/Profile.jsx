@@ -9,8 +9,6 @@ import {
   Pencil,
 } from "lucide-react";
 
-import Navbar from "../../components/common/NavBar";
-
 import {
   getProfile,
   getColleges,
@@ -209,8 +207,6 @@ function Profile() {
   if (loading) {
     return (
       <div>
-        <Navbar />
-
         <main className="px-8 py-12">
           <p className="text-gray-600">Loading profile...</p>
         </main>
@@ -224,8 +220,6 @@ function Profile() {
   if (error) {
     return (
       <div>
-        <Navbar />
-
         <main className="px-8 py-12">
           <p className="text-red-500">{error}</p>
         </main>
@@ -235,8 +229,6 @@ function Profile() {
 
   return (
     <div>
-      <Navbar />
-
       <main className="px-8 py-12">
         {/* Header */}
 

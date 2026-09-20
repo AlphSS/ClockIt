@@ -3,8 +3,6 @@ import Navbar from "../../components/common/NavBar";
 function Home() {
   return (
     <div>
-      <Navbar />
-
       <main className="px-8 py-12">
         <h1 className="text-4xl font-bold">Welcome to ClockIt</h1>
 
