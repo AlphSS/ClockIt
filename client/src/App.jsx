@@ -5,6 +5,10 @@ import Login from "./pages/Registration/login";
 
 import Home from "./pages/Home/Home";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import EmailConfirmed from "./components/auth/EmailConfirmed";
+import VerifyEmail from "./components/auth/VerifyEmail";
+import AccountCreated from "./components/auth/AccountCreated";
+import Profile from "./components/common/Profile";
 
 import Marketplace from "./pages/Marketplace/Marketplace";
 import ProductDetails from "./pages/Marketplace/ProductDetails";
@@ -27,6 +31,24 @@ function App() {
       <Routes>
         {/* Authentication */}
         <Route path="/register" element={<Register />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
+
+        <Route path="/email-confirmed" element={<EmailConfirmed />} />
+
+        <Route
+          path="/account-created"
+          element={
+            <AccountCreated
+              name={sessionStorage.getItem("registrationFullName")}
+              onContinue={() => {
+                sessionStorage.removeItem("registrationFullName");
+                sessionStorage.removeItem("registrationEmail");
+                window.location.href = "/";
+              }}
+            />
+          }
+        />
+
         <Route path="/login" element={<Login />} />
 
         <Route path="/verify-email" element={<VerifyEmail />} />
@@ -71,6 +93,14 @@ function App() {
 
         {/* Home */}
         <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/"
           element={
             <ProtectedRoute>
@@ -79,6 +109,7 @@ function App() {
           }
         />
       </Routes>
+
     </BrowserRouter>
   );
 }

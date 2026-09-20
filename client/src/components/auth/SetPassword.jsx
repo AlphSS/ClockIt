@@ -67,41 +67,42 @@ function SetPassword({ onBack, onComplete }) {
     }
 
     setError("");
+    setLoading(true);
 
     onComplete(password);
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-md">
         {/* Back */}
         <button
           type="button"
           onClick={onBack}
-          className="mb-6 flex items-center gap-2 text-sm text-text-secondary transition hover:text-primary"
+          className="mb-6 flex items-center gap-2 text-sm text-gray-500 transition hover:text-gray-900"
         >
           <ArrowLeft size={18} />
           Back
         </button>
 
+        {/* Logo */}
+        <div className="mb-8 text-center">
+          <h1 className="text-3xl font-bold text-gray-900">ClockIt</h1>
+
+          <p className="mt-2 text-sm text-gray-500">
+            Your Campus, Your Community
+          </p>
+        </div>
+
         {/* Card */}
-        <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm sm:p-8">
-          {/* Logo */}
-          <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold text-primary">UniNest</h1>
-
-            <p className="mt-1 text-sm text-text-secondary">
-              Your Campus, Your Community
-            </p>
-          </div>
-
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
           {/* Heading */}
           <div className="mb-7">
-            <h2 className="text-2xl font-bold text-text-primary">
+            <h2 className="text-2xl font-semibold text-gray-900">
               Create your password
             </h2>
 
-            <p className="mt-2 text-sm text-text-secondary">
+            <p className="mt-2 text-sm text-gray-500">
               Choose a strong password to secure your account.
             </p>
           </div>
@@ -111,7 +112,7 @@ function SetPassword({ onBack, onComplete }) {
             <div>
               <label
                 htmlFor="password"
-                className="mb-2 block text-sm font-medium text-text-primary"
+                className="mb-2 block text-sm font-medium text-gray-700"
               >
                 Password
               </label>
@@ -119,7 +120,7 @@ function SetPassword({ onBack, onComplete }) {
               <div className="relative">
                 <Lock
                   size={18}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
                 />
 
                 <input
@@ -131,13 +132,13 @@ function SetPassword({ onBack, onComplete }) {
                     setError("");
                   }}
                   placeholder="Create a password"
-                  className="w-full rounded-xl border border-border bg-surface py-3 pl-10 pr-11 text-sm text-text-primary outline-none transition placeholder:text-text-muted focus:border-primary focus:ring-2 focus:ring-primary/10"
+                  className="w-full rounded-xl border border-gray-300 bg-white py-3 pl-10 pr-11 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-black focus:ring-2 focus:ring-gray-200"
                 />
 
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-900"
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -149,17 +150,17 @@ function SetPassword({ onBack, onComplete }) {
             {password && (
               <div>
                 <div className="mb-2 flex items-center justify-between">
-                  <span className="text-xs text-text-secondary">
+                  <span className="text-xs text-gray-500">
                     Password strength
                   </span>
 
                   <span
                     className={`text-xs font-semibold ${
                       strength <= 2
-                        ? "text-danger"
+                        ? "text-red-600"
                         : strength <= 4
-                          ? "text-warning"
-                          : "text-success"
+                          ? "text-yellow-600"
+                          : "text-green-600"
                     }`}
                   >
                     {getStrengthText()}
@@ -173,11 +174,11 @@ function SetPassword({ onBack, onComplete }) {
                       className={`h-1.5 flex-1 rounded-full ${
                         item <= strength
                           ? strength <= 2
-                            ? "bg-danger"
+                            ? "bg-red-500"
                             : strength <= 4
-                              ? "bg-warning"
-                              : "bg-success"
-                          : "bg-surface-muted"
+                              ? "bg-yellow-500"
+                              : "bg-green-500"
+                          : "bg-gray-200"
                       }`}
                     />
                   ))}
@@ -186,8 +187,8 @@ function SetPassword({ onBack, onComplete }) {
             )}
 
             {/* Requirements */}
-            <div className="rounded-xl bg-surface-muted p-4">
-              <p className="mb-3 text-xs font-semibold text-text-primary">
+            <div className="rounded-xl bg-gray-50 border border-gray-200 p-4">
+              <p className="mb-3 text-xs font-semibold text-gray-900">
                 Password must contain:
               </p>
 
@@ -220,7 +221,7 @@ function SetPassword({ onBack, onComplete }) {
             <div>
               <label
                 htmlFor="confirmPassword"
-                className="mb-2 block text-sm font-medium text-text-primary"
+                className="mb-2 block text-sm font-medium text-gray-700"
               >
                 Confirm Password
               </label>
@@ -228,7 +229,7 @@ function SetPassword({ onBack, onComplete }) {
               <div className="relative">
                 <Lock
                   size={18}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
                 />
 
                 <input
@@ -242,15 +243,15 @@ function SetPassword({ onBack, onComplete }) {
                   placeholder="Re-enter your password"
                   className={`w-full rounded-xl border ${
                     confirmPassword && password !== confirmPassword
-                      ? "border-danger"
-                      : "border-border"
-                  } bg-surface py-3 pl-10 pr-11 text-sm text-text-primary outline-none transition placeholder:text-text-muted focus:border-primary focus:ring-2 focus:ring-primary/10`}
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  } bg-white py-3 pl-10 pr-11 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-black focus:ring-2 focus:ring-gray-200`}
                 />
 
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-900"
                   aria-label={
                     showConfirmPassword ? "Hide password" : "Show password"
                   }
@@ -265,13 +266,17 @@ function SetPassword({ onBack, onComplete }) {
             </div>
 
             {/* Error */}
-            {error && <p className="text-sm text-danger">{error}</p>}
+            {error && (
+              <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3">
+                <p className="text-sm text-red-600">{error}</p>
+              </div>
+            )}
 
             {/* Create Account */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-xl bg-primary py-3.5 text-sm font-semibold text-white transition hover:bg-primary-hover active:scale-[0.99]"
+              className="w-full rounded-xl bg-black py-3.5 text-sm font-semibold text-white transition hover:bg-gray-800 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? "Creating Account..." : "Create Account"}
             </button>
@@ -287,15 +292,13 @@ function Requirement({ valid, text }) {
     <div className="flex items-center gap-2">
       <div
         className={`flex h-4 w-4 items-center justify-center rounded-full ${
-          valid ? "bg-success text-white" : "border border-border"
+          valid ? "bg-green-500 text-white" : "border border-gray-300"
         }`}
       >
         {valid && <Check size={10} />}
       </div>
 
-      <span
-        className={`text-xs ${valid ? "text-success" : "text-text-secondary"}`}
-      >
+      <span className={`text-xs ${valid ? "text-green-600" : "text-gray-500"}`}>
         {text}
       </span>
     </div>

@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 import { useEffect, useState } from "react";
 
 import {
@@ -10,6 +8,8 @@ import {
   ShieldCheck,
   Pencil,
 } from "lucide-react";
+
+import Navbar from "../../components/common/NavBar";
 
 import {
   getProfile,
@@ -235,6 +235,8 @@ function Profile() {
 
   return (
     <div>
+      <Navbar />
+
       <main className="px-8 py-12">
         {/* Header */}
 
@@ -613,4 +615,3 @@ function InfoItem({ icon, label, value }) {
 }
 
 export default Profile;
->>>>>>> Stashed changes

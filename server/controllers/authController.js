@@ -1,4 +1,4 @@
-import { supabaseAdmin } from "../config/supabase.js";
+import { supabaseAdmin, supabase } from "../config/supabase.js";
 import {
   verifyRegistrationToken,
   consumeRegistrationToken,
@@ -78,14 +78,18 @@ export async function registerUser(req, res) {
     }
 
     // Create Supabase Auth user
-    const { data: authData, error: authError } =
-      await supabaseAdmin.auth.admin.createUser({
-        email,
-        phone,
-        password,
-        phone_confirm: true,
-        email_confirm: true,
-      });
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: "http://localhost:5173/email-confirmed",
+      },
+    });
+
+    console.log("SIGNUP RESULT:");
+    console.log("User:", authData?.user);
+    console.log("Session:", authData?.session);
+    console.log("Auth error:", authError);
 
     if (authError) {
       console.error(authError);
@@ -111,7 +115,11 @@ export async function registerUser(req, res) {
       .single();
 
     if (profileError) {
-      console.error(profileError);
+      console.error("PROFILE CREATION ERROR:");
+      console.error("Code:", profileError.code);
+      console.error("Message:", profileError.message);
+      console.error("Details:", profileError.details);
+      console.error("Hint:", profileError.hint);
 
       // Roll back Auth user if profile creation fails
       await supabaseAdmin.auth.admin.deleteUser(user.id);
@@ -170,6 +178,12 @@ export async function loginUser(req, res) {
       });
     }
 
+    if (!data.user.email_confirmed_at) {
+      return res.status(403).json({
+        success: false,
+        message: "Please verify your email before logging in.",
+      });
+    }
     return res.status(200).json({
       success: true,
       message: "Login successful.",
