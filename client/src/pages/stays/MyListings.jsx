@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Plus, Edit2, Trash2, Eye, CheckCircle, Clock, XCircle, ArrowLeft } from "lucide-react";
+import { Plus, Edit2, Trash2, Eye, CheckCircle, Clock, XCircle } from "lucide-react";
 import NavBar from "../../components/common/NavBar";
 import { fetchMyListings, deleteStay } from "../../services/staysApi";
 import { useAuth } from "../../context/AuthContext";
@@ -33,19 +33,20 @@ export default function MyListings() {
     return null;
   }
 
-  async function load() {
-    try {
-      const token = await getToken();
-      const res = await fetchMyListings(token);
-      setListings(res.data || []);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    async function load() {
+      try {
+        const token = await getToken();
+        const res = await fetchMyListings(token);
+        setListings(res.data || []);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
     }
-  }
-
-  useEffect(() => { load(); }, []);
+    load();
+  }, [getToken]);
 
   async function handleDelete(id) {
     if (!window.confirm("Delete this listing? This action cannot be undone.")) return;

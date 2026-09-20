@@ -50,7 +50,7 @@ export default function StaysHome() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ backgroundColor: "#F3EEE7" }}>
       <NavBar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-8">
@@ -88,12 +88,13 @@ export default function StaysHome() {
             <div className="lg:hidden flex items-center justify-between">
               <button
                 onClick={() => setMobileFiltersOpen(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-700 shadow-sm hover:shadow-md transition"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all"
+                style={{ backgroundColor: "#FDFAF5", border: "1.5px solid #E8E0D8", color: "#18100E", boxShadow: "0 2px 8px rgba(24,16,14,0.06)" }}
               >
-                <SlidersHorizontal size={16} />
+                <SlidersHorizontal size={15} />
                 Filters
                 {total > 0 && (
-                  <span className="text-xs text-cyan-600">({total})</span>
+                  <span className="text-xs font-bold" style={{ color: "#7B3045" }}>({total})</span>
                 )}
               </button>
               <PostFlatCard />
@@ -128,12 +129,18 @@ export default function StaysHome() {
             className="flex-1 bg-black/40"
             onClick={() => setMobileFiltersOpen(false)}
           />
-          <div className="w-80 max-w-full bg-white h-full overflow-y-auto shadow-2xl p-4">
+          <div
+            className="w-80 max-w-full h-full overflow-y-auto shadow-2xl p-4"
+            style={{ backgroundColor: "#F3EEE7" }}
+          >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-gray-900">Filters</h3>
+              <h3 className="font-bold text-sm uppercase tracking-widest" style={{ color: "#18100E" }}>Filters</h3>
               <button
                 onClick={() => setMobileFiltersOpen(false)}
-                className="w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400"
+                className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+                style={{ color: "#9CA3AF" }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#E8E0D8"}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
               >
                 <X size={16} />
               </button>
@@ -147,7 +154,8 @@ export default function StaysHome() {
             />
             <button
               onClick={() => setMobileFiltersOpen(false)}
-              className="mt-4 w-full py-3 bg-cyan-500 text-white font-semibold rounded-xl"
+              className="mt-4 w-full py-3 text-sm font-bold rounded-xl transition-all"
+              style={{ backgroundColor: "#18100E", color: "#F3EEE7" }}
             >
               Show {total} Flats
             </button>

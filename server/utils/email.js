@@ -1,10 +1,21 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy-initialize Resend so server doesn't crash if RESEND_API_KEY isn't set
+let _resend = null;
+function getResendClient() {
+  if (!_resend) {
+    if (!process.env.RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY is not set in environment variables.");
+    }
+    _resend = new Resend(process.env.RESEND_API_KEY);
+  }
+  return _resend;
+}
 
 export async function sendCollegeVerificationEmail(collegeEmail, otp) {
+  const resend = getResendClient();
   const { data, error } = await resend.emails.send({
-    from: process.env.RESEND_FROM_EMAIL,
+    from: process.env.RESEND_FROM_EMAIL || "noreply@clockit.app",
     to: [collegeEmail],
     subject: "ClockIt College Email Verification",
     html: `

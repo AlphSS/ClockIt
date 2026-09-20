@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Heart, MapPin, Bed, Bath, Maximize2, Star, Phone, CheckCircle, Calendar } from "lucide-react";
+import { Heart, MapPin, Bed, Bath, Maximize2, Star, CheckCircle, Calendar } from "lucide-react";
 import { formatRent, formatDate, getFirstImage, getAmenityIcon, getFurnishingLabel } from "../../utils/stayHelpers";
 
 export default function StayCard({ stay, isSaved, onToggleSave, saveLoading }) {
@@ -12,7 +12,6 @@ export default function StayCard({ stay, isSaved, onToggleSave, saveLoading }) {
   const isVerified = stay.is_verified && stay.verification_status === "verified";
 
   function handleCardClick(e) {
-    // Don't navigate if clicking heart
     if (e.target.closest(".heart-btn")) return;
     navigate(`/stays/${stay.id}`);
   }
@@ -20,10 +19,23 @@ export default function StayCard({ stay, isSaved, onToggleSave, saveLoading }) {
   return (
     <div
       onClick={handleCardClick}
-      className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden"
+      className="group rounded-2xl overflow-hidden cursor-pointer transition-all duration-300"
+      style={{
+        backgroundColor: "#FDFAF5",
+        border: "1px solid #E8E0D8",
+        boxShadow: "0 2px 8px rgba(24,16,14,0.05)",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.boxShadow = "0 8px 32px rgba(24,16,14,0.12)";
+        e.currentTarget.style.transform = "translateY(-3px)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.boxShadow = "0 2px 8px rgba(24,16,14,0.05)";
+        e.currentTarget.style.transform = "translateY(0)";
+      }}
     >
       {/* Image */}
-      <div className="relative h-48 overflow-hidden bg-gray-100">
+      <div className="relative h-48 overflow-hidden" style={{ backgroundColor: "#E8E0D8" }}>
         <img
           src={mainImage}
           alt={stay.title}
@@ -33,34 +45,32 @@ export default function StayCard({ stay, isSaved, onToggleSave, saveLoading }) {
             e.target.src = "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800";
           }}
         />
-
-        {/* Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" />
 
         {/* Verified badge */}
         {isVerified && (
-          <div className="absolute top-3 left-3 flex items-center gap-1 bg-emerald-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
-            <CheckCircle size={11} />
-            Verified
+          <div
+            className="absolute top-3 left-3 flex items-center gap-1 text-white text-xs font-bold px-2.5 py-1 rounded-full"
+            style={{ backgroundColor: "#2D6A4F" }}
+          >
+            <CheckCircle size={10} /> Verified
           </div>
         )}
 
-        {/* Heart button */}
+        {/* Heart */}
         <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onToggleSave(stay.id);
-          }}
+          onClick={(e) => { e.stopPropagation(); onToggleSave(stay.id); }}
           disabled={saveLoading === stay.id}
-          className={`heart-btn absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center transition-all ${
-            isSaved
-              ? "bg-red-500 text-white shadow-md"
-              : "bg-white/90 text-gray-400 hover:text-red-400 hover:bg-white shadow-sm"
-          }`}
+          className="heart-btn absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center transition-all"
+          style={{
+            backgroundColor: isSaved ? "#7B3045" : "rgba(253,250,245,0.9)",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+          }}
         >
           <Heart
-            size={16}
-            className={`transition-transform ${saveLoading === stay.id ? "animate-pulse" : ""}`}
+            size={15}
+            style={{ color: isSaved ? "#FDFAF5" : "#7B3045" }}
+            className={saveLoading === stay.id ? "animate-pulse" : ""}
             fill={isSaved ? "currentColor" : "none"}
           />
         </button>
@@ -69,7 +79,7 @@ export default function StayCard({ stay, isSaved, onToggleSave, saveLoading }) {
         <div className="absolute bottom-3 left-3">
           <span className="text-white font-bold text-lg drop-shadow-md">
             {formatRent(stay.rent)}
-            <span className="text-sm font-normal">/mo</span>
+            <span className="text-sm font-normal opacity-80">/mo</span>
           </span>
         </div>
       </div>
@@ -77,32 +87,35 @@ export default function StayCard({ stay, isSaved, onToggleSave, saveLoading }) {
       {/* Content */}
       <div className="p-4">
         {/* Title */}
-        <h3 className="font-bold text-gray-900 text-base leading-snug mb-1 line-clamp-1 group-hover:text-cyan-600 transition">
+        <h3
+          className="font-bold text-base leading-snug mb-1 line-clamp-1 transition-colors"
+          style={{ color: "#18100E", fontFamily: "Georgia, serif" }}
+        >
           {stay.title}
         </h3>
 
         {/* Location */}
-        <div className="flex items-center gap-1 text-gray-500 text-sm mb-3">
-          <MapPin size={13} className="text-gray-400 flex-shrink-0" />
-          <span className="truncate">{stay.location_area}, {stay.location_city || "Pune"}</span>
+        <div className="flex items-center gap-1 mb-3" style={{ color: "#9CA3AF" }}>
+          <MapPin size={12} className="flex-shrink-0" />
+          <span className="text-xs truncate">{stay.location_area}, {stay.location_city || "Pune"}</span>
         </div>
 
-        {/* Specs row */}
-        <div className="flex items-center gap-3 text-sm text-gray-600 mb-3">
+        {/* Specs */}
+        <div className="flex items-center gap-3 text-xs mb-3" style={{ color: "#6B7280" }}>
           <div className="flex items-center gap-1">
-            <Bed size={14} className="text-cyan-500" />
-            <span className="font-medium">{stay.bhk}</span>
+            <Bed size={13} style={{ color: "#7B3045" }} />
+            <span className="font-semibold">{stay.bhk}</span>
           </div>
-          <span className="text-gray-300">•</span>
+          <span style={{ color: "#D1C7BB" }}>•</span>
           <div className="flex items-center gap-1">
-            <Bath size={14} className="text-cyan-500" />
+            <Bath size={13} style={{ color: "#7B3045" }} />
             <span>{stay.bathrooms} Bath</span>
           </div>
           {stay.area_sqft && (
             <>
-              <span className="text-gray-300">•</span>
+              <span style={{ color: "#D1C7BB" }}>•</span>
               <div className="flex items-center gap-1">
-                <Maximize2 size={13} className="text-cyan-500" />
+                <Maximize2 size={12} style={{ color: "#7B3045" }} />
                 <span>{stay.area_sqft} sqft</span>
               </div>
             </>
@@ -113,13 +126,20 @@ export default function StayCard({ stay, isSaved, onToggleSave, saveLoading }) {
         {topAmenities.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-3">
             {topAmenities.map((a) => (
-              <span key={a} className="flex items-center gap-1 px-2 py-0.5 bg-gray-50 text-gray-600 text-xs rounded-full border border-gray-100">
+              <span
+                key={a}
+                className="flex items-center gap-1 px-2 py-0.5 text-xs rounded-full"
+                style={{ backgroundColor: "#F3EEE7", color: "#6B7280", border: "1px solid #E8E0D8" }}
+              >
                 <span>{getAmenityIcon(a)}</span>
                 {a}
               </span>
             ))}
             {(stay.amenities?.length || 0) > 3 && (
-              <span className="px-2 py-0.5 bg-gray-50 text-gray-500 text-xs rounded-full border border-gray-100">
+              <span
+                className="px-2 py-0.5 text-xs rounded-full"
+                style={{ backgroundColor: "#F3EEE7", color: "#9CA3AF", border: "1px solid #E8E0D8" }}
+              >
                 +{stay.amenities.length - 3} more
               </span>
             )}
@@ -127,33 +147,32 @@ export default function StayCard({ stay, isSaved, onToggleSave, saveLoading }) {
         )}
 
         {/* Bottom row */}
-        <div className="flex items-center justify-between pt-3 border-t border-gray-50">
+        <div className="flex items-center justify-between pt-3" style={{ borderTop: "1px solid #F0E9E1" }}>
           <div className="flex items-center gap-3">
-            {/* Rating */}
             {stay.rating > 0 && (
               <div className="flex items-center gap-1">
-                <Star size={13} className="text-amber-400 fill-amber-400" />
-                <span className="text-sm font-semibold text-gray-700">{stay.rating}</span>
-                <span className="text-xs text-gray-400">({stay.review_count})</span>
+                <Star size={12} style={{ color: "#D97706" }} fill="#D97706" />
+                <span className="text-xs font-bold" style={{ color: "#18100E" }}>{stay.rating}</span>
+                <span className="text-xs" style={{ color: "#9CA3AF" }}>({stay.review_count})</span>
               </div>
             )}
-            {/* Availability */}
             {stay.available_from && (
-              <div className="flex items-center gap-1 text-xs text-gray-400">
+              <div className="flex items-center gap-1" style={{ color: "#9CA3AF" }}>
                 <Calendar size={11} />
-                <span>{formatDate(stay.available_from)}</span>
+                <span className="text-xs">{formatDate(stay.available_from)}</span>
               </div>
             )}
           </div>
 
-          {/* Contact CTA */}
           <Link
             to={`/stays/${stay.id}`}
             onClick={(e) => e.stopPropagation()}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold rounded-lg transition shadow-sm hover:shadow-md"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl transition-all"
+            style={{ backgroundColor: "#18100E", color: "#F3EEE7" }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#7B3045"}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "#18100E"}
           >
-            <Phone size={12} />
-            Contact
+            View
           </Link>
         </div>
       </div>

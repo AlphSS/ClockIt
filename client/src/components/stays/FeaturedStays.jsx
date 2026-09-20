@@ -16,14 +16,25 @@ export default function FeaturedStays({ isSaved, onToggleSave, saveLoading }) {
   if (loading) {
     return (
       <div>
-        <h2 className="text-xl font-bold text-gray-900 mb-4">✨ Featured Flats</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2
+            className="font-bold"
+            style={{ color: "#18100E", fontFamily: "Georgia, serif", fontSize: "1.25rem" }}
+          >
+            Featured Flats
+          </h2>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="bg-white rounded-2xl border border-gray-100 overflow-hidden animate-pulse">
-              <div className="h-48 bg-gray-200" />
+            <div
+              key={i}
+              className="rounded-2xl overflow-hidden animate-pulse"
+              style={{ backgroundColor: "#FDFAF5", border: "1px solid #E8E0D8" }}
+            >
+              <div className="h-48" style={{ backgroundColor: "#E8E0D8" }} />
               <div className="p-4 space-y-3">
-                <div className="h-4 bg-gray-200 rounded-full w-3/4" />
-                <div className="h-3 bg-gray-200 rounded-full w-1/2" />
+                <div className="h-4 rounded-full w-3/4" style={{ backgroundColor: "#E8E0D8" }} />
+                <div className="h-3 rounded-full w-1/2" style={{ backgroundColor: "#E8E0D8" }} />
               </div>
             </div>
           ))}
@@ -37,9 +48,17 @@ export default function FeaturedStays({ isSaved, onToggleSave, saveLoading }) {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-gray-900">✨ Featured Flats</h2>
-        <span className="text-xs text-gray-400 bg-amber-50 text-amber-600 px-2 py-1 rounded-full font-medium border border-amber-200">
-          Verified & Popular
+        <h2
+          className="font-bold"
+          style={{ color: "#18100E", fontFamily: "Georgia, serif", fontSize: "1.25rem" }}
+        >
+          Featured Flats
+        </h2>
+        <span
+          className="text-xs font-semibold px-3 py-1 rounded-full"
+          style={{ backgroundColor: "#F3EEE7", color: "#7B3045", border: "1px solid #E8E0D8" }}
+        >
+          Verified &amp; Popular
         </span>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">

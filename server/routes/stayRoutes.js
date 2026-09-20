@@ -38,11 +38,13 @@ const upload = multer({
 router.get("/seed", seedStays);          // Dev-only seed endpoint
 router.get("/featured", getFeaturedStays);
 router.get("/", getStays);
-router.get("/:id", optionalAuth, getStayById);
 
-// ── Protected routes ──────────────────────────────────────────────────────────
-router.post("/", requireAuth, createStay);
+// ── Protected routes (must be before /:id to avoid param collision) ───────────
 router.get("/my/listings", requireAuth, getMyListings);
+router.post("/", requireAuth, createStay);
+router.post("/upload/image", requireAuth, upload.single("image"), uploadImage);
+
+router.get("/:id", optionalAuth, getStayById);
 router.put("/:id", requireAuth, updateStay);
 router.delete("/:id", requireAuth, deleteStay);
 
@@ -50,7 +52,5 @@ router.post("/:id/save", requireAuth, saveStay);
 router.delete("/:id/save", requireAuth, unsaveStay);
 router.post("/:id/view", optionalAuth, recordView);
 router.post("/:id/inquiries", requireAuth, createInquiry);
-
-router.post("/upload/image", requireAuth, upload.single("image"), uploadImage);
 
 export default router;

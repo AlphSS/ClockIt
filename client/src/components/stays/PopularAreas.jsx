@@ -1,20 +1,9 @@
 import { useEffect, useState } from "react";
-import { MapPin, ChevronRight, Loader2 } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { fetchAreas } from "../../services/staysApi";
 
 const FALLBACK_AREAS = [
   "Kothrud", "Karve Nagar", "Hinjewadi", "Baner", "Wakad", "Aundh", "Pashan",
-];
-
-// Color palette for area chips
-const COLORS = [
-  "from-cyan-500 to-cyan-600",
-  "from-violet-500 to-violet-600",
-  "from-orange-500 to-orange-600",
-  "from-emerald-500 to-emerald-600",
-  "from-rose-500 to-rose-600",
-  "from-amber-500 to-amber-600",
-  "from-blue-500 to-blue-600",
 ];
 
 export default function PopularAreas({ onAreaClick, activeArea }) {
@@ -31,35 +20,52 @@ export default function PopularAreas({ onAreaClick, activeArea }) {
   const displayAreas = areas.length > 0 ? areas : FALLBACK_AREAS.map((name, i) => ({ id: i, name }));
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+    <div
+      className="rounded-2xl p-5"
+      style={{ backgroundColor: "#FDFAF5", border: "1px solid #E8E0D8", boxShadow: "0 2px 12px rgba(24,16,14,0.04)" }}
+    >
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-bold text-gray-900">Popular Areas</h3>
-        <span className="text-xs text-gray-400">{displayAreas.length} areas</span>
+        <h3
+          className="text-xs font-bold uppercase tracking-widest"
+          style={{ color: "#18100E" }}
+        >
+          Popular Areas
+        </h3>
+        <span className="text-xs" style={{ color: "#9CA3AF" }}>{displayAreas.length} areas</span>
       </div>
 
       {loading ? (
-        <div className="flex gap-2">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="h-8 w-24 bg-gray-100 rounded-full animate-pulse" />
+        <div className="flex flex-wrap gap-2">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-8 w-24 rounded-full animate-pulse"
+              style={{ backgroundColor: "#E8E0D8" }}
+            />
           ))}
         </div>
       ) : (
         <div className="flex flex-wrap gap-2">
           {displayAreas.map((area, idx) => {
             const isActive = activeArea === area.name;
-            const colorClass = COLORS[idx % COLORS.length];
-
             return (
               <button
                 key={area.id || idx}
                 onClick={() => onAreaClick(isActive ? "" : area.name)}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all hover:shadow-md active:scale-[0.97] ${
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all"
+                style={
                   isActive
-                    ? `bg-gradient-to-r ${colorClass} text-white shadow-md`
-                    : "bg-gray-50 text-gray-700 border border-gray-200 hover:border-gray-300 hover:bg-gray-100"
-                }`}
+                    ? { backgroundColor: "#18100E", color: "#F3EEE7", border: "1.5px solid #18100E" }
+                    : { backgroundColor: "#F3EEE7", color: "#6B7280", border: "1.5px solid #E8E0D8" }
+                }
+                onMouseEnter={(e) => {
+                  if (!isActive) e.currentTarget.style.borderColor = "#7B3045";
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) e.currentTarget.style.borderColor = "#E8E0D8";
+                }}
               >
-                <MapPin size={13} />
+                <MapPin size={11} />
                 {area.name}
               </button>
             );

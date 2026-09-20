@@ -21,6 +21,7 @@ import PostStay from "./pages/stays/PostStay";
 import MyListings from "./pages/stays/MyListings";
 import SavedStays from "./pages/stays/SavedStays";
 import MyInquiries from "./pages/stays/MyInquiries";
+import EditStay from "./pages/stays/EditStay";
 
 function App() {
   return (
@@ -68,10 +69,11 @@ function App() {
 
           {/* Stays module */}
           <Route path="/stays" element={<StaysHome />} />
-          <Route path="/stays/post" element={<PostStay />} />
-          <Route path="/stays/my-listings" element={<MyListings />} />
-          <Route path="/stays/saved" element={<SavedStays />} />
-          <Route path="/stays/inquiries" element={<MyInquiries />} />
+          <Route path="/stays/post" element={<ProtectedRoute><PostStay /></ProtectedRoute>} />
+          <Route path="/stays/my-listings" element={<ProtectedRoute><MyListings /></ProtectedRoute>} />
+          <Route path="/stays/saved" element={<ProtectedRoute><SavedStays /></ProtectedRoute>} />
+          <Route path="/stays/inquiries" element={<ProtectedRoute><MyInquiries /></ProtectedRoute>} />
+          <Route path="/stays/:id/edit" element={<ProtectedRoute><EditStay /></ProtectedRoute>} />
           <Route path="/stays/:id" element={<StayDetails />} />
 
           {/* Placeholder routes for Deals and Roomies (other teams) */}
