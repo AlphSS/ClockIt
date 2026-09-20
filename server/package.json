@@ -16,7 +16,13 @@
     "@supabase/supabase-js": "^2.112.2",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
+<<<<<<< Updated upstream
     "express": "^5.2.1"
+=======
+    "express": "^5.2.1",
+    "multer": "^2.4.0",
+    "resend": "^6.25.0"
+>>>>>>> Stashed changes
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
