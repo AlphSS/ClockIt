@@ -1,9 +1,84 @@
 import { useNavigate, NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { supabase } from "../../services/supabase";
 
 function Navbar({ theme = "dark" }) {
   const navigate = useNavigate();
 
+  // ==================== USERNAME STATE ====================
+  const [username, setUsername] = useState("");
+
+  // ==================== FETCH USERNAME ====================
+  useEffect(() => {
+    let isMounted = true;
+
+    async function fetchUsername() {
+      try {
+        // Get the currently logged-in user
+        const {
+          data: { user },
+          error: userError,
+        } = await supabase.auth.getUser();
+
+        if (userError) {
+          console.error("Error fetching authenticated user:", userError);
+          return;
+        }
+
+        // If no user is logged in
+        if (!user) {
+          if (isMounted) {
+            setUsername("");
+          }
+          return;
+        }
+
+        // Fetch username from the profiles table
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("username")
+          .eq("id", user.id)
+          .maybeSingle();
+
+        if (error) {
+          console.error("Error fetching username from profiles:", error);
+        }
+
+        if (isMounted) {
+          setUsername(
+            data?.username ||
+              user.user_metadata?.username ||
+              user.email?.split("@")[0] ||
+              "User"
+          );
+        }
+      } catch (error) {
+        console.error("Unexpected error fetching username:", error);
+      }
+    }
+
+    // Fetch username when Navbar loads
+    fetchUsername();
+
+    // Listen for login/logout events
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_OUT") {
+        setUsername("");
+      } else if (session?.user) {
+        fetchUsername();
+      }
+    });
+
+    // Cleanup subscription when Navbar unmounts
+    return () => {
+      isMounted = false;
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  // ==================== LOGOUT ====================
   async function handleLogout() {
     const { error } = await supabase.auth.signOut();
 
@@ -15,7 +90,7 @@ function Navbar({ theme = "dark" }) {
     navigate("/login", { replace: true });
   }
 
-  // Styling for normal and active navigation links
+  // ==================== NAVIGATION STYLING ====================
   const isRoomies = theme === "roomies";
 
   const navLinkStyle = ({ isActive }) =>
@@ -44,7 +119,7 @@ function Navbar({ theme = "dark" }) {
       }
     >
       <div className="mx-auto flex h-[88px] max-w-6xl items-center justify-between px-6">
-        
+
         {/* ==================== LOGO ==================== */}
         <button
           onClick={() => navigate("/")}
@@ -55,10 +130,9 @@ function Navbar({ theme = "dark" }) {
           ClockIt
         </button>
 
-
         {/* ==================== NAVIGATION ==================== */}
         <div className="flex items-center gap-1">
-          
+
           <NavLink to="/" className={navLinkStyle}>
             Home
           </NavLink>
@@ -81,11 +155,10 @@ function Navbar({ theme = "dark" }) {
 
         </div>
 
-
         {/* ==================== RIGHT SIDE ==================== */}
         <div className="flex items-center gap-5">
 
-          {/* Chat */}
+          {/* ==================== CHAT ==================== */}
           <button
             onClick={() => navigate("/chat")}
             aria-label="Chat"
@@ -111,8 +184,7 @@ function Navbar({ theme = "dark" }) {
             </svg>
           </button>
 
-
-          {/* ==================== NOTIFICATION ==================== */}
+          {/* ==================== NOTIFICATIONS ==================== */}
           <button
             aria-label="Notifications"
             className={`group relative flex h-9 w-9 items-center justify-center rounded-full transition-all duration-300 ${
@@ -143,18 +215,18 @@ function Navbar({ theme = "dark" }) {
             </span>
           </button>
 
-
           {/* ==================== PROFILE AVATAR ==================== */}
           <button
             onClick={() => navigate("/profile")}
             aria-label="Profile"
+            title={username || "Profile"}
             className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold transition-all duration-300 hover:scale-105 ${
               isRoomies
                 ? "bg-[#C6B39A] text-[#280B0F] hover:shadow-[0_0_12px_rgba(198,179,154,0.35)]"
                 : "bg-white text-black hover:shadow-[0_0_12px_rgba(255,255,255,0.35)]"
             }`}
           >
-            N
+            {username ? username.charAt(0).toUpperCase() : "?"}
           </button>
 
         </div>

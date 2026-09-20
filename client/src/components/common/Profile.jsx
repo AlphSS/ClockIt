@@ -1,15 +1,36 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   User,
-  Phone,
   Mail,
+  Phone,
   GraduationCap,
   ShieldCheck,
   Pencil,
+  Home,
+  Users,
+  MapPin,
+  CalendarDays,
+  Wallet,
+  CheckCircle2,
+  Save,
+  X,
+  ChevronRight,
+  LogOut,
+  Building2,
+  BedDouble,
+  Cigarette,
+  Moon,
+  Utensils,
+  MessageCircle,
+  Sparkles,
 } from "lucide-react";
 
-import Navbar from "../../components/common/NavBar";
+import { supabase } from "../../services/supabase";
+
+import Navbar from "./NavBar";
+import Footer from "./Footer";
 
 import {
   getProfile,
@@ -19,14 +40,26 @@ import {
   verifyCollegeOtp,
 } from "../../services/profileApi";
 
+import "./Profile.css";
+
+
 function Profile() {
+
+  const navigate = useNavigate();
+
+
+  // ==========================================
+  // PROFILE STATE
+  // ==========================================
+
   const [profile, setProfile] = useState(null);
   const [colleges, setColleges] = useState([]);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Edit mode
+  const [activeSection, setActiveSection] = useState("overview");
+
   const [isEditing, setIsEditing] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -38,8 +71,13 @@ function Profile() {
 
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState("");
+  const [saveMessage, setSaveMessage] = useState("");
 
-  // College verification
+
+  // ==========================================
+  // COLLEGE VERIFICATION STATE
+  // ==========================================
+
   const [collegeEmail, setCollegeEmail] = useState("");
   const [otp, setOtp] = useState("");
 
@@ -50,12 +88,69 @@ function Profile() {
   const [otpMessage, setOtpMessage] = useState("");
   const [otpError, setOtpError] = useState("");
 
-  /*
-   * Load profile + colleges
-   */
+
+  // ==========================================
+  // STAY PREFERENCES
+  // ==========================================
+
+  const [stayPreferences, setStayPreferences] = useState({
+    city: "",
+    areas: "",
+    minBudget: "",
+    maxBudget: "",
+    accommodationType: "",
+    bhk: "",
+    furnishing: "",
+    moveInDate: "",
+    amenities: [],
+  });
+
+
+  // ==========================================
+  // FLATMATE PREFERENCES
+  // ==========================================
+
+  const [flatmatePreferences, setFlatmatePreferences] = useState({
+    preferredGender: "",
+    minAge: "",
+    maxAge: "",
+    smoking: "",
+    drinking: "",
+    sleepSchedule: "",
+    cleanliness: "",
+    socialPreference: "",
+    foodPreference: "",
+    guests: "",
+    pets: "",
+  });
+
+
+  // ==========================================
+  // AMENITIES
+  // ==========================================
+
+  const amenities = [
+    "Wi-Fi",
+    "Parking",
+    "Laundry",
+    "AC",
+    "Kitchen",
+    "Gym",
+    "Power Backup",
+    "Security",
+  ];
+
+
+  // ==========================================
+  // LOAD PROFILE
+  // ==========================================
+
   useEffect(() => {
+
     async function loadProfile() {
+
       try {
+
         const [profileData, collegeData] = await Promise.all([
           getProfile(),
           getColleges(),
@@ -65,54 +160,102 @@ function Profile() {
         setColleges(collegeData);
 
         setCollegeEmail(profileData.college_email || "");
-      } catch (error) {
-        console.error("Profile loading error:", error);
 
-        setError(error.message || "Unable to load profile.");
+      } catch (err) {
+
+        console.error("Profile loading error:", err);
+
+        setError(err.message || "Unable to load your profile.");
+
       } finally {
+
         setLoading(false);
+
       }
+
     }
 
     loadProfile();
+
   }, []);
 
-  /*
-   * Enter edit mode
-   */
+
+  // ==========================================
+  // LOGOUT
+  // ==========================================
+
+  async function handleLogout() {
+
+    const { error: logoutError } = await supabase.auth.signOut();
+
+    if (logoutError) {
+
+      console.error("Logout failed:", logoutError);
+
+      return;
+
+    }
+
+    navigate("/login", { replace: true });
+
+  }
+
+
+  // ==========================================
+  // PROFILE EDITING
+  // ==========================================
+
   function handleEditProfile() {
+
     setFormData({
+
       fullName: profile.full_name || "",
+
       username: profile.username || "",
+
       universityId: profile.university_id || "",
+
       bio: profile.bio || "",
+
     });
 
     setSaveError("");
+    setSaveMessage("");
+
     setIsEditing(true);
+
   }
 
-  /*
-   * Cancel editing
-   */
+
   function handleCancelEdit() {
+
     setIsEditing(false);
+
     setSaveError("");
+    setSaveMessage("");
+
   }
 
-  /*
-   * Save profile
-   */
+
   async function handleSaveProfile() {
+
     try {
+
       setSaving(true);
+
       setSaveError("");
+      setSaveMessage("");
 
       const result = await updateProfile({
+
         fullName: formData.fullName,
+
         username: formData.username,
+
         universityId: formData.universityId,
+
         bio: formData.bio,
+
       });
 
       const updatedProfile = result.profile || result;
@@ -120,28 +263,43 @@ function Profile() {
       setProfile(updatedProfile);
 
       setIsEditing(false);
-    } catch (error) {
-      console.error("Update profile error:", error);
 
-      setSaveError(error.message || "Unable to update profile.");
+      setSaveMessage("Profile updated successfully.");
+
+    } catch (err) {
+
+      console.error("Profile update error:", err);
+
+      setSaveError(err.message || "Unable to update your profile.");
+
     } finally {
+
       setSaving(false);
+
     }
+
   }
 
-  /*
-   * Send college OTP
-   */
+
+  // ==========================================
+  // COLLEGE VERIFICATION
+  // ==========================================
+
   async function handleSendOtp() {
+
     try {
+
       setOtpError("");
       setOtpMessage("");
 
       const email = collegeEmail.trim().toLowerCase();
 
       if (!email) {
+
         setOtpError("Please enter your college email.");
+
         return;
+
       }
 
       setSendingOtp(true);
@@ -149,35 +307,43 @@ function Profile() {
       const result = await sendCollegeOtp(email);
 
       setCollegeEmail(email);
+
       setOtpSent(true);
+
       setOtp("");
 
-      setOtpMessage(result.message || "Verification code generated.");
-    } catch (error) {
-      console.error("Send OTP error:", error);
+      setOtpMessage(
+        result.message || "Verification code sent successfully."
+      );
 
-      setOtpError(error.message || "Unable to send verification code.");
+    } catch (err) {
+
+      console.error("OTP error:", err);
+
+      setOtpError(err.message || "Unable to send verification code.");
+
     } finally {
+
       setSendingOtp(false);
+
     }
+
   }
 
-  /*
-   * Verify college OTP
-   */
+
   async function handleVerifyOtp() {
+
     try {
+
       setOtpError("");
       setOtpMessage("");
 
-      if (!otp) {
-        setOtpError("Please enter the verification code.");
-        return;
-      }
-
       if (!/^\d{6}$/.test(otp)) {
-        setOtpError("Verification code must contain 6 digits.");
+
+        setOtpError("Enter a valid 6-digit verification code.");
+
         return;
+
       }
 
       setVerifyingOtp(true);
@@ -185,433 +351,1652 @@ function Profile() {
       const result = await verifyCollegeOtp(otp);
 
       setProfile((previousProfile) => ({
+
         ...previousProfile,
+
         college_email: collegeEmail,
+
         college_verified: true,
+
       }));
 
       setOtpSent(false);
+
       setOtp("");
 
-      setOtpMessage(result.message || "College email verified successfully.");
-    } catch (error) {
-      console.error("Verify OTP error:", error);
+      setOtpMessage(
+        result.message || "College email verified successfully."
+      );
 
-      setOtpError(error.message || "Unable to verify college email.");
+    } catch (err) {
+
+      console.error("Verification error:", err);
+
+      setOtpError(err.message || "Unable to verify your college email.");
+
     } finally {
+
       setVerifyingOtp(false);
+
     }
+
   }
 
-  /*
-   * Loading
-   */
+
+  // ==========================================
+  // PREFERENCE HANDLERS
+  // ==========================================
+
+  function handleStayChange(event) {
+
+    const { name, value } = event.target;
+
+    setStayPreferences((previous) => ({
+
+      ...previous,
+
+      [name]: value,
+
+    }));
+
+  }
+
+
+  function handleFlatmateChange(event) {
+
+    const { name, value } = event.target;
+
+    setFlatmatePreferences((previous) => ({
+
+      ...previous,
+
+      [name]: value,
+
+    }));
+
+  }
+
+
+  function handleAmenityChange(amenity) {
+
+    setStayPreferences((previous) => {
+
+      const selectedAmenities = previous.amenities;
+
+      const updatedAmenities = selectedAmenities.includes(amenity)
+
+        ? selectedAmenities.filter((item) => item !== amenity)
+
+        : [...selectedAmenities, amenity];
+
+      return {
+
+        ...previous,
+
+        amenities: updatedAmenities,
+
+      };
+
+    });
+
+  }
+
+
+  function handleStaySubmit(event) {
+
+    event.preventDefault();
+
+    setSaveMessage(
+      "Your stay preferences are ready for database integration."
+    );
+
+  }
+
+
+  function handleFlatmateSubmit(event) {
+
+    event.preventDefault();
+
+    setSaveMessage(
+      "Your flatmate preferences are ready for database integration."
+    );
+
+  }
+
+
+  // ==========================================
+  // LOADING SCREEN
+  // ==========================================
+
   if (loading) {
+
     return (
-      <div>
+
+      <div className="profile-page">
+
         <Navbar />
 
-        <main className="px-8 py-12">
-          <p className="text-gray-600">Loading profile...</p>
+        <main className="profile-loading">
+
+          <div className="loading-spinner"></div>
+
+          <p>Preparing your ClockIt profile...</p>
+
         </main>
+
       </div>
+
     );
+
   }
 
-  /*
-   * Error
-   */
+
+  // ==========================================
+  // ERROR SCREEN
+  // ==========================================
+
   if (error) {
+
     return (
-      <div>
+
+      <div className="profile-page">
+
         <Navbar />
 
-        <main className="px-8 py-12">
-          <p className="text-red-500">{error}</p>
+        <main className="profile-error">
+
+          <h2>Something went wrong</h2>
+
+          <p>{error}</p>
+
         </main>
+
       </div>
+
     );
+
   }
+
+
+  // ==========================================
+  // MAIN PROFILE PAGE
+  // ==========================================
 
   return (
-    <div>
+
+    <div className="profile-page">
+
       <Navbar />
 
-      <main className="px-8 py-12">
-        {/* Header */}
 
-        <h1 className="text-4xl font-bold">My Profile</h1>
+      <main className="profile-dashboard">
 
-        <p className="mt-3 text-gray-600">
-          Manage your ClockIt profile and account information.
-        </p>
 
-        <section className="mt-10 max-w-3xl">
-          {/* ================================= */}
-          {/* PROFILE HEADER */}
-          {/* ================================= */}
+        {/* =====================================
+            DASHBOARD GRID
+        ===================================== */}
 
-          <div className="flex items-center gap-5">
-            {/* Profile picture */}
+        <div className="profile-dashboard-grid">
 
-            <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gray-100">
-              {profile.profile_picture ? (
-                <img
-                  src={profile.profile_picture}
-                  alt="Profile"
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <User size={40} className="text-gray-500" />
-              )}
+
+          {/* =====================================
+              LEFT SIDEBAR
+          ===================================== */}
+
+          <aside className="profile-sidebar">
+
+
+            {/* SIDEBAR INTRODUCTION */}
+
+            <div className="sidebar-introduction">
+
+              <p className="sidebar-eyebrow">
+                YOUR CLOCKIT SPACE
+              </p>
+
+              <h1>My Profile</h1>
+
+              <p className="sidebar-description">
+
+                Manage your identity, living preferences,
+                and community experience.
+
+              </p>
+
             </div>
 
-            {/* Name + username + bio */}
 
-            <div className="flex-1">
-              {isEditing ? (
-                <>
-                  {/* Full name */}
+            <div className="sidebar-divider"></div>
 
-                  <input
-                    type="text"
-                    value={formData.fullName}
-                    onChange={(e) =>
-                      setFormData((previous) => ({
-                        ...previous,
-                        fullName: e.target.value,
-                      }))
-                    }
-                    className="w-full max-w-md rounded-lg border border-gray-300 px-3 py-2 text-2xl font-semibold outline-none focus:border-black"
-                    placeholder="Full name"
+
+            {/* USER SUMMARY */}
+
+            <div className="sidebar-profile">
+
+              <div className="sidebar-avatar">
+
+                {profile.profile_picture ? (
+
+                  <img
+                    src={profile.profile_picture}
+                    alt="Profile"
                   />
 
-                  {/* Username */}
+                ) : (
 
-                  <input
-                    type="text"
-                    value={formData.username}
-                    onChange={(e) =>
-                      setFormData((previous) => ({
-                        ...previous,
-                        username: e.target.value,
-                      }))
-                    }
-                    className="mt-2 w-full max-w-md rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-black"
-                    placeholder="Username"
-                  />
+                  <User size={36} strokeWidth={1.4} />
 
-                  {/* Bio */}
+                )}
 
-                  <textarea
-                    value={formData.bio}
-                    onChange={(e) =>
-                      setFormData((previous) => ({
-                        ...previous,
-                        bio: e.target.value,
-                      }))
-                    }
-                    rows={3}
-                    placeholder="Tell us something about yourself..."
-                    className="mt-3 w-full max-w-md resize-none rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-black"
-                  />
-                </>
-              ) : (
-                <>
-                  <h2 className="text-2xl font-semibold">
-                    {profile.full_name}
-                  </h2>
-
-                  <p className="mt-1 text-gray-600">@{profile.username}</p>
-
-                  {profile.bio && (
-                    <p className="mt-3 text-gray-600">{profile.bio}</p>
-                  )}
-                </>
-              )}
-            </div>
-          </div>
-
-          {/* ================================= */}
-          {/* PERSONAL INFORMATION */}
-          {/* ================================= */}
-
-          <div className="mt-10">
-            <h2 className="text-xl font-semibold">Personal Information</h2>
-
-            <div className="mt-5 space-y-5">
-              {/* Full Name */}
-
-              <InfoItem
-                icon={<User size={18} />}
-                label="Full Name"
-                value={
-                  isEditing ? (
-                    <input
-                      type="text"
-                      value={formData.fullName}
-                      onChange={(e) =>
-                        setFormData((previous) => ({
-                          ...previous,
-                          fullName: e.target.value,
-                        }))
-                      }
-                      className="w-full max-w-md rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-black"
-                    />
-                  ) : (
-                    profile.full_name
-                  )
-                }
-              />
-
-              {/* Username */}
-
-              <InfoItem
-                icon={<User size={18} />}
-                label="Username"
-                value={
-                  isEditing ? (
-                    <input
-                      type="text"
-                      value={formData.username}
-                      onChange={(e) =>
-                        setFormData((previous) => ({
-                          ...previous,
-                          username: e.target.value,
-                        }))
-                      }
-                      className="w-full max-w-md rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-black"
-                    />
-                  ) : (
-                    `@${profile.username}`
-                  )
-                }
-              />
-
-              {/* Phone */}
-
-              <InfoItem
-                icon={<Phone size={18} />}
-                label="Phone Number"
-                value={profile.phone || "Not added"}
-              />
-            </div>
-          </div>
-
-          {/* ================================= */}
-          {/* COLLEGE VERIFICATION */}
-          {/* ================================= */}
-
-          <div className="mt-10">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-xl font-semibold">College Verification</h2>
-
-                <p className="mt-2 text-gray-600">
-                  Verify your college email to access student features.
-                </p>
               </div>
+
+
+              <h2>{profile.full_name}</h2>
+
+              <p className="sidebar-username">
+                @{profile.username}
+              </p>
+
+
+              {profile.colleges?.name && (
+
+                <div className="sidebar-university">
+
+                  <GraduationCap size={14} />
+
+                  <span>{profile.colleges.name}</span>
+
+                </div>
+
+              )}
+
 
               {profile.college_verified && (
-                <div className="flex items-center gap-2 text-sm font-medium text-green-600">
-                  <ShieldCheck size={18} />
-                  Verified
+
+                <div className="sidebar-verified">
+
+                  <ShieldCheck size={14} />
+
+                  College verified
+
                 </div>
+
               )}
+
             </div>
 
-            <div className="mt-5 space-y-5">
-              {/* University */}
 
-              <InfoItem
-                icon={<GraduationCap size={18} />}
-                label="University"
-                value={
-                  isEditing ? (
-                    <select
-                      value={formData.universityId || ""}
-                      onChange={(e) =>
-                        setFormData((previous) => ({
-                          ...previous,
-                          universityId: e.target.value,
-                        }))
-                      }
-                      className="w-full max-w-md rounded-lg border border-gray-300 bg-white px-3 py-2 outline-none focus:border-black"
-                    >
-                      <option value="">Select University</option>
+            <div className="sidebar-divider"></div>
 
-                      {colleges.map((college) => (
-                        <option key={college.id} value={college.id}>
-                          {college.name}
-                        </option>
-                      ))}
-                    </select>
-                  ) : (
-                    profile.colleges?.name || "Not added"
-                  )
+
+            {/* NAVIGATION */}
+
+            <nav className="profile-sidebar-navigation">
+
+
+              <p className="sidebar-label">
+                ACCOUNT
+              </p>
+
+
+              <button
+                className={
+                  activeSection === "overview"
+                    ? "sidebar-nav-item active"
+                    : "sidebar-nav-item"
                 }
-              />
+                onClick={() => {
 
-              {/* College email */}
+                  setActiveSection("overview");
+                  setSaveMessage("");
 
-              <InfoItem
-                icon={<Mail size={18} />}
-                label="College Email"
-                value={profile.college_email || "Not verified"}
-              />
+                }}
+              >
+
+                <User size={18} />
+
+                <span>Profile Overview</span>
+
+                <ChevronRight size={16} />
+
+              </button>
+
+
+              <p className="sidebar-label preferences-label">
+                PREFERENCES
+              </p>
+
+
+              <button
+                className={
+                  activeSection === "stay"
+                    ? "sidebar-nav-item active"
+                    : "sidebar-nav-item"
+                }
+                onClick={() => {
+
+                  setActiveSection("stay");
+                  setSaveMessage("");
+
+                }}
+              >
+
+                <Home size={18} />
+
+                <span>Flat Preferences</span>
+
+                <ChevronRight size={16} />
+
+              </button>
+
+
+              <button
+                className={
+                  activeSection === "flatmate"
+                    ? "sidebar-nav-item active"
+                    : "sidebar-nav-item"
+                }
+                onClick={() => {
+
+                  setActiveSection("flatmate");
+                  setSaveMessage("");
+
+                }}
+              >
+
+                <Users size={18} />
+
+                <span>Flatmate Preferences</span>
+
+                <ChevronRight size={16} />
+
+              </button>
+
+
+            </nav>
+
+
+            {/* ACCOUNT STATUS */}
+
+            <div className="sidebar-account-status">
+
+              <div className="sidebar-divider"></div>
+
+              <p className="sidebar-label">
+                ACCOUNT STATUS
+              </p>
+
+
+              <div className="sidebar-status">
+
+                <div className="status-dot"></div>
+
+                <div>
+
+                  <strong>Account active</strong>
+
+                  <span>
+                    Your ClockIt journey starts here.
+                  </span>
+
+                </div>
+
+              </div>
+
             </div>
 
-            {/* ================================= */}
-            {/* COLLEGE EMAIL VERIFICATION */}
-            {/* ================================= */}
 
-            {!profile.college_verified && (
-              <div className="mt-6 max-w-md">
-                <label className="text-sm font-medium text-gray-700">
-                  College Email
-                </label>
+            {/* LOGOUT */}
 
-                <input
-                  type="email"
-                  value={collegeEmail}
-                  onChange={(e) => {
-                    setCollegeEmail(e.target.value);
-                    setOtpError("");
-                    setOtpMessage("");
-                  }}
-                  disabled={otpSent}
-                  placeholder="yourname@college.edu"
-                  className="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-black disabled:bg-gray-100"
-                />
+            <div className="sidebar-logout">
 
-                {!otpSent && (
-                  <button
-                    type="button"
-                    disabled={sendingOtp}
-                    onClick={handleSendOtp}
-                    className="mt-4 rounded-lg bg-black px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    {sendingOtp ? "Sending..." : "Send Verification Code"}
-                  </button>
-                )}
+              <button
+                className="logout-button"
+                onClick={handleLogout}
+              >
 
-                {otpSent && (
-                  <div className="mt-5">
-                    <label className="text-sm font-medium text-gray-700">
-                      Verification Code
-                    </label>
+                <LogOut size={17} />
 
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      maxLength={6}
-                      value={otp}
-                      onChange={(e) => {
-                        const value = e.target.value
-                          .replace(/\D/g, "")
-                          .slice(0, 6);
+                <span>Log out</span>
 
-                        setOtp(value);
-                        setOtpError("");
-                      }}
-                      placeholder="Enter 6-digit code"
-                      className="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-center tracking-[0.5em] outline-none focus:border-black"
+              </button>
+
+            </div>
+
+
+          </aside>
+
+
+          {/* =====================================
+              RIGHT CONTENT
+          ===================================== */}
+
+          <div className="profile-content">
+
+
+            {/* =====================================
+                PROFILE OVERVIEW
+            ===================================== */}
+
+            {activeSection === "overview" && (
+
+              <section className="dashboard-card">
+
+
+                <div className="card-heading">
+
+                  <div>
+
+                    <p className="card-eyebrow">
+                      ACCOUNT DETAILS
+                    </p>
+
+                    <h2>Personal Information</h2>
+
+                    <p>
+                      Manage your personal details and
+                      college identity.
+                    </p>
+
+                  </div>
+
+
+                  {!isEditing && (
+
+                    <button
+                      className="outline-button"
+                      onClick={handleEditProfile}
+                    >
+
+                      <Pencil size={16} />
+
+                      Edit Profile
+
+                    </button>
+
+                  )}
+
+                </div>
+
+
+                {/* PROFILE INTRO */}
+
+                <div className="profile-intro">
+
+                  <div className="intro-avatar">
+
+                    {profile.profile_picture ? (
+
+                      <img
+                        src={profile.profile_picture}
+                        alt="Profile"
+                      />
+
+                    ) : (
+
+                      <User size={42} />
+
+                    )}
+
+                  </div>
+
+
+                  <div>
+
+                    <h3>{profile.full_name}</h3>
+
+                    <p>@{profile.username}</p>
+
+                    {profile.bio && (
+
+                      <span>{profile.bio}</span>
+
+                    )}
+
+                  </div>
+
+                </div>
+
+
+                {/* EDIT FORM */}
+
+                {isEditing ? (
+
+                  <div className="profile-edit-form">
+
+
+                    <div className="form-grid">
+
+
+                      <FormField label="Full Name">
+
+                        <input
+                          type="text"
+                          value={formData.fullName}
+                          onChange={(event) =>
+                            setFormData((previous) => ({
+                              ...previous,
+                              fullName: event.target.value,
+                            }))
+                          }
+                        />
+
+                      </FormField>
+
+
+                      <FormField label="Username">
+
+                        <input
+                          type="text"
+                          value={formData.username}
+                          onChange={(event) =>
+                            setFormData((previous) => ({
+                              ...previous,
+                              username: event.target.value,
+                            }))
+                          }
+                        />
+
+                      </FormField>
+
+
+                    </div>
+
+
+                    <FormField label="University">
+
+                      <select
+                        value={formData.universityId}
+                        onChange={(event) =>
+                          setFormData((previous) => ({
+                            ...previous,
+                            universityId: event.target.value,
+                          }))
+                        }
+                      >
+
+                        <option value="">
+                          Select University
+                        </option>
+
+                        {colleges.map((college) => (
+
+                          <option
+                            key={college.id}
+                            value={college.id}
+                          >
+
+                            {college.name}
+
+                          </option>
+
+                        ))}
+
+                      </select>
+
+                    </FormField>
+
+
+                    <FormField label="Bio">
+
+                      <textarea
+                        rows="4"
+                        value={formData.bio}
+                        placeholder="Tell us something about yourself..."
+                        onChange={(event) =>
+                          setFormData((previous) => ({
+                            ...previous,
+                            bio: event.target.value,
+                          }))
+                        }
+                      />
+
+                    </FormField>
+
+
+                    <div className="form-actions">
+
+                      <button
+                        className="primary-button"
+                        onClick={handleSaveProfile}
+                        disabled={saving}
+                      >
+
+                        <Save size={16} />
+
+                        {saving ? "Saving..." : "Save Changes"}
+
+                      </button>
+
+
+                      <button
+                        className="cancel-button"
+                        onClick={handleCancelEdit}
+                        disabled={saving}
+                      >
+
+                        <X size={16} />
+
+                        Cancel
+
+                      </button>
+
+                    </div>
+
+
+                    {saveError && (
+
+                      <p className="form-error">
+                        {saveError}
+                      </p>
+
+                    )}
+
+                  </div>
+
+                ) : (
+
+                  /* PERSONAL DETAILS */
+
+                  <div className="details-grid">
+
+
+                    <DetailItem
+                      icon={<User size={18} />}
+                      label="Full Name"
+                      value={profile.full_name}
                     />
 
-                    <div className="flex items-center gap-4">
-                      <button
-                        type="button"
-                        disabled={verifyingOtp}
-                        onClick={handleVerifyOtp}
-                        className="mt-4 rounded-lg bg-black px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800 disabled:opacity-50"
-                      >
-                        {verifyingOtp ? "Verifying..." : "Verify"}
-                      </button>
 
-                      <button
-                        type="button"
-                        disabled={sendingOtp}
-                        onClick={handleSendOtp}
-                        className="mt-4 text-sm font-medium text-gray-600 hover:text-black disabled:opacity-50"
-                      >
-                        Resend Code
-                      </button>
-                    </div>
+                    <DetailItem
+                      icon={<Mail size={18} />}
+                      label="Account Email"
+                      value={profile.email || "Not available"}
+                    />
+
+
+                    <DetailItem
+                      icon={<Phone size={18} />}
+                      label="Phone Number"
+                      value={profile.phone || "Not added"}
+                    />
+
+
+                    <DetailItem
+                      icon={<GraduationCap size={18} />}
+                      label="University"
+                      value={
+                        profile.colleges?.name || "Not selected"
+                      }
+                    />
+
+
+                    <DetailItem
+                      icon={<ShieldCheck size={18} />}
+                      label="College Verification"
+                      value={
+                        profile.college_verified
+                          ? "Verified"
+                          : "Not verified"
+                      }
+                    />
+
+
+                    <DetailItem
+                      icon={<CalendarDays size={18} />}
+                      label="Member Since"
+                      value={
+                        profile.created_at
+                          ? new Date(
+                              profile.created_at
+                            ).toLocaleDateString()
+                          : "Recently joined"
+                      }
+                    />
+
+
                   </div>
+
                 )}
 
-                {otpMessage && (
-                  <p className="mt-3 text-sm text-green-600">{otpMessage}</p>
-                )}
 
-                {otpError && (
-                  <p className="mt-3 text-sm text-red-500">{otpError}</p>
-                )}
-              </div>
+                {/* COLLEGE VERIFICATION */}
+
+                <div className="verification-section">
+
+
+                  <div className="section-heading">
+
+                    <div className="section-heading-icon">
+
+                      <ShieldCheck size={20} />
+
+                    </div>
+
+                    <div>
+
+                      <h3>College Verification</h3>
+
+                      <p>
+                        Verify your college email to build trust
+                        within the ClockIt community.
+                      </p>
+
+                    </div>
+
+                  </div>
+
+
+                  {profile.college_verified ? (
+
+                    <div className="verified-message">
+
+                      <CheckCircle2 size={20} />
+
+                      <div>
+
+                        <strong>College email verified</strong>
+
+                        <p>{profile.college_email}</p>
+
+                      </div>
+
+                    </div>
+
+                  ) : (
+
+                    <div className="verification-form">
+
+
+                      <FormField label="College Email">
+
+                        <input
+                          type="email"
+                          value={collegeEmail}
+                          onChange={(event) =>
+                            setCollegeEmail(event.target.value)
+                          }
+                          placeholder="you@college.edu"
+                        />
+
+                      </FormField>
+
+
+                      {!otpSent ? (
+
+                        <button
+                          className="primary-button"
+                          onClick={handleSendOtp}
+                          disabled={sendingOtp}
+                        >
+
+                          {sendingOtp
+                            ? "Sending..."
+                            : "Send Verification Code"}
+
+                        </button>
+
+                      ) : (
+
+                        <div className="otp-box">
+
+
+                          <FormField label="Enter 6-digit OTP">
+
+                            <input
+                              type="text"
+                              maxLength="6"
+                              value={otp}
+                              onChange={(event) => {
+
+                                setOtp(
+                                  event.target.value.replace(
+                                    /\D/g,
+                                    ""
+                                  )
+                                );
+
+                              }}
+                              placeholder="000000"
+                            />
+
+                          </FormField>
+
+
+                          <div className="otp-actions">
+
+                            <button
+                              className="primary-button"
+                              onClick={handleVerifyOtp}
+                              disabled={verifyingOtp}
+                            >
+
+                              {verifyingOtp
+                                ? "Verifying..."
+                                : "Verify OTP"}
+
+                            </button>
+
+
+                            <button
+                              className="text-button"
+                              onClick={handleSendOtp}
+                              disabled={sendingOtp}
+                            >
+
+                              Resend Code
+
+                            </button>
+
+                          </div>
+
+                        </div>
+
+                      )}
+
+
+                      {otpMessage && (
+
+                        <p className="form-success">
+                          {otpMessage}
+                        </p>
+
+                      )}
+
+                      {otpError && (
+
+                        <p className="form-error">
+                          {otpError}
+                        </p>
+
+                      )}
+
+                    </div>
+
+                  )}
+
+                </div>
+
+
+              </section>
+
             )}
+
+
+            {/* =====================================
+                FLAT PREFERENCES
+            ===================================== */}
+
+            {activeSection === "stay" && (
+
+              <section className="dashboard-card">
+
+
+                <div className="card-heading">
+
+                  <div>
+
+                    <p className="card-eyebrow">
+                      FIND YOUR SPACE
+                    </p>
+
+                    <h2>Flat Preferences</h2>
+
+                    <p>
+                      Tell us what you're looking for in
+                      your next place.
+                    </p>
+
+                  </div>
+
+
+                  <div className="card-icon">
+
+                    <Home size={22} />
+
+                  </div>
+
+                </div>
+
+
+                <form onSubmit={handleStaySubmit}>
+
+
+                  <div className="preference-section-title">
+
+                    <MapPin size={18} />
+
+                    <h3>Location & Budget</h3>
+
+                  </div>
+
+
+                  <div className="form-grid">
+
+
+                    <FormField label="Preferred City">
+
+                      <input
+                        type="text"
+                        name="city"
+                        value={stayPreferences.city}
+                        onChange={handleStayChange}
+                        placeholder="e.g. Pune"
+                      />
+
+                    </FormField>
+
+
+                    <FormField label="Preferred Areas">
+
+                      <input
+                        type="text"
+                        name="areas"
+                        value={stayPreferences.areas}
+                        onChange={handleStayChange}
+                        placeholder="e.g. Wakad, Hinjewadi"
+                      />
+
+                    </FormField>
+
+
+                    <FormField label="Minimum Monthly Budget">
+
+                      <div className="input-with-icon">
+
+                        <Wallet size={16} />
+
+                        <input
+                          type="number"
+                          name="minBudget"
+                          value={stayPreferences.minBudget}
+                          onChange={handleStayChange}
+                          placeholder="Minimum ₹"
+                        />
+
+                      </div>
+
+                    </FormField>
+
+
+                    <FormField label="Maximum Monthly Budget">
+
+                      <div className="input-with-icon">
+
+                        <Wallet size={16} />
+
+                        <input
+                          type="number"
+                          name="maxBudget"
+                          value={stayPreferences.maxBudget}
+                          onChange={handleStayChange}
+                          placeholder="Maximum ₹"
+                        />
+
+                      </div>
+
+                    </FormField>
+
+
+                  </div>
+
+
+                  <div className="preference-section-title">
+
+                    <Building2 size={18} />
+
+                    <h3>Accommodation Details</h3>
+
+                  </div>
+
+
+                  <div className="form-grid">
+
+
+                    <FormField label="Accommodation Type">
+
+                      <select
+                        name="accommodationType"
+                        value={stayPreferences.accommodationType}
+                        onChange={handleStayChange}
+                      >
+
+                        <option value="">
+                          Select type
+                        </option>
+
+                        <option value="1bhk">
+                          1 BHK
+                        </option>
+
+                        <option value="2bhk">
+                          2 BHK
+                        </option>
+
+                        <option value="3bhk">
+                          3 BHK
+                        </option>
+
+                        <option value="shared_flat">
+                          Shared Flat
+                        </option>
+
+                        <option value="private_room">
+                          Private Room
+                        </option>
+
+                        <option value="pg">
+                          PG
+                        </option>
+
+                      </select>
+
+                    </FormField>
+
+
+                    <FormField label="Preferred BHK">
+
+                      <select
+                        name="bhk"
+                        value={stayPreferences.bhk}
+                        onChange={handleStayChange}
+                      >
+
+                        <option value="">
+                          Select BHK
+                        </option>
+
+                        <option value="1">1 BHK</option>
+
+                        <option value="2">2 BHK</option>
+
+                        <option value="3">3 BHK</option>
+
+                        <option value="4">4+ BHK</option>
+
+                      </select>
+
+                    </FormField>
+
+
+                    <FormField label="Furnishing">
+
+                      <select
+                        name="furnishing"
+                        value={stayPreferences.furnishing}
+                        onChange={handleStayChange}
+                      >
+
+                        <option value="">
+                          Select furnishing
+                        </option>
+
+                        <option value="fully_furnished">
+                          Fully Furnished
+                        </option>
+
+                        <option value="semi_furnished">
+                          Semi Furnished
+                        </option>
+
+                        <option value="unfurnished">
+                          Unfurnished
+                        </option>
+
+                      </select>
+
+                    </FormField>
+
+
+                    <FormField label="Expected Move-in Date">
+
+                      <input
+                        type="date"
+                        name="moveInDate"
+                        value={stayPreferences.moveInDate}
+                        onChange={handleStayChange}
+                      />
+
+                    </FormField>
+
+
+                  </div>
+
+
+                  <div className="preference-section-title">
+
+                    <Sparkles size={18} />
+
+                    <h3>Preferred Amenities</h3>
+
+                  </div>
+
+
+                  <div className="amenities-grid">
+
+                    {amenities.map((amenity) => (
+
+                      <label
+                        key={amenity}
+                        className={
+                          stayPreferences.amenities.includes(amenity)
+                            ? "amenity-option selected"
+                            : "amenity-option"
+                        }
+                      >
+
+                        <input
+                          type="checkbox"
+                          checked={stayPreferences.amenities.includes(
+                            amenity
+                          )}
+                          onChange={() =>
+                            handleAmenityChange(amenity)
+                          }
+                        />
+
+                        <CheckCircle2 size={16} />
+
+                        <span>{amenity}</span>
+
+                      </label>
+
+                    ))}
+
+                  </div>
+
+
+                  <div className="preference-actions">
+
+                    <button
+                      className="primary-button"
+                      type="submit"
+                    >
+
+                      <Save size={16} />
+
+                      Save Flat Preferences
+
+                    </button>
+
+                  </div>
+
+
+                </form>
+
+              </section>
+
+            )}
+
+
+            {/* =====================================
+                FLATMATE PREFERENCES
+            ===================================== */}
+
+            {activeSection === "flatmate" && (
+
+              <section className="dashboard-card">
+
+
+                <div className="card-heading">
+
+                  <div>
+
+                    <p className="card-eyebrow">
+                      FIND YOUR PEOPLE
+                    </p>
+
+                    <h2>Flatmate Finder Preferences</h2>
+
+                    <p>
+                      Share your lifestyle preferences to help
+                      find a compatible flatmate.
+                    </p>
+
+                  </div>
+
+
+                  <div className="card-icon">
+
+                    <Users size={22} />
+
+                  </div>
+
+                </div>
+
+
+                <form onSubmit={handleFlatmateSubmit}>
+
+
+                  <div className="preference-section-title">
+
+                    <Users size={18} />
+
+                    <h3>Basic Preferences</h3>
+
+                  </div>
+
+
+                  <div className="form-grid">
+
+
+                    <FormField label="Preferred Flatmate Gender">
+
+                      <select
+                        name="preferredGender"
+                        value={flatmatePreferences.preferredGender}
+                        onChange={handleFlatmateChange}
+                      >
+
+                        <option value="">
+                          Select preference
+                        </option>
+
+                        <option value="any">Any</option>
+
+                        <option value="male">Male</option>
+
+                        <option value="female">Female</option>
+
+                        <option value="prefer_not_to_say">
+                          Prefer not to say
+                        </option>
+
+                      </select>
+
+                    </FormField>
+
+
+                    <FormField label="Minimum Age">
+
+                      <input
+                        type="number"
+                        name="minAge"
+                        value={flatmatePreferences.minAge}
+                        onChange={handleFlatmateChange}
+                        placeholder="Minimum age"
+                        min="18"
+                      />
+
+                    </FormField>
+
+
+                    <FormField label="Maximum Age">
+
+                      <input
+                        type="number"
+                        name="maxAge"
+                        value={flatmatePreferences.maxAge}
+                        onChange={handleFlatmateChange}
+                        placeholder="Maximum age"
+                        min="18"
+                      />
+
+                    </FormField>
+
+
+                  </div>
+
+
+                  <div className="preference-section-title">
+
+                    <Moon size={18} />
+
+                    <h3>Lifestyle Preferences</h3>
+
+                  </div>
+
+
+                  <div className="form-grid">
+
+
+                    <FormField label="Smoking Preference">
+
+                      <select
+                        name="smoking"
+                        value={flatmatePreferences.smoking}
+                        onChange={handleFlatmateChange}
+                      >
+
+                        <option value="">
+                          Select preference
+                        </option>
+
+                        <option value="non_smoker">
+                          Non-smoker
+                        </option>
+
+                        <option value="smoker">
+                          Smoker
+                        </option>
+
+                        <option value="no_preference">
+                          No preference
+                        </option>
+
+                      </select>
+
+                    </FormField>
+
+
+                    <FormField label="Drinking Preference">
+
+                      <select
+                        name="drinking"
+                        value={flatmatePreferences.drinking}
+                        onChange={handleFlatmateChange}
+                      >
+
+                        <option value="">
+                          Select preference
+                        </option>
+
+                        <option value="non_drinker">
+                          Non-drinker
+                        </option>
+
+                        <option value="drinker">
+                          Drinker
+                        </option>
+
+                        <option value="no_preference">
+                          No preference
+                        </option>
+
+                      </select>
+
+                    </FormField>
+
+
+                    <FormField label="Sleep Schedule">
+
+                      <select
+                        name="sleepSchedule"
+                        value={flatmatePreferences.sleepSchedule}
+                        onChange={handleFlatmateChange}
+                      >
+
+                        <option value="">
+                          Select schedule
+                        </option>
+
+                        <option value="early_bird">
+                          Early Bird
+                        </option>
+
+                        <option value="night_owl">
+                          Night Owl
+                        </option>
+
+                        <option value="flexible">
+                          Flexible
+                        </option>
+
+                      </select>
+
+                    </FormField>
+
+
+                    <FormField label="Cleanliness Level">
+
+                      <select
+                        name="cleanliness"
+                        value={flatmatePreferences.cleanliness}
+                        onChange={handleFlatmateChange}
+                      >
+
+                        <option value="">
+                          Select preference
+                        </option>
+
+                        <option value="very_clean">
+                          Very Clean
+                        </option>
+
+                        <option value="moderate">
+                          Moderately Clean
+                        </option>
+
+                        <option value="relaxed">
+                          Relaxed
+                        </option>
+
+                      </select>
+
+                    </FormField>
+
+
+                    <FormField label="Social Preference">
+
+                      <select
+                        name="socialPreference"
+                        value={flatmatePreferences.socialPreference}
+                        onChange={handleFlatmateChange}
+                      >
+
+                        <option value="">
+                          Select preference
+                        </option>
+
+                        <option value="introvert">
+                          Quiet & Private
+                        </option>
+
+                        <option value="extrovert">
+                          Social & Outgoing
+                        </option>
+
+                        <option value="balanced">
+                          Balanced
+                        </option>
+
+                      </select>
+
+                    </FormField>
+
+
+                    <FormField label="Food Preference">
+
+                      <select
+                        name="foodPreference"
+                        value={flatmatePreferences.foodPreference}
+                        onChange={handleFlatmateChange}
+                      >
+
+                        <option value="">
+                          Select preference
+                        </option>
+
+                        <option value="vegetarian">
+                          Vegetarian
+                        </option>
+
+                        <option value="non_vegetarian">
+                          Non-vegetarian
+                        </option>
+
+                        <option value="vegan">
+                          Vegan
+                        </option>
+
+                        <option value="no_preference">
+                          No preference
+                        </option>
+
+                      </select>
+
+                    </FormField>
+
+
+                    <FormField label="Guests Preference">
+
+                      <select
+                        name="guests"
+                        value={flatmatePreferences.guests}
+                        onChange={handleFlatmateChange}
+                      >
+
+                        <option value="">
+                          Select preference
+                        </option>
+
+                        <option value="rarely">
+                          Rarely
+                        </option>
+
+                        <option value="sometimes">
+                          Sometimes
+                        </option>
+
+                        <option value="often">
+                          Often
+                        </option>
+
+                        <option value="no_guests">
+                          No guests
+                        </option>
+
+                      </select>
+
+                    </FormField>
+
+
+                    <FormField label="Pets Preference">
+
+                      <select
+                        name="pets"
+                        value={flatmatePreferences.pets}
+                        onChange={handleFlatmateChange}
+                      >
+
+                        <option value="">
+                          Select preference
+                        </option>
+
+                        <option value="pet_friendly">
+                          Pet-friendly
+                        </option>
+
+                        <option value="no_pets">
+                          Prefer no pets
+                        </option>
+
+                        <option value="no_preference">
+                          No preference
+                        </option>
+
+                      </select>
+
+                    </FormField>
+
+
+                  </div>
+
+
+                  <div className="preference-actions">
+
+                    <button
+                      className="primary-button"
+                      type="submit"
+                    >
+
+                      <Save size={16} />
+
+                      Save Flatmate Preferences
+
+                    </button>
+
+                  </div>
+
+
+                </form>
+
+              </section>
+
+            )}
+
+
+            {/* SUCCESS MESSAGE */}
+
+            {saveMessage && (
+
+              <div className="global-save-message">
+
+                <CheckCircle2 size={18} />
+
+                <span>{saveMessage}</span>
+
+              </div>
+
+            )}
+
+
           </div>
 
-          {/* ================================= */}
-          {/* SAVE / CANCEL / EDIT */}
-          {/* ================================= */}
+        </div>
 
-          {!isEditing ? (
-            <button
-              type="button"
-              onClick={handleEditProfile}
-              className="mt-8 flex items-center gap-2 rounded-lg bg-black px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800"
-            >
-              <Pencil size={17} />
-              Edit Profile
-            </button>
-          ) : (
-            <div className="mt-8">
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  disabled={saving}
-                  onClick={handleSaveProfile}
-                  className="rounded-lg bg-black px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {saving ? "Saving..." : "Save Changes"}
-                </button>
-
-                <button
-                  type="button"
-                  disabled={saving}
-                  onClick={handleCancelEdit}
-                  className="rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 disabled:opacity-50"
-                >
-                  Cancel
-                </button>
-              </div>
-
-              {saveError && (
-                <p className="mt-3 text-sm text-red-500">{saveError}</p>
-              )}
-            </div>
-          )}
-        </section>
       </main>
+
+
+      <Footer />
+
     </div>
+
   );
+
 }
 
-/*
- * Reusable information row
- */
-function InfoItem({ icon, label, value }) {
+
+// ==========================================
+// REUSABLE FORM FIELD
+// ==========================================
+
+function FormField({ label, children }) {
+
   return (
-    <div className="flex items-center gap-3">
-      <div className="shrink-0 text-gray-500">{icon}</div>
 
-      <div className="min-w-0 flex-1">
-        <p className="text-sm text-gray-500">{label}</p>
+    <div className="form-field">
 
-        <div className="mt-1 font-medium">{value}</div>
-      </div>
+      <label>{label}</label>
+
+      {children}
+
     </div>
+
   );
+
 }
+
+
+// ==========================================
+// REUSABLE DETAIL ITEM
+// ==========================================
+
+function DetailItem({ icon, label, value }) {
+
+  return (
+
+    <div className="detail-item">
+
+      <div className="detail-icon">
+
+        {icon}
+
+      </div>
+
+      <div className="detail-content">
+
+        <span>{label}</span>
+
+        <strong>{value}</strong>
+
+      </div>
+
+    </div>
+
+  );
+
+}
+
 
 export default Profile;
