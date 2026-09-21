@@ -1,3 +1,5 @@
+import "dotenv/config";
+
 console.log("SERVER FILE STARTED");
 console.log("RESEND KEY LOADED:", !!process.env.RESEND_API_KEY);
 
@@ -14,6 +16,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
+
 
 app.get("/", (req, res) => {
   res.json({

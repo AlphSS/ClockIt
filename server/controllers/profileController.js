@@ -440,3 +440,139 @@ export async function verifyCollegeOtp(req, res) {
     });
   }
 }
+
+// ==========================================
+// GET USER PREFERENCES
+// ==========================================
+
+export async function getPreferences(req, res) {
+  try {
+    const userId = req.user.id;
+
+    const [flatResult, flatmateResult] = await Promise.all([
+      supabaseAdmin
+        .from("flat_preferences")
+        .select("*")
+        .eq("user_id", userId)
+        .maybeSingle(),
+
+      supabaseAdmin
+        .from("flatmate_preferences")
+        .select("*")
+        .eq("user_id", userId)
+        .maybeSingle(),
+    ]);
+
+    if (flatResult.error) {
+      console.error("Get flat preferences error:", flatResult.error);
+
+      return res.status(500).json({
+        success: false,
+        message: "Unable to fetch flat preferences.",
+      });
+    }
+
+    if (flatmateResult.error) {
+      console.error(
+        "Get flatmate preferences error:",
+        flatmateResult.error,
+      );
+
+      return res.status(500).json({
+        success: false,
+        message: "Unable to fetch flatmate preferences.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      flatPreferences: flatResult.data,
+      flatmatePreferences: flatmateResult.data,
+    });
+  } catch (error) {
+    console.error("Get preferences error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong.",
+    });
+  }
+}
+
+
+// ==========================================
+// UPDATE USER PREFERENCES
+// ==========================================
+
+export async function updatePreferences(req, res) {
+  try {
+    const userId = req.user.id;
+
+    const { flatPreferences, flatmatePreferences } = req.body;
+
+    // Save flat preferences
+    if (flatPreferences) {
+      const { error: flatError } = await supabaseAdmin
+        .from("flat_preferences")
+        .upsert(
+          {
+            user_id: userId,
+            ...flatPreferences,
+            updated_at: new Date().toISOString(),
+          },
+          {
+            onConflict: "user_id",
+          },
+        );
+
+      if (flatError) {
+        console.error("Update flat preferences error:", flatError);
+
+        return res.status(500).json({
+          success: false,
+          message: "Unable to update flat preferences.",
+        });
+      }
+    }
+
+    // Save flatmate preferences
+    if (flatmatePreferences) {
+      const { error: flatmateError } = await supabaseAdmin
+        .from("flatmate_preferences")
+        .upsert(
+          {
+            user_id: userId,
+            ...flatmatePreferences,
+            updated_at: new Date().toISOString(),
+          },
+          {
+            onConflict: "user_id",
+          },
+        );
+
+      if (flatmateError) {
+        console.error(
+          "Update flatmate preferences error:",
+          flatmateError,
+        );
+
+        return res.status(500).json({
+          success: false,
+          message: "Unable to update flatmate preferences.",
+        });
+      }
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Preferences updated successfully.",
+    });
+  } catch (error) {
+    console.error("Update preferences error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong.",
+    });
+  }
+}

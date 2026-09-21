@@ -2,29 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
-  User,
-  Mail,
-  Phone,
-  GraduationCap,
-  ShieldCheck,
-  Pencil,
-  Home,
-  Users,
-  MapPin,
-  CalendarDays,
-  Wallet,
-  CheckCircle2,
-  Save,
-  X,
-  ChevronRight,
-  LogOut,
-  Building2,
-  BedDouble,
-  Cigarette,
-  Moon,
-  Utensils,
-  MessageCircle,
-  Sparkles,
+  User, Mail, Phone, GraduationCap, ShieldCheck, Pencil, Home, Users, MapPin, CalendarDays, Wallet, CheckCircle2, Save, X, ChevronRight, LogOut, Building2, BedDouble, Cigarette, Moon,
+  Utensils, MessageCircle, Sparkles,
 } from "lucide-react";
 
 import { supabase } from "../../services/supabase";
@@ -38,6 +17,8 @@ import {
   updateProfile,
   sendCollegeOtp,
   verifyCollegeOtp,
+  getPreferences,
+  updatePreferences,
 } from "../../services/profileApi";
 
 import "./Profile.css";
@@ -151,13 +132,46 @@ function Profile() {
 
       try {
 
-        const [profileData, collegeData] = await Promise.all([
+        const [profileData, collegeData, preferencesData] = await Promise.all([
           getProfile(),
           getColleges(),
+          getPreferences(),
         ]);
 
         setProfile(profileData);
         setColleges(collegeData);
+
+        if (preferencesData?.flatPreferences) {
+          setStayPreferences((previous) => ({
+            ...previous,
+            city: preferencesData.flatPreferences.preferred_location || "",
+            minBudget: preferencesData.flatPreferences.min_budget ?? "",
+            maxBudget: preferencesData.flatPreferences.max_budget ?? "",
+            bhk: preferencesData.flatPreferences.preferred_bhk || "",
+            furnishing:
+              preferencesData.flatPreferences.furnishing_preference || "",
+            moveInDate:
+              preferencesData.flatPreferences.preferred_move_in_date || "",
+          }));
+        }
+
+        if (preferencesData?.flatmatePreferences) {
+          setFlatmatePreferences((previous) => ({
+            ...previous,
+            preferredGender:
+              preferencesData.flatmatePreferences.preferred_gender || "",
+            minAge: preferencesData.flatmatePreferences.min_age ?? "",
+            maxAge: preferencesData.flatmatePreferences.max_age ?? "",
+            smoking:
+              preferencesData.flatmatePreferences.smoking_preference || "",
+            sleepSchedule:
+              preferencesData.flatmatePreferences.sleep_schedule || "",
+            cleanliness:
+              preferencesData.flatmatePreferences.cleanliness_preference || "",
+            foodPreference:
+              preferencesData.flatmatePreferences.food_preference || "",
+          }));
+        }
 
         setCollegeEmail(profileData.college_email || "");
 
@@ -442,24 +456,103 @@ function Profile() {
   }
 
 
-  function handleStaySubmit(event) {
+  async function handleStaySubmit(event) {
 
     event.preventDefault();
 
-    setSaveMessage(
-      "Your stay preferences are ready for database integration."
-    );
+    try {
+
+      setSaveMessage("");
+      setSaveError("");
+
+      await updatePreferences({
+
+        flatPreferences: {
+
+          preferred_location: stayPreferences.city.trim() || null,
+
+          min_budget: stayPreferences.minBudget
+            ? Number(stayPreferences.minBudget)
+            : null,
+
+          max_budget: stayPreferences.maxBudget
+            ? Number(stayPreferences.maxBudget)
+            : null,
+
+          preferred_bhk: stayPreferences.bhk || null,
+
+          furnishing_preference: stayPreferences.furnishing || null,
+
+          preferred_move_in_date: stayPreferences.moveInDate || null,
+
+        },
+
+      });
+
+      setSaveMessage("Flat preferences saved successfully.");
+
+    } catch (err) {
+
+      console.error("Flat preferences update error:", err);
+
+      setSaveError(err.message || "Unable to save flat preferences.");
+
+    }
 
   }
 
 
-  function handleFlatmateSubmit(event) {
+  async function handleFlatmateSubmit(event) {
 
     event.preventDefault();
 
-    setSaveMessage(
-      "Your flatmate preferences are ready for database integration."
-    );
+    try {
+
+      setSaveMessage("");
+      setSaveError("");
+
+      await updatePreferences({
+
+        flatmatePreferences: {
+
+          preferred_gender:
+            flatmatePreferences.preferredGender || null,
+
+          min_age: flatmatePreferences.minAge
+            ? Number(flatmatePreferences.minAge)
+            : null,
+
+          max_age: flatmatePreferences.maxAge
+            ? Number(flatmatePreferences.maxAge)
+            : null,
+
+          smoking_preference:
+            flatmatePreferences.smoking || null,
+
+          sleep_schedule:
+            flatmatePreferences.sleepSchedule || null,
+
+          cleanliness_preference:
+            flatmatePreferences.cleanliness || null,
+
+          food_preference:
+            flatmatePreferences.foodPreference || null,
+
+        },
+
+      });
+
+      setSaveMessage("Flatmate preferences saved successfully.");
+
+    } catch (err) {
+
+      console.error("Flatmate preferences update error:", err);
+
+      setSaveError(
+        err.message || "Unable to save flatmate preferences."
+      );
+
+    }
 
   }
 
@@ -1280,7 +1373,12 @@ function Profile() {
                         type="text"
                         name="city"
                         value={stayPreferences.city}
-                        onChange={handleStayChange}
+onChange={(e) =>
+  setStayPreferences({
+    ...stayPreferences,
+    city: e.target.value,
+  })
+}
                         placeholder="e.g. Pune"
                       />
 
@@ -1310,7 +1408,12 @@ function Profile() {
                           type="number"
                           name="minBudget"
                           value={stayPreferences.minBudget}
-                          onChange={handleStayChange}
+onChange={(e) =>
+  setStayPreferences({
+    ...stayPreferences,
+    minBudget: e.target.value,
+  })
+}
                           placeholder="Minimum ₹"
                         />
 
@@ -1329,7 +1432,12 @@ function Profile() {
                           type="number"
                           name="maxBudget"
                           value={stayPreferences.maxBudget}
-                          onChange={handleStayChange}
+onChange={(e) =>
+  setStayPreferences({
+    ...stayPreferences,
+    maxBudget: e.target.value,
+  })
+}
                           placeholder="Maximum ₹"
                         />
 
@@ -1915,6 +2023,20 @@ function Profile() {
 
             )}
 
+
+            {/* SAVE ERROR MESSAGE */}
+
+            {saveError && (
+
+              <div className="global-save-message">
+
+                <X size={18} />
+
+                <span>{saveError}</span>
+
+              </div>
+
+            )}
 
             {/* SUCCESS MESSAGE */}
 
