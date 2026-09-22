@@ -422,3 +422,49 @@
   }
 
 }
+
+.roomie-filter-panel {
+  margin-top: 20px;
+  padding: 22px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  border: 1px solid rgba(40, 11, 15, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.roomie-filter-panel input,
+.roomie-filter-panel select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid rgba(40, 11, 15, 0.15);
+  border-radius: 8px;
+  background: #fff;
+  color: #280b0f;
+}
+
+.roomie-clear-filters,
+.roomie-apply-filters {
+  padding: 12px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.roomie-clear-filters {
+  border: 1px solid rgba(40, 11, 15, 0.2);
+  background: transparent;
+}
+
+.roomie-apply-filters {
+  border: none;
+  background: #280b0f;
+  color: white;
+}
+
+@media (max-width: 700px) {
+  .roomie-filter-panel {
+    grid-template-columns: 1fr;
+  }
+}

@@ -11,13 +11,12 @@ function RoomieCard({
   image,
   tags = [],
   description,
+  listingType,
+  bhk,
+  furnishing,
 }) {
   return (
     <article className="roomie-card">
-
-      {/* =========================
-          PROFILE IMAGE
-          ========================= */}
 
       <div className="roomie-card-image-wrapper">
 
@@ -29,36 +28,29 @@ function RoomieCard({
           />
         ) : (
           <div className="roomie-card-image-placeholder">
-            {name?.charAt(0)}
+            {name?.charAt(0)?.toUpperCase()}
           </div>
         )}
 
-        {/* Availability Badge */}
         <span className="roomie-available-badge">
           Available
         </span>
 
       </div>
 
-
-      {/* =========================
-          CARD CONTENT
-          ========================= */}
-
       <div className="roomie-card-content">
 
-        {/* Name */}
         <div className="roomie-card-heading">
 
           <div>
             <h3>{name}</h3>
 
             <p>
-              {age} · {role}
+              {age ? `${age} · ` : ""}
+              {role || "Roomie"}
             </p>
           </div>
 
-          {/* Small heart/favorite button */}
           <button
             className="roomie-favorite"
             aria-label={`Save ${name}`}
@@ -79,11 +71,6 @@ function RoomieCard({
           </button>
 
         </div>
-
-
-        {/* =========================
-            LOCATION
-            ========================= */}
 
         <div className="roomie-card-location">
 
@@ -106,64 +93,56 @@ function RoomieCard({
 
         </div>
 
-
-        {/* =========================
-            COLLEGE / WORK
-            ========================= */}
-
         <p className="roomie-card-college">
-          {college}
+          {college || ""}
         </p>
 
-
-        {/* =========================
-            DETAILS
-            ========================= */}
+        {listingType && (
+          <span className="roomie-listing-type">
+            {listingType === "HAS_PLACE"
+              ? "Has a place"
+              : "Looking for a place"}
+          </span>
+        )}
 
         <div className="roomie-card-details">
 
           <div className="roomie-detail">
-
             <span className="roomie-detail-label">
               Budget
             </span>
 
             <strong>
-              ₹{budget}/mo
+              {budget
+                ? `₹${Number(budget).toLocaleString("en-IN")}/mo`
+                : "Flexible"}
             </strong>
-
           </div>
 
-
           <div className="roomie-detail">
-
             <span className="roomie-detail-label">
               Move-in
             </span>
 
             <strong>
-              {moveIn}
+              {moveIn || "Flexible"}
             </strong>
-
           </div>
 
         </div>
 
-
-        {/* =========================
-            DESCRIPTION
-            ========================= */}
+        {bhk && (
+          <p className="roomie-card-description">
+            {bhk}
+            {furnishing ? ` · ${furnishing}` : ""}
+          </p>
+        )}
 
         {description && (
           <p className="roomie-card-description">
             {description}
           </p>
         )}
-
-
-        {/* =========================
-            TAGS
-            ========================= */}
 
         <div className="roomie-card-tags">
 
@@ -177,11 +156,6 @@ function RoomieCard({
           ))}
 
         </div>
-
-
-        {/* =========================
-            ACTION
-            ========================= */}
 
         <button className="roomie-view-button">
           View Profile
@@ -204,7 +178,6 @@ function RoomieCard({
         </button>
 
       </div>
-
     </article>
   );
 }

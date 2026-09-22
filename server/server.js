@@ -1,4 +1,5 @@
 import "dotenv/config";
+import roomieRoutes from "./routes/roomieRoutes.js";
 
 console.log("SERVER FILE STARTED");
 console.log("RESEND KEY LOADED:", !!process.env.RESEND_API_KEY);
@@ -16,6 +17,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
+app.use("/api/roomies", roomieRoutes);
 
 
 app.get("/", (req, res) => {

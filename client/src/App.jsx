@@ -12,6 +12,7 @@ import Profile from "./components/common/Profile";
 import Roomies from "./pages/Roomies/Roomies";
 import GoToTop from "./components/common/GoToTop";
 import About from "./pages/About/About";
+import CreateListing from "./pages/Roomies/CreateListing";
 
 function App() {
   return (
@@ -64,6 +65,11 @@ function App() {
         />
 
           <Route path="/about" element={<About />} />
+
+          <Route
+            path="/roomies/create"
+            element={<CreateListing />}
+          />
 
       </Routes>
 
