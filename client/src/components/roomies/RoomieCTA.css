@@ -1,0 +1,349 @@
+/* ========================================
+   CLOCKIT — ROOMIE CTA
+   ======================================== */
+
+.roomie-cta {
+  position: relative;
+
+  overflow: hidden;
+
+  padding: 130px 8% 80px;
+
+  background: #8d3a3c;
+
+  color: #f5eee6;
+
+  text-align: center;
+}
+
+
+/* ========================================
+   CONTENT
+   ======================================== */
+
+.roomie-cta-content {
+  position: relative;
+
+  z-index: 2;
+
+  max-width: 800px;
+
+  margin: 0 auto;
+}
+
+
+/* ========================================
+   EYEBROW
+   ======================================== */
+
+.roomie-cta-eyebrow {
+  margin: 0 0 20px;
+
+  color: #c6b39a;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 3px;
+}
+
+
+/* ========================================
+   HEADING
+   ======================================== */
+
+.roomie-cta h2 {
+  margin: 0;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: clamp(48px, 6vw, 82px);
+
+  font-weight: 400;
+
+  line-height: 0.98;
+
+  letter-spacing: -2px;
+
+  color: #f5eee6;
+}
+
+
+/* ========================================
+   DESCRIPTION
+   ======================================== */
+
+.roomie-cta-description {
+  max-width: 570px;
+
+  margin: 30px auto 0;
+
+  color: #f5eee6;
+
+  font-size: 15px;
+
+  line-height: 1.8;
+
+  opacity: 0.88;
+}
+
+
+/* ========================================
+   ACTIONS
+   ======================================== */
+
+.roomie-cta-actions {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 13px;
+
+  margin-top: 40px;
+}
+
+
+/* ========================================
+   PRIMARY BUTTON
+   ======================================== */
+
+.roomie-cta-primary {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  padding: 15px 25px;
+
+  border: 1px solid #c6b39a;
+
+  border-radius: 2px;
+
+  background: #c6b39a;
+
+  color: #280b0f;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.5px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+
+.roomie-cta-primary:hover {
+  background: #f5eee6;
+
+  border-color: #f5eee6;
+
+  color: #280b0f;
+
+  transform: translateY(-2px);
+}
+
+
+.roomie-cta-primary svg {
+  transition: transform 0.25s ease;
+}
+
+
+.roomie-cta-primary:hover svg {
+  transform: translateX(4px);
+}
+
+
+/* ========================================
+   SECONDARY BUTTON
+   ======================================== */
+
+.roomie-cta-secondary {
+  padding: 15px 25px;
+
+  border: 1px solid rgba(245, 238, 230, 0.7);
+
+  border-radius: 2px;
+
+  background: transparent;
+
+  color: #f5eee6;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.5px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+
+.roomie-cta-secondary:hover {
+  background: #f5eee6;
+
+  border-color: #f5eee6;
+
+  color: #280b0f;
+
+  transform: translateY(-2px);
+}
+
+
+/* ========================================
+   BOTTOM MESSAGE
+   ======================================== */
+
+.roomie-cta-bottom {
+  position: relative;
+
+  z-index: 2;
+
+  max-width: 700px;
+
+  margin: 90px auto 0;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+
+  justify-content: center;
+}
+
+
+.roomie-cta-bottom span {
+  width: 55px;
+
+  height: 1px;
+
+  background: rgba(198, 179, 154, 0.65);
+}
+
+
+.roomie-cta-bottom p {
+  margin: 0;
+
+  color: #c6b39a;
+
+  font-size: 11px;
+
+  letter-spacing: 0.5px;
+}
+
+
+/* ========================================
+   DECORATIVE CIRCLES
+   ======================================== */
+
+.roomie-cta-circle {
+  position: absolute;
+
+  border: 1px solid rgba(198, 179, 154, 0.3);
+
+  border-radius: 50%;
+
+  pointer-events: none;
+}
+
+
+.roomie-cta-circle-one {
+  width: 360px;
+
+  height: 360px;
+
+  top: -170px;
+
+  right: -90px;
+}
+
+
+.roomie-cta-circle-two {
+  width: 240px;
+
+  height: 240px;
+
+  bottom: -120px;
+
+  left: -70px;
+
+  border-color: rgba(245, 238, 230, 0.18);
+}
+
+
+/* ========================================
+   RESPONSIVE — TABLET
+   ======================================== */
+
+@media (max-width: 700px) {
+
+  .roomie-cta {
+    padding: 100px 7% 70px;
+  }
+
+
+  .roomie-cta-actions {
+    flex-direction: column;
+  }
+
+
+  .roomie-cta-primary,
+  .roomie-cta-secondary {
+    width: 100%;
+
+    max-width: 320px;
+  }
+
+
+  .roomie-cta-bottom {
+    margin-top: 65px;
+  }
+
+}
+
+
+/* ========================================
+   RESPONSIVE — MOBILE
+   ======================================== */
+
+@media (max-width: 450px) {
+
+  .roomie-cta {
+    padding: 80px 6% 60px;
+  }
+
+
+  .roomie-cta h2 {
+    font-size: 46px;
+  }
+
+
+  .roomie-cta-description {
+    font-size: 14px;
+  }
+
+
+  .roomie-cta-bottom span {
+    width: 30px;
+  }
+
+}

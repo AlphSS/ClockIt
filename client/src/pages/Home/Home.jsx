@@ -1,16 +1,32 @@
-import Navbar from "../../components/common/NavBar";
+import NavBar from "../../components/common/NavBar"
+import HeroSection from "../../components/home/HeroSection";
+import QuickActions from "../../components/home/QuickActions";
+import ClockItMenu from "../../components/home/ClockItMenu";
+import CommunitySection from "../../components/home/CommunitySection";
+import HomeCTA from "../../components/home/HomeCTA";
+import Footer from "../../components/common/Footer"
 
 function Home() {
   return (
-    <div>
-      <main className="px-8 py-12">
-        <h1 className="text-4xl font-bold">Welcome to ClockIt</h1>
+    <main>
+      <NavBar/>
+      {/* Hero Section */}
+      <HeroSection />
 
-        <p className="mt-3 text-gray-600">
-          Your student community starts here.
-        </p>
-      </main>
-    </div>
+      {/* Quick Actions */}
+      <QuickActions />
+
+      {/* ClockIt Features */}
+      <ClockItMenu />
+
+      {/* Community Section */}
+      <CommunitySection />
+
+      {/* Final Call To Action */}
+      <HomeCTA />
+
+      <Footer/>
+    </main>
   );
 }
 

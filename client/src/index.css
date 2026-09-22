@@ -33,8 +33,3 @@
   --color-roomies: #8B5CF6;
   --color-stays: #06B6D4;
 }
-
-@keyframes slide-up {
-  from { transform: translateY(40px); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
-}

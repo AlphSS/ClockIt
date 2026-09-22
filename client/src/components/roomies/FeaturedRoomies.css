@@ -1,0 +1,192 @@
+/* ========================================
+   CLOCKIT — FEATURED ROOMIES
+   ======================================== */
+
+.featured-roomies {
+  padding: 110px 8% 120px;
+
+  background: #f5eee6;
+
+  color: #280b0f;
+}
+
+
+/* ========================================
+   HEADER
+   ======================================== */
+
+.featured-roomies-header {
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap: 50px;
+
+  margin-bottom: 55px;
+}
+
+
+.featured-roomies-eyebrow {
+  margin: 0 0 18px;
+
+  color: #8d3a3c;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 3px;
+}
+
+
+.featured-roomies-header h2 {
+  margin: 0;
+
+  color: #280b0f;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: clamp(42px, 5vw, 64px);
+
+  font-weight: 400;
+
+  line-height: 1;
+
+  letter-spacing: -1.5px;
+}
+
+
+.featured-roomies-intro {
+  max-width: 340px;
+
+  margin: 0 0 5px;
+
+  color: #7b694e;
+
+  font-size: 14px;
+
+  line-height: 1.7;
+}
+
+
+/* ========================================
+   GRID
+   ======================================== */
+
+.featured-roomies-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 24px;
+}
+
+
+/* ========================================
+   FOOTER / VIEW ALL
+   ======================================== */
+
+.featured-roomies-footer {
+  display: flex;
+
+  justify-content: center;
+
+  margin-top: 45px;
+}
+
+
+.featured-roomies-view-all {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 13px 24px;
+
+  border: 1px solid #7b694e;
+
+  background: transparent;
+
+  color: #3b1319;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.7px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
+}
+
+
+.featured-roomies-view-all span {
+  font-size: 17px;
+
+  transition: transform 0.25s ease;
+}
+
+
+.featured-roomies-view-all:hover {
+  background: #3b1319;
+
+  border-color: #3b1319;
+
+  color: #f5eee6;
+}
+
+
+.featured-roomies-view-all:hover span {
+  transform: translateX(4px);
+}
+
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 1000px) {
+
+  .featured-roomies-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+
+  .featured-roomies-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+
+  .featured-roomies-intro {
+    max-width: 500px;
+  }
+
+}
+
+
+@media (max-width: 650px) {
+
+  .featured-roomies {
+    padding: 80px 6% 90px;
+  }
+
+
+  .featured-roomies-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .featured-roomies-header h2 {
+    font-size: 44px;
+  }
+
+}
