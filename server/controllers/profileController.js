@@ -5,7 +5,6 @@ import { sendCollegeVerificationEmail } from "../utils/email.js";
 export async function getProfile(req, res) {
   try {
     const userId = req.user.id;
-
     const { data: profile, error } = await supabaseAdmin
       .from("profiles")
       .select(

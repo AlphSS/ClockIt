@@ -1,20 +1,21 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import { AuthProvider } from "./context/AuthContext";
+import Register from "./components/auth/RegistrationForm";
+import Login from "./pages/Registration/login";
+
+import Home from "./pages/Home/Home";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import EmailConfirmed from "./components/auth/EmailConfirmed";
 import VerifyEmail from "./components/auth/VerifyEmail";
 import AccountCreated from "./components/auth/AccountCreated";
 import Profile from "./components/common/Profile";
 
-// Auth / Registration
-import Register from "./components/auth/RegistrationForm";
-import Home from "./pages/Home/Home";
+import Marketplace from "./pages/Marketplace/Marketplace";
+import ProductDetails from "./pages/Marketplace/ProductDetails";
+import MyListing from "./pages/Marketplace/MyListing";
+import EditProduct from "./pages/Marketplace/EditProduct";
+import AddProduct from "./pages/Marketplace/AddProduct";
 
-// Login
-import Login from "./pages/Login/Login";
-
-// Stays
 import StaysHome from "./pages/stays/StaysHome";
 import StayDetails from "./pages/stays/StayDetails";
 import PostStay from "./pages/stays/PostStay";
@@ -23,67 +24,143 @@ import SavedStays from "./pages/stays/SavedStays";
 import MyInquiries from "./pages/stays/MyInquiries";
 import EditStay from "./pages/stays/EditStay";
 
+import Navbar from "./components/common/NavBar";
+
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          {/* Auth */}
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/verify-email" element={<VerifyEmail />} />
-          <Route path="/email-confirmed" element={<EmailConfirmed />} />
-          <Route
-            path="/account-created"
-            element={
-              <AccountCreated
-                name={sessionStorage.getItem("registrationFullName")}
-                onContinue={() => {
-                  sessionStorage.removeItem("registrationFullName");
-                  sessionStorage.removeItem("registrationEmail");
-                  window.location.href = "/";
-                }}
-              />
-            }
-          />
+    <BrowserRouter>
+      <Navbar />
 
-          {/* Profile */}
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
+      <Routes>
+        {/* Authentication */}
+        <Route path="/register" element={<Register />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
 
-          {/* Home */}
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            }
-          />
+        <Route path="/email-confirmed" element={<EmailConfirmed />} />
 
-          {/* Stays module */}
-          <Route path="/stays" element={<StaysHome />} />
-          <Route path="/stays/create" element={<ProtectedRoute><PostStay /></ProtectedRoute>} />
-          <Route path="/stays/post" element={<ProtectedRoute><PostStay /></ProtectedRoute>} />
-          <Route path="/stays/my-listings" element={<ProtectedRoute><MyListings /></ProtectedRoute>} />
-          <Route path="/stays/saved" element={<ProtectedRoute><SavedStays /></ProtectedRoute>} />
-          <Route path="/stays/wishlist" element={<ProtectedRoute><SavedStays /></ProtectedRoute>} />
-          <Route path="/stays/inquiries" element={<ProtectedRoute><MyInquiries /></ProtectedRoute>} />
-          <Route path="/stays/:id/edit" element={<ProtectedRoute><EditStay /></ProtectedRoute>} />
-          <Route path="/stays/:id" element={<StayDetails />} />
+        <Route
+          path="/account-created"
+          element={
+            <AccountCreated
+              name={sessionStorage.getItem("registrationFullName")}
+              onContinue={() => {
+                sessionStorage.removeItem("registrationFullName");
+                sessionStorage.removeItem("registrationEmail");
+                window.location.href = "/";
+              }}
+            />
+          }
+        />
 
-          {/* Placeholder routes for Deals and Roomies */}
-          <Route path="/deals" element={<div className="min-h-screen flex items-center justify-center text-gray-400">Deals module — coming soon</div>} />
-          <Route path="/roomies" element={<div className="min-h-screen flex items-center justify-center text-gray-400">Roomies module — coming soon</div>} />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+        <Route path="/login" element={<Login />} />
+
+        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/email-confirmed" element={<EmailConfirmed />} />
+
+        <Route
+          path="/account-created"
+          element={
+            <AccountCreated
+              name={sessionStorage.getItem("registrationFullName")}
+              onContinue={() => {
+                sessionStorage.removeItem("registrationFullName");
+                sessionStorage.removeItem("registrationEmail");
+                window.location.href = "/";
+              }}
+            />
+          }
+        />
+
+        {/* Marketplace */}
+        <Route path="/marketplace" element={<Marketplace />} />
+
+        <Route path="/marketplace/product/:id" element={<ProductDetails />} />
+
+        <Route path="/marketplace/my-listings" element={<MyListing />} />
+
+        <Route path="/marketplace/product/:id/edit" element={<EditProduct />} />
+
+        <Route path="/marketplace/add" element={<AddProduct />} />
+
+        {/* Stays module */}
+        <Route path="/stays" element={<StaysHome />} />
+        <Route
+          path="/stays/create"
+          element={
+            <ProtectedRoute>
+              <PostStay />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/stays/post"
+          element={
+            <ProtectedRoute>
+              <PostStay />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/stays/my-listings"
+          element={
+            <ProtectedRoute>
+              <MyListings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/stays/saved"
+          element={
+            <ProtectedRoute>
+              <SavedStays />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/stays/wishlist"
+          element={
+            <ProtectedRoute>
+              <SavedStays />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/stays/inquiries"
+          element={
+            <ProtectedRoute>
+              <MyInquiries />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/stays/:id/edit"
+          element={
+            <ProtectedRoute>
+              <EditStay />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/stays/:id" element={<StayDetails />} />
+
+        {/* Home */}
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
