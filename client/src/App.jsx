@@ -11,10 +11,18 @@ import Profile from "./components/common/Profile";
 
 import Roomies from "./pages/Roomies/Roomies";
 import Marketplace from "./pages/Marketplace/Marketplace";
-// import Stays from "./components/stays/StaysHome";
 import GoToTop from "./components/common/GoToTop";
 import About from "./pages/About/About";
 import CreateListing from "./pages/Roomies/CreateListing";
+
+// Stays Pages
+import StaysHome from "./pages/stays/StaysHome";
+import StayDetails from "./pages/stays/StayDetails";
+import PostStay from "./pages/stays/PostStay";
+import EditStay from "./pages/stays/EditStay";
+import MyListings from "./pages/stays/MyListings";
+import SavedStays from "./pages/stays/SavedStays";
+import MyInquiries from "./pages/stays/MyInquiries";
 
 function App() {
   return (
@@ -50,15 +58,25 @@ function App() {
           }
         />
 
-         {/* <Route path="/stays" element={<Stays />} /> */}
-          <Route path="/marketplace" element={<Marketplace />} />
+        {/* Stays Routes */}
+        <Route path="/stays" element={<StaysHome />} />
+        <Route path="/stay" element={<StaysHome />} />
+        <Route path="/stays/post" element={<ProtectedRoute><PostStay /></ProtectedRoute>} />
+        <Route path="/stays/create" element={<ProtectedRoute><PostStay /></ProtectedRoute>} />
+        <Route path="/stays/my-listings" element={<ProtectedRoute><MyListings /></ProtectedRoute>} />
+        <Route path="/stays/saved" element={<ProtectedRoute><SavedStays /></ProtectedRoute>} />
+        <Route path="/stays/inquiries" element={<ProtectedRoute><MyInquiries /></ProtectedRoute>} />
+        <Route path="/stays/:id" element={<StayDetails />} />
+        <Route path="/stays/:id/edit" element={<ProtectedRoute><EditStay /></ProtectedRoute>} />
+
+        <Route path="/marketplace" element={<Marketplace />} />
         <Route
           path="/roomies"
           element={
-           <ProtectedRoute>
-             <Roomies />
+            <ProtectedRoute>
+              <Roomies />
             </ProtectedRoute>
-           }
+          }
         />
         <Route
           path="/"
@@ -69,16 +87,14 @@ function App() {
           }
         />
 
-          <Route path="/about" element={<About />} />
+        <Route path="/about" element={<About />} />
 
-          <Route
-            path="/roomies/create"
-            element={<CreateListing />}
-          />
+        <Route
+          path="/roomies/create"
+          element={<CreateListing />}
+        />
 
       </Routes>
-
-      
 
       <GoToTop />
 
