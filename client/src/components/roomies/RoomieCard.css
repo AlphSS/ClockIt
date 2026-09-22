@@ -1,0 +1,434 @@
+/* ========================================
+   CLOCKIT — ROOMIE CARD
+   ======================================== */
+
+.roomie-card {
+  overflow: hidden;
+
+  background: #fffaf5;
+
+  border: 1px solid rgba(123, 105, 78, 0.22);
+
+  border-radius: 4px;
+
+  box-shadow:
+    0 12px 35px rgba(59, 19, 25, 0.07);
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+
+.roomie-card:hover {
+  transform: translateY(-6px);
+
+  border-color: rgba(141, 58, 60, 0.35);
+
+  box-shadow:
+    0 20px 45px rgba(59, 19, 25, 0.13);
+}
+
+
+/* ========================================
+   IMAGE
+   ======================================== */
+
+.roomie-card-image-wrapper {
+  position: relative;
+
+  height: 270px;
+
+  overflow: hidden;
+
+  background: #c6b39a;
+}
+
+
+.roomie-card-image {
+  width: 100%;
+
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  transition: transform 0.5s ease;
+}
+
+
+.roomie-card:hover .roomie-card-image {
+  transform: scale(1.04);
+}
+
+
+/* ========================================
+   IMAGE PLACEHOLDER
+   ======================================== */
+
+.roomie-card-image-placeholder {
+  width: 100%;
+
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background:
+    linear-gradient(
+      145deg,
+      #c6b39a,
+      #8d3a3c
+    );
+
+  color: #f5eee6;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 70px;
+
+  font-weight: 400;
+}
+
+
+/* ========================================
+   AVAILABLE BADGE
+   ======================================== */
+
+.roomie-available-badge {
+  position: absolute;
+
+  top: 16px;
+
+  left: 16px;
+
+  padding: 7px 12px;
+
+  background: #f5eee6;
+
+  color: #3b1319;
+
+  border: 1px solid rgba(59, 19, 25, 0.12);
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+  text-transform: uppercase;
+}
+
+
+/* ========================================
+   CARD CONTENT
+   ======================================== */
+
+.roomie-card-content {
+  padding: 24px;
+}
+
+
+/* ========================================
+   HEADING
+   ======================================== */
+
+.roomie-card-heading {
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  gap: 15px;
+}
+
+
+.roomie-card-heading h3 {
+  margin: 0;
+
+  color: #280b0f;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 25px;
+
+  font-weight: 400;
+
+  line-height: 1.1;
+}
+
+
+.roomie-card-heading p {
+  margin: 7px 0 0;
+
+  color: #7b694e;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+
+/* ========================================
+   FAVORITE
+   ======================================== */
+
+.roomie-favorite {
+  width: 36px;
+
+  height: 36px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: 1px solid rgba(123, 105, 78, 0.3);
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: #8d3a3c;
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+
+.roomie-favorite:hover {
+  background: #8d3a3c;
+
+  border-color: #8d3a3c;
+
+  color: #f5eee6;
+}
+
+
+/* ========================================
+   LOCATION
+   ======================================== */
+
+.roomie-card-location {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin-top: 18px;
+
+  color: #3b1319;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+
+.roomie-card-location svg {
+  color: #8d3a3c;
+}
+
+
+/* ========================================
+   COLLEGE
+   ======================================== */
+
+.roomie-card-college {
+  margin: 7px 0 0;
+
+  color: #7b694e;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+}
+
+
+/* ========================================
+   DETAILS
+   ======================================== */
+
+.roomie-card-details {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 10px;
+
+  margin-top: 20px;
+
+  padding: 15px 0;
+
+  border-top: 1px solid rgba(123, 105, 78, 0.18);
+
+  border-bottom: 1px solid rgba(123, 105, 78, 0.18);
+}
+
+
+.roomie-detail {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+
+.roomie-detail + .roomie-detail {
+  padding-left: 18px;
+
+  border-left: 1px solid rgba(123, 105, 78, 0.18);
+}
+
+
+.roomie-detail-label {
+  color: #7b694e;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 1.2px;
+
+  text-transform: uppercase;
+}
+
+
+.roomie-detail strong {
+  color: #280b0f;
+
+  font-size: 14px;
+
+  font-weight: 700;
+}
+
+
+/* ========================================
+   DESCRIPTION
+   ======================================== */
+
+.roomie-card-description {
+  margin: 17px 0 0;
+
+  color: #7b694e;
+
+  font-size: 12px;
+
+  line-height: 1.6;
+}
+
+
+/* ========================================
+   TAGS
+   ======================================== */
+
+.roomie-card-tags {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 7px;
+
+  margin-top: 17px;
+}
+
+
+.roomie-tag {
+  padding: 6px 9px;
+
+  background: #f5eee6;
+
+  border: 1px solid rgba(198, 179, 154, 0.6);
+
+  color: #3b1319;
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.3px;
+}
+
+
+/* ========================================
+   VIEW PROFILE
+   ======================================== */
+
+.roomie-view-button {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  margin-top: 22px;
+
+  padding: 13px 18px;
+
+  border: 1px solid #3b1319;
+
+  background: #3b1319;
+
+  color: #f5eee6;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.7px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease;
+}
+
+
+.roomie-view-button:hover {
+  background: #8d3a3c;
+
+  border-color: #8d3a3c;
+}
+
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 600px) {
+
+  .roomie-card-image-wrapper {
+    height: 250px;
+  }
+
+
+  .roomie-card-content {
+    padding: 20px;
+  }
+
+
+  .roomie-card-heading h3 {
+    font-size: 23px;
+  }
+
+}
