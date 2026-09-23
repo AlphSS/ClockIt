@@ -10,10 +10,15 @@ import AccountCreated from "./components/auth/AccountCreated";
 import Profile from "./components/common/Profile";
 
 import Roomies from "./pages/Roomies/Roomies";
-import Marketplace from "./pages/Marketplace/Marketplace";
 import GoToTop from "./components/common/GoToTop";
 import About from "./pages/About/About";
 import CreateListing from "./pages/Roomies/CreateListing";
+
+import Marketplace from "./pages/Marketplace/Marketplace";
+import ProductDetails from "./pages/Marketplace/ProductDetails";
+import MyListing from "./pages/Marketplace/MyListing";
+import EditProduct from "./pages/Marketplace/EditProduct";
+import AddProduct from "./pages/Marketplace/AddProduct";
 
 // Stays Pages
 import StaysHome from "./pages/stays/StaysHome";
@@ -61,15 +66,64 @@ function App() {
         {/* Stays Routes */}
         <Route path="/stays" element={<StaysHome />} />
         <Route path="/stay" element={<StaysHome />} />
-        <Route path="/stays/post" element={<ProtectedRoute><PostStay /></ProtectedRoute>} />
-        <Route path="/stays/create" element={<ProtectedRoute><PostStay /></ProtectedRoute>} />
-        <Route path="/stays/my-listings" element={<ProtectedRoute><MyListings /></ProtectedRoute>} />
-        <Route path="/stays/saved" element={<ProtectedRoute><SavedStays /></ProtectedRoute>} />
-        <Route path="/stays/inquiries" element={<ProtectedRoute><MyInquiries /></ProtectedRoute>} />
+        <Route
+          path="/stays/post"
+          element={
+            <ProtectedRoute>
+              <PostStay />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/stays/create"
+          element={
+            <ProtectedRoute>
+              <PostStay />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/stays/my-listings"
+          element={
+            <ProtectedRoute>
+              <MyListings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/stays/saved"
+          element={
+            <ProtectedRoute>
+              <SavedStays />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/stays/inquiries"
+          element={
+            <ProtectedRoute>
+              <MyInquiries />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/stays/:id" element={<StayDetails />} />
-        <Route path="/stays/:id/edit" element={<ProtectedRoute><EditStay /></ProtectedRoute>} />
+        <Route
+          path="/stays/:id/edit"
+          element={
+            <ProtectedRoute>
+              <EditStay />
+            </ProtectedRoute>
+          }
+        />
 
         <Route path="/marketplace" element={<Marketplace />} />
+        <Route path="/marketplace/product/:id" element={<ProductDetails />} />
+
+        <Route path="/marketplace/my-listing" element={<MyListing />} />
+
+        <Route path="/marketplace/product/:id/edit" element={<EditProduct />} />
+
+        <Route path="/marketplace/add" element={<AddProduct />} />
         <Route
           path="/roomies"
           element={
@@ -89,15 +143,10 @@ function App() {
 
         <Route path="/about" element={<About />} />
 
-        <Route
-          path="/roomies/create"
-          element={<CreateListing />}
-        />
-
+        <Route path="/roomies/create" element={<CreateListing />} />
       </Routes>
 
       <GoToTop />
-
     </BrowserRouter>
   );
 }
