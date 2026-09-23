@@ -14,7 +14,10 @@ import Marketplace from "./pages/Marketplace/Marketplace";
 import GoToTop from "./components/common/GoToTop";
 import About from "./pages/About/About";
 import CreateListing from "./pages/Roomies/CreateListing";
+<<<<<<< HEAD
 import AddProduct from "./pages/Marketplace/AddProduct";
+=======
+>>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
 
 // Stays Pages
 import StaysHome from "./pages/stays/StaysHome";
@@ -72,10 +75,13 @@ function App() {
 
         <Route path="/marketplace" element={<Marketplace />} />
         <Route
+<<<<<<< HEAD
           path="/marketplace/add"
           element={<AddProduct />}
 />
         <Route
+=======
+>>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
           path="/roomies"
           element={
             <ProtectedRoute>
