@@ -146,11 +146,7 @@ function NavBar({ theme = "dark" }) {
           </NavLink>
 
           <NavLink to="/marketplace" className={navLinkStyle}>
-<<<<<<< HEAD
-            Deals
-=======
             Marketplace
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
           </NavLink>
 
           <NavLink to="/about" className={navLinkStyle}>

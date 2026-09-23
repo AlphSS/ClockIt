@@ -12,10 +12,6 @@ import { useStays } from "../../hooks/useStays";
 import { useSavedStays } from "../../hooks/useSavedStays";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-<<<<<<< HEAD
-import Footer from "../../components/common/Footer";
-=======
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
 
 export default function StaysHome() {
   const { user } = useAuth();
@@ -55,11 +51,7 @@ export default function StaysHome() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#F3EEE7" }}>
-<<<<<<< HEAD
-      <NavBar theme="roomies" />
-=======
       <NavBar />
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-8">
         {/* Search hero */}
@@ -170,11 +162,6 @@ export default function StaysHome() {
           </div>
         </div>
       )}
-<<<<<<< HEAD
-
-      <Footer theme="roomies" />
-=======
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
     </div>
   );
 }

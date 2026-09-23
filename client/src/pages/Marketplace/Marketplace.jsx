@@ -1,12 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-<<<<<<< HEAD
-import NavBar from "../../components/common/NavBar";
-import Footer from "../../components/common/Footer";
-import "./Marketplace.css";
-
-=======
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
 import {
   Search,
   SlidersHorizontal,
@@ -20,8 +13,6 @@ import {
 
 import { getProducts } from "../../services/marketplaceApi";
 
-<<<<<<< HEAD
-=======
 /*
  * Design notes (shares its language with ProductDetails)
  * - Concept: a campus notice board. Listings are pinned prints
@@ -57,7 +48,6 @@ const Styles = () => (
   `}</style>
 );
 
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
 function Marketplace() {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
@@ -139,21 +129,6 @@ function Marketplace() {
   };
 
   /* ================= LOADING ================= */
-<<<<<<< HEAD
-
-  if (loading) {
-    return (
-      <div className="marketplace-page">
-        <NavBar theme="roomies" />
-
-        <div className="marketplace-loading">
-          <div className="marketplace-loading-spinner" />
-
-          <p>Loading Marketplace...</p>
-        </div>
-
-        <Footer theme="roomies" />
-=======
   if (loading) {
     return (
       <div className="mk-root min-h-screen bg-[#E9ECF3] text-[#14213D] flex items-center justify-center">
@@ -162,40 +137,11 @@ function Marketplace() {
           <div className="w-10 h-10 border-[3px] border-[#C9D0E0] border-t-[#14213D] rounded-full animate-spin mx-auto mb-4" />
           <p className="text-[#5B6478]">Loading Marketplace...</p>
         </div>
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
       </div>
     );
   }
 
   /* ================= ERROR ================= */
-<<<<<<< HEAD
-
-  if (error) {
-    return (
-      <div className="marketplace-page">
-        <NavBar theme="roomies" />
-
-        <div className="marketplace-error-wrapper">
-          <div className="marketplace-error">
-            <div className="marketplace-error-icon">
-              <PackageOpen size={28} />
-            </div>
-
-            <h2>Unable to load Marketplace</h2>
-
-            <p>{error}</p>
-
-            <button
-              onClick={loadProducts}
-              className="marketplace-sell-button"
-            >
-              Try Again
-            </button>
-          </div>
-        </div>
-
-        <Footer theme="roomies" />
-=======
   if (error) {
     return (
       <div className="mk-root min-h-screen bg-[#E9ECF3] text-[#14213D] flex items-center justify-center px-6">
@@ -218,55 +164,11 @@ function Marketplace() {
             Try Again
           </button>
         </div>
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
       </div>
     );
   }
 
   return (
-<<<<<<< HEAD
-    <div className="marketplace-page">
-      <NavBar theme="roomies" />
-
-      {/* =====================================================
-          MARKETPLACE HEADER
-          ===================================================== */}
-
-      <header className="marketplace-header">
-        <div className="marketplace-header-content">
-          <div>
-            <span className="marketplace-eyebrow">
-              ClockIt Marketplace
-            </span>
-
-            <h1>
-              Find what you 
-              <br />
-              need around
-              <br /> campus.
-            </h1>
-
-            <p className="marketplace-header-description">
-              Buy, sell and discover useful products from students
-              around your campus.
-            </p>
-          </div>
-
-          <button
-            onClick={() => navigate("/marketplace/add")}
-            className="marketplace-sell-button"
-          >
-            <Plus size={18} />
-            Sell an Item
-          </button>
-
-          {/* =================================================
-              SEARCH
-              ================================================= */}
-
-          <div className="marketplace-search-wrapper">
-            <Search size={19} />
-=======
     <div className="mk-root min-h-screen bg-[#E9ECF3] text-[#14213D]">
       <Styles />
 
@@ -304,38 +206,12 @@ function Marketplace() {
               size={19}
               className="absolute left-5 top-1/2 -translate-y-1/2 text-[#5B6478]"
             />
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
 
             <input
               type="text"
               placeholder="Search for books, electronics, furniture..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-<<<<<<< HEAD
-              className="marketplace-search"
-            />
-          </div>
-        </div>
-              {/* Right-side marketplace illustration */}
-        <img
-          src="/marketplace-hero.png"
-          alt="Marketplace finds"
-          className="marketplace-hero-image"
-        />
-      </header>
-
-      {/* =====================================================
-          MARKETPLACE CONTENT
-          ===================================================== */}
-
-      <main className="marketplace-content">
-
-        {/* ===================================================
-            CATEGORIES
-            =================================================== */}
-
-        <div className="marketplace-categories">
-=======
               className="w-full h-14 pl-[3.25rem] pr-5 rounded-full bg-white text-[#14213D] placeholder:text-[#8A93A8] shadow-[0_10px_24px_rgba(20,33,61,0.12)] border-0"
             />
           </div>
@@ -345,7 +221,6 @@ function Marketplace() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Categories */}
         <div className="flex flex-wrap gap-2">
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
           {categories.map((item) => {
             const active = category === item;
 
@@ -353,15 +228,10 @@ function Marketplace() {
               <button
                 key={item}
                 onClick={() => setCategory(item)}
-<<<<<<< HEAD
-                className={`marketplace-category ${
-                  active ? "active" : ""
-=======
                 className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
                   active
                     ? "bg-[#14213D] text-white"
                     : "bg-white text-[#3E475A] ring-1 ring-[#C9D0E0] hover:ring-[#14213D] hover:text-[#14213D]"
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
                 }`}
               >
                 {item}
@@ -370,24 +240,6 @@ function Marketplace() {
           })}
         </div>
 
-<<<<<<< HEAD
-        {/* ===================================================
-            RESULT CONTROLS
-            =================================================== */}
-
-        <div className="marketplace-result-bar">
-          <p className="marketplace-result-count">
-            <strong>{filteredProducts.length}</strong>
-
-            {filteredProducts.length === 1
-              ? "item"
-              : "items"}{" "}
-            found
-          </p>
-
-          <div className="marketplace-sort-wrapper">
-            <SlidersHorizontal size={16} />
-=======
         {/* Result controls */}
         <div className="flex flex-row items-center justify-between gap-3 mt-7 mb-6 pb-4 border-b-2 border-dashed border-[#B7C0D6]">
           <p className="text-sm text-[#5B6478]">
@@ -402,56 +254,10 @@ function Marketplace() {
               size={16}
               className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#14213D] pointer-events-none"
             />
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
 
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-<<<<<<< HEAD
-              className="marketplace-sort"
-            >
-              <option value="newest">Newest</option>
-              <option value="oldest">Oldest</option>
-              <option value="price-low">
-                Price: Low to High
-              </option>
-              <option value="price-high">
-                Price: High to Low
-              </option>
-            </select>
-
-            <ChevronDown size={16} />
-          </div>
-        </div>
-
-        {/* ===================================================
-            EMPTY STATE
-            =================================================== */}
-
-        {filteredProducts.length === 0 ? (
-          <div className="marketplace-empty">
-            <div className="marketplace-empty-icon">
-              <PackageOpen size={30} />
-            </div>
-
-            <h2>No products found</h2>
-
-            <p>
-              Try a different search term or select another
-              category.
-            </p>
-          </div>
-        ) : (
-
-          /* =================================================
-             PRODUCT GRID
-             ================================================= */
-
-          <div className="marketplace-grid">
-            {filteredProducts.map((product) => {
-              const firstImage =
-                product.product_images?.[0]?.image_url;
-=======
               className="appearance-none pl-10 pr-10 py-2.5 rounded-full bg-white text-sm font-medium text-[#14213D] ring-1 ring-[#C9D0E0] hover:ring-[#14213D] cursor-pointer transition"
             >
               <option value="newest">Newest</option>
@@ -489,49 +295,19 @@ function Marketplace() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-3 gap-y-9 sm:gap-x-6">
             {filteredProducts.map((product) => {
               const firstImage = product.product_images?.[0]?.image_url;
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
 
               return (
                 <div
                   key={product.id}
-<<<<<<< HEAD
-                  onClick={() =>
-                    navigate(
-                      `/marketplace/product/${product.id}`
-                    )
-                  }
-                  className="marketplace-product-card"
-                >
-
-                  {/* =========================================
-                      PRODUCT IMAGE
-                      ========================================= */}
-
-                  <div className="marketplace-product-image">
-=======
                   onClick={() => navigate(`/marketplace/product/${product.id}`)}
                   className="group cursor-pointer"
                 >
                   {/* Image with price tag chip */}
                   <div className="relative aspect-[4/5] bg-white rounded-[22px] overflow-hidden">
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
                     {firstImage ? (
                       <img
                         src={firstImage}
                         alt={product.title}
-<<<<<<< HEAD
-                      />
-                    ) : (
-                      <div className="marketplace-product-placeholder">
-                        <PackageOpen size={35} />
-                      </div>
-                    )}
-
-                    {/* =======================================
-                        WISHLIST
-                        ======================================= */}
-
-=======
                         className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-500"
                       />
                     ) : (
@@ -541,52 +317,21 @@ function Marketplace() {
                     )}
 
                     {/* Wishlist visual */}
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
                     <button
                       type="button"
                       aria-label="Save item"
                       onClick={(e) => e.stopPropagation()}
-<<<<<<< HEAD
-                      className="marketplace-favorite"
-=======
                       className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white text-[#14213D] flex items-center justify-center shadow-md hover:bg-[#FF5A4E] hover:text-white transition-colors"
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
                     >
                       <Heart size={17} />
                     </button>
 
-<<<<<<< HEAD
-                    {/* =======================================
-                        PRICE
-                        ======================================= */}
-
-                    <span className="marketplace-price">
-=======
                     {/* Price */}
                     <span className="mk-display absolute bottom-3 left-3 px-3 py-1.5 rounded-lg bg-[#FFD23F] text-[#14213D] text-base sm:text-lg font-extrabold shadow-[0_4px_10px_rgba(20,33,61,0.2)]">
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
                       ₹{formatPrice(product.price)}
                     </span>
                   </div>
 
-<<<<<<< HEAD
-                  {/* =========================================
-                      PRODUCT DETAILS
-                      ========================================= */}
-
-                  <div className="marketplace-product-info">
-
-                    <h2 className="marketplace-product-title">
-                      {product.title}
-                    </h2>
-
-                    {/* =======================================
-                        BADGES
-                        ======================================= */}
-
-                    <div className="marketplace-tags">
-                      <span className="marketplace-tag condition">
-=======
                   {/* Product details */}
                   <div className="pt-3 px-1">
                     <h2 className="font-semibold text-sm sm:text-base leading-snug line-clamp-2 group-hover:underline decoration-2 underline-offset-4 decoration-[#FFD23F]">
@@ -596,43 +341,16 @@ function Marketplace() {
                     {/* Badges */}
                     <div className="flex flex-wrap items-center gap-1.5 mt-2">
                       <span className="text-[11px] px-2 py-0.5 rounded-full bg-white text-[#3E475A] ring-1 ring-[#C9D0E0]">
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
                         {product.condition}
                       </span>
 
                       {product.is_negotiable && (
-<<<<<<< HEAD
-                        <span className="marketplace-tag">
-=======
                         <span className="text-[11px] px-2 py-0.5 rounded-full bg-[#14213D] text-white">
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
                           Negotiable
                         </span>
                       )}
                     </div>
 
-<<<<<<< HEAD
-                    {/* =======================================
-                        LOCATION
-                        ======================================= */}
-
-                    {product.location && (
-                      <div className="marketplace-location">
-                        <MapPin size={13} />
-
-                        <span>
-                          {product.location}
-                        </span>
-                      </div>
-                    )}
-
-                    {/* =======================================
-                        COLLEGE
-                        ======================================= */}
-
-                    {product.colleges?.name && (
-                      <p className="marketplace-seller">
-=======
                     {/* Location */}
                     {product.location && (
                       <div className="flex items-center gap-1.5 mt-2.5 text-xs text-[#3E475A]">
@@ -644,35 +362,19 @@ function Marketplace() {
                     {/* College */}
                     {product.colleges?.name && (
                       <p className="text-xs text-[#5B6478] mt-1 truncate">
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
                         {product.colleges.name}
                       </p>
                     )}
 
-<<<<<<< HEAD
-                    {/* =======================================
-                        SELLER
-                        ======================================= */}
-
-                    <div className="marketplace-seller">
-                      <Clock3 size={12} />
-
-                      <span>
-=======
                     {/* Seller */}
                     <div className="flex items-center gap-1.5 mt-2.5 pt-2.5 border-t border-dashed border-[#B7C0D6] text-[11px] sm:text-xs text-[#5B6478]">
                       <Clock3 size={12} />
                       <span className="truncate">
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
                         {product.profiles?.full_name
                           ? `Seller: ${product.profiles.full_name}`
                           : "Campus seller"}
                       </span>
                     </div>
-<<<<<<< HEAD
-
-=======
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
                   </div>
                 </div>
               );
@@ -681,21 +383,10 @@ function Marketplace() {
         )}
 
         {/* Bottom spacing */}
-<<<<<<< HEAD
-        <div style={{ height: "32px" }} />
-      </main>
-
-      <Footer theme="roomies" />
-=======
         <div className="h-8" />
       </div>
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
     </div>
   );
 }
 
-<<<<<<< HEAD
 export default Marketplace;
-=======
-export default Marketplace;
->>>>>>> 02b1866fdd8faf39367b9cf55f9c0e5a0ecf6859
