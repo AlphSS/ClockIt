@@ -82,7 +82,7 @@ export async function registerUser(req, res) {
       email,
       password,
       options: {
-        emailRedirectTo: "http://localhost:5173/email-confirmed",
+        emailRedirectTo:  `${process.env.CLIENT_URL}/email-confirmed`,
       },
     });
 

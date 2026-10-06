@@ -1,6 +1,6 @@
 import { supabase } from "./supabase";
 
-const API_URL = import.meta.env.VITE_API_URL+"/marketplace" || "http://localhost:5800/api/marketplace";
+const API_URL = `${import.meta.env.VITE_API_URL}/marketplace` || "http://localhost:5800/api/marketplace";
 
 async function getAuthHeaders() {
   const {
