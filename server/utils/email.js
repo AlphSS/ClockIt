@@ -68,3 +68,42 @@ ClockIt Team`,
     `,
   });
 }
+
+export async function sendCollegeVerificationEmail({
+  to,
+  otp,
+}) {
+  return transporter.sendMail({
+    from: `"ClockIt" <${process.env.EMAIL_USER}>`,
+    to,
+    subject: "ClockIt College Email Verification",
+    text: `Your ClockIt college email verification code is: ${otp}
+
+This code is valid for a limited time.
+
+If you did not request this code, you can ignore this email.`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 30px;">
+        <h2>College Email Verification</h2>
+
+        <p>Your ClockIt verification code is:</p>
+
+        <div style="
+          font-size: 32px;
+          font-weight: bold;
+          letter-spacing: 8px;
+          text-align: center;
+          margin: 30px 0;
+        ">
+          ${otp}
+        </div>
+
+        <p>This code is valid for a limited time.</p>
+
+        <p>If you did not request this code, you can safely ignore this email.</p>
+
+        <p>Regards,<br>ClockIt Team</p>
+      </div>
+    `,
+  });
+}
