@@ -1,64 +1,70 @@
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_APP_PASSWORD,
+  },
+});
 
-export async function sendCollegeVerificationEmail(collegeEmail, otp) {
-  const { data, error } = await resend.emails.send({
-    from: process.env.RESEND_FROM_EMAIL,
-    to: [collegeEmail],
-    subject: "ClockIt College Email Verification",
+export async function sendVerificationEmail({
+  to,
+  username,
+  verificationLink,
+}) {
+  return transporter.sendMail({
+    from: `"ClockIt" <${process.env.EMAIL_USER}>`,
+    to,
+    subject: "Verify your ClockIt account",
+    text: `Hi ${username},
+
+Welcome to ClockIt!
+
+Please verify your email by clicking the link below:
+
+${verificationLink}
+
+If you did not create this account, you can ignore this email.
+
+Regards,
+ClockIt Team`,
     html: `
-      <div style="
-        font-family: Arial, sans-serif;
-        max-width: 500px;
-        margin: 40px auto;
-        padding: 30px;
-        border: 1px solid #e5e7eb;
-        border-radius: 12px;
-      ">
-        <h2>Verify your college email</h2>
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto;">
+        <h2>Welcome to ClockIt 👋</h2>
+
+        <p>Hi ${username},</p>
 
         <p>
-          You requested to verify your college email address for ClockIt.
+          Thanks for creating your ClockIt account.
+          Please verify your email address by clicking the button below.
         </p>
 
-        <p>Your verification code is:</p>
-
-        <div style="
-          margin: 25px 0;
-          padding: 18px;
-          background: #f3f4f6;
-          border-radius: 8px;
-          text-align: center;
-        ">
-          <span style="
-            font-size: 32px;
-            font-weight: bold;
-            letter-spacing: 8px;
-          ">
-            ${otp}
-          </span>
+        <div style="text-align: center; margin: 30px 0;">
+          <a
+            href="${verificationLink}"
+            style="
+              background: #2563eb;
+              color: white;
+              padding: 12px 24px;
+              text-decoration: none;
+              border-radius: 6px;
+              display: inline-block;
+            "
+          >
+            Verify Email
+          </a>
         </div>
 
         <p>
-          This code will expire in 10 minutes.
+          If you did not create this account, you can safely ignore this email.
         </p>
 
         <p>
-          If you did not request this verification, you can ignore this email.
-        </p>
-
-        <p>
-          — ClockIt
+          Regards,<br>
+          ClockIt Team
         </p>
       </div>
     `,
   });
-
-  if (error) {
-    console.error("Resend email error:", error);
-    throw new Error("Unable to send verification email.");
-  }
-
-  return data;
 }
