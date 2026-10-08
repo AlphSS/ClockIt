@@ -26,9 +26,9 @@ export function AuthProvider({ children }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const login = useCallback(async (phone, password) => {
+  const login = useCallback(async (email, password) => {
     const { data, error } = await supabase.auth.signInWithPassword({
-      phone,
+      email,
       password,
     });
     if (error) throw error;

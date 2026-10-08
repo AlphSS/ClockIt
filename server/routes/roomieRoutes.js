@@ -9,7 +9,7 @@ import {
   deleteRoomieListing,
 } from "../controllers/roomieController.js";
 
-import { requireAuth } from "../middleware/authMiddleware.js";
+import { requireAuth } from "../middleware/auth.js";
 
 const router = express.Router();
 

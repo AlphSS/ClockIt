@@ -1,4 +1,4 @@
-import { supabaseAdmin, supabase } from "../config/supabase.js";
+import { supabaseAdmin, supabase, supabaseAuth } from "../config/supabase.js";
 import {
   verifyRegistrationToken,
   consumeRegistrationToken,
@@ -82,14 +82,9 @@ export async function registerUser(req, res) {
       email,
       password,
       options: {
-        emailRedirectTo:  `${process.env.CLIENT_URL}/email-confirmed`,
+        emailRedirectTo: `${process.env.CLIENT_URL}/email-confirmed`,
       },
     });
-
-    console.log("SIGNUP RESULT:");
-    console.log("User:", authData?.user);
-    console.log("Session:", authData?.session);
-    console.log("Auth error:", authError);
 
     if (authError) {
       console.error(authError);
@@ -164,7 +159,7 @@ export async function loginUser(req, res) {
     }
 
     // Login through Supabase Auth
-    const { data, error } = await supabaseAdmin.auth.signInWithPassword({
+    const { data, error } = await supabaseAuth.auth.signInWithPassword({
       email,
       password,
     });

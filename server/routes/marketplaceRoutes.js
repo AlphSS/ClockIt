@@ -11,7 +11,7 @@ import {
   markProductAsSold,
   uploadProductImage,
 } from "../controllers/marketplaceController.js";
-import { requireAuth } from "../middleware/authMiddleware.js";
+import { requireAuth } from "../middleware/auth.js";
 
 const router = express.Router();
 const upload = multer({
