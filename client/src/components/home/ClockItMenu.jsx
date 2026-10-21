@@ -89,6 +89,7 @@ export const ClockItMenu = ({ items = defaultItems, className }) => {
   };
 
   return (
+    
     <div
       ref={containerRef}
       className={cn(
@@ -195,6 +196,7 @@ export const ClockItMenu = ({ items = defaultItems, className }) => {
         </svg>
       </div>
     </div>
+    
   );
 };
 

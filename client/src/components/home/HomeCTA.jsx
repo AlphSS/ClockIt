@@ -4,6 +4,7 @@ function HomeCTA() {
   const navigate = useNavigate();
 
   return (
+    
     <section className="bg-[#2A2A29] px-6 py-28 text-[#EDE9E3]">
       <div className="mx-auto max-w-6xl">
 
@@ -62,8 +63,9 @@ function HomeCTA() {
 
             {/* ================= BUTTON ================= */}
 
-            <button
-              onClick={() => navigate("/roomies")}
+            
+              <a
+                href="#quickaction"
               className="
                 group
                 mt-9
@@ -88,7 +90,7 @@ function HomeCTA() {
               <span className="text-lg transition-transform duration-300 group-hover:translate-x-1">
                 →
               </span>
-            </button>
+            </a>
 
           </div>
 
@@ -115,6 +117,7 @@ function HomeCTA() {
 
       </div>
     </section>
+     
   );
 }
 

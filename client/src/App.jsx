@@ -8,7 +8,6 @@ import EmailConfirmed from "./components/auth/EmailConfirmed";
 import VerifyEmail from "./components/auth/VerifyEmail";
 import AccountCreated from "./components/auth/AccountCreated";
 import Profile from "./components/common/Profile";
-
 import Roomies from "./pages/Roomies/Roomies";
 import GoToTop from "./components/common/GoToTop";
 import About from "./pages/About/About";
@@ -28,6 +27,8 @@ import EditStay from "./pages/stays/EditStay";
 import MyListings from "./pages/stays/MyListings";
 import SavedStays from "./pages/stays/SavedStays";
 import MyInquiries from "./pages/stays/MyInquiries";
+import Chat from "./pages/Chat/Chat";
+import Notifications from "./pages/Notifications/Notifications";
 
 function App() {
   return (
@@ -63,6 +64,7 @@ function App() {
           }
         />
 
+       
         {/* Stays Routes */}
         <Route path="/stays" element={<StaysHome />} />
         <Route path="/stay" element={<StaysHome />} />
@@ -144,7 +146,15 @@ function App() {
         <Route path="/about" element={<About />} />
 
         <Route path="/roomies/create" element={<CreateListing />} />
+
+        <Route path="/chat" element={<Chat />} />
+
+        <Route
+          path="/notifications"
+          element={<Notifications />}
+        />
       </Routes>
+      
 
       <GoToTop />
     </BrowserRouter>
