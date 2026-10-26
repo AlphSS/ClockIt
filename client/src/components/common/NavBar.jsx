@@ -1,15 +1,11 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { supabase } from "../../services/supabase";
-<<<<<<< Updated upstream
-=======
 import { getNotifications } from "../../services/notificationApi";
->>>>>>> Stashed changes
 
-function Navbar() {
+function NavBar({ theme = "dark" }) {
   const navigate = useNavigate();
 
-<<<<<<< Updated upstream
-=======
   // ==================== USERNAME STATE ====================
   const [username, setUsername] = useState("");
   const [unreadNotifications, setUnreadNotifications] = useState(0);
@@ -55,7 +51,7 @@ function Navbar() {
             data?.username ||
               user.user_metadata?.username ||
               user.email?.split("@")[0] ||
-              "User",
+              "User"
           );
         }
       } catch (error) {
@@ -97,14 +93,10 @@ function Navbar() {
     };
     loadUnread();
     const timer = window.setInterval(loadUnread, 30000);
-    return () => {
-      active = false;
-      window.clearInterval(timer);
-    };
+    return () => { active = false; window.clearInterval(timer); };
   }, []);
 
   // ==================== LOGOUT ====================
->>>>>>> Stashed changes
   async function handleLogout() {
     const { error } = await supabase.auth.signOut();
 
@@ -116,17 +108,27 @@ function Navbar() {
     navigate("/login", { replace: true });
   }
 
-  return (
-<<<<<<< Updated upstream
-    <nav className="flex items-center justify-between border-b border-gray-200 px-8 py-4">
-      {/* Logo */}
-      <button onClick={() => navigate("/")} className="text-2xl font-bold">
-        ClockIt
-      </button>
+  // ==================== NAVIGATION STYLING ====================
+  const isRoomies = theme === "roomies";
 
-      {/* Navigation */}
-      <div className="flex items-center gap-2">
-=======
+  const navLinkStyle = ({ isActive }) =>
+    `relative px-4 py-2 text-sm font-medium transition-all duration-300 ${
+      isActive
+        ? `${
+            isRoomies ? "text-[#F5EEE6]" : "text-white"
+          } after:absolute after:bottom-0 after:left-1/2 after:h-[2px] after:w-6 after:-translate-x-1/2 after:rounded-full ${
+            isRoomies
+              ? "after:bg-[#8D3A3C]"
+              : "after:bg-white after:shadow-[0_0_10px_rgba(255,255,255,0.9)]"
+          }`
+        : `${
+            isRoomies
+              ? "text-[#D8C9B5] hover:text-[#F5EEE6]"
+              : "text-gray-400 hover:text-white"
+          }`
+    }`;
+
+  return (
     <nav
       className={
         isRoomies
@@ -135,59 +137,32 @@ function Navbar() {
       }
     >
       <div className="mx-auto flex h-[88px] max-w-6xl items-center justify-between px-6">
+
         {/* ==================== LOGO ==================== */}
->>>>>>> Stashed changes
         <button
           onClick={() => navigate("/")}
-          className="rounded-lg px-4 py-2 hover:bg-gray-100"
+          className={`text-xl font-semibold tracking-tight transition-opacity duration-300 hover:opacity-70 ${
+            isRoomies ? "text-[#F5EEE6]" : "text-white"
+          }`}
         >
-          Home
+          ClockIt
         </button>
 
-<<<<<<< Updated upstream
-        <button
-          onClick={() => navigate("/marketplace")}
-          className="rounded-lg px-4 py-2 hover:bg-gray-100"
-        >
-          Marketplace
-        </button>
-
-        <button
-          onClick={() => navigate("/roomies")}
-          className="rounded-lg px-4 py-2 hover:bg-gray-100"
-        >
-          Roomies
-        </button>
-=======
         {/* ==================== NAVIGATION ==================== */}
         <div className="flex items-center gap-1">
+
           <NavLink to="/" className={navLinkStyle}>
             Home
           </NavLink>
->>>>>>> Stashed changes
 
-        <button
-          onClick={() => navigate("/stay")}
-          className="rounded-lg px-4 py-2 hover:bg-gray-100"
-        >
-          Stay
-        </button>
+          <NavLink to="/stays" className={navLinkStyle}>
+            Stay
+          </NavLink>
 
-        <button
-          onClick={() => navigate("/profile")}
-          className="rounded-lg px-4 py-2 hover:bg-gray-100"
-        >
-          Profile
-        </button>
+          <NavLink to="/roomies" className={navLinkStyle}>
+            Roomies
+          </NavLink>
 
-<<<<<<< Updated upstream
-        <button
-          onClick={handleLogout}
-          className="ml-2 rounded-lg px-4 py-2 hover:bg-gray-100"
-        >
-          Logout
-        </button>
-=======
           <NavLink to="/marketplace" className={navLinkStyle}>
             Marketplace
           </NavLink>
@@ -195,10 +170,12 @@ function Navbar() {
           <NavLink to="/about" className={navLinkStyle}>
             About Us
           </NavLink>
+
         </div>
 
         {/* ==================== RIGHT SIDE ==================== */}
         <div className="flex items-center gap-5">
+
           {/* ==================== CHAT ==================== */}
           <button
             onClick={() => navigate("/chat")}
@@ -251,6 +228,7 @@ function Navbar() {
               <path d="M13.73 21a2 2 0 0 1-3.46 0" />
             </svg>
 
+
             {unreadNotifications > 0 && (
               <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#8D3A3C] px-1 text-[10px] font-semibold text-white shadow-[0_0_8px_rgba(141,58,60,0.5)]">
                 {unreadNotifications > 99 ? "99+" : unreadNotifications}
@@ -271,11 +249,11 @@ function Navbar() {
           >
             {username ? username.charAt(0).toUpperCase() : "?"}
           </button>
+
         </div>
->>>>>>> Stashed changes
       </div>
     </nav>
   );
 }
 
-export default Navbar;
+export default NavBar;
