@@ -1,0 +1,325 @@
+
+/* =========================================================
+   CLOCKIT MARKETPLACE — SHARED THEME
+   Roomies-inspired typography, spacing and palette
+   ========================================================= */
+
+/* =========================================================
+   1. GLOBAL DESIGN TOKENS
+   ========================================================= */
+
+:root {
+  /* Brand palette */
+  --clockit-camel: #c6b39a;
+  --clockit-boho: #7b694e;
+  --clockit-rubine: #8d3a3c;
+  --clockit-tamarind: #3b1319;
+  --clockit-roast: #280b0f;
+
+  /* Backgrounds */
+  --clockit-ivory: #f7f0e7;
+  --clockit-cream: #fcf7ef;
+  --clockit-paper: #fffaf4;
+  --clockit-border: #e5d5c3;
+  --clockit-muted: #78685d;
+  --clockit-white: #ffffff;
+
+  /* Roomies-inspired typography */
+  --clockit-font-body: Arial, Helvetica, sans-serif;
+  --clockit-font-display: Georgia, "Times New Roman", serif;
+  --clockit-font-script: "Caveat", cursive;
+
+  /* Shared content sizing */
+  --clockit-content-width: 1152px;
+  --clockit-page-gutter: 24px;
+  --clockit-form-width: 760px;
+
+  /* Border radius */
+  --clockit-radius-sm: 3px;
+  --clockit-radius-md: 8px;
+  --clockit-radius-lg: 16px;
+
+  /* Shadows */
+  --clockit-shadow-soft: 0 8px 24px rgba(59, 19, 25, 0.07);
+  --clockit-shadow-card: 0 16px 36px rgba(59, 19, 25, 0.09);
+}
+
+/* =========================================================
+   2. SHARED TYPOGRAPHY
+   ========================================================= */
+
+.mk-root,
+.ap-root,
+.ep-root,
+.ml-root,
+.pd-root,
+.ck-root {
+  font-family: var(--clockit-font-body);
+}
+
+.mk-display,
+.ap-display,
+.ep-display,
+.ml-display,
+.pd-display,
+.ck-display {
+  font-family: var(--clockit-font-display);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+
+.mk-root h1,
+.mk-root h2,
+.mk-root h3,
+.ap-root h1,
+.ap-root h2,
+.ap-root h3,
+.ep-root h1,
+.ep-root h2,
+.ep-root h3,
+.ml-root h1,
+.ml-root h2,
+.ml-root h3,
+.pd-root h1,
+.pd-root h2,
+.pd-root h3 {
+  font-family: var(--clockit-font-display);
+  font-weight: 400;
+}
+
+.ck-script {
+  font-family: var(--clockit-font-script);
+}
+
+/* =========================================================
+   3. SHARED PAGE BACKGROUNDS
+   ========================================================= */
+
+.mk-root,
+.ap-root,
+.ep-root,
+.ml-root,
+.pd-root {
+  min-height: 100vh;
+  background-color: var(--clockit-ivory);
+  color: var(--clockit-tamarind);
+}
+
+/* Optional shared decorative background */
+
+.ck-bg {
+  background: linear-gradient(
+    145deg,
+    #fcf7ef 0%,
+    #f7f0e7 55%,
+    #eee0d0 100%
+  );
+}
+
+/* =========================================================
+   4. SHARED CONTENT WIDTHS
+   ========================================================= */
+
+/*
+  Use these classes on inner content containers.
+  They keep page content centered and prevent it from
+  stretching too far across large screens.
+*/
+
+.mk-container,
+.ap-container,
+.ep-container,
+.ml-content,
+.pd-page-container {
+  width: min(
+    var(--clockit-content-width),
+    calc(100% - (2 * var(--clockit-page-gutter)))
+  );
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* Narrower form layouts */
+
+.ap-form-container,
+.ep-form-container {
+  width: min(
+    var(--clockit-form-width),
+    calc(100% - (2 * var(--clockit-page-gutter)))
+  );
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* Shared inner hero width */
+
+.mk-hero-inner,
+.ap-hero-inner,
+.ep-hero-inner,
+.ml-hero-inner,
+.pd-hero-inner {
+  width: min(
+    var(--clockit-content-width),
+    calc(100% - (2 * var(--clockit-page-gutter)))
+  );
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* =========================================================
+   5. REUSABLE PANELS AND CARDS
+   ========================================================= */
+
+.ck-panel {
+  background: rgba(255, 250, 244, 0.92);
+  border: 1px solid rgba(198, 179, 154, 0.45);
+  box-shadow: var(--clockit-shadow-card);
+}
+
+.ck-card {
+  background: var(--clockit-paper);
+  border: 1px solid var(--clockit-border);
+  box-shadow: var(--clockit-shadow-soft);
+}
+
+/* =========================================================
+   6. REUSABLE FORM FIELDS
+   ========================================================= */
+
+.ck-field,
+.ap-field,
+.ep-field {
+  width: 100%;
+  min-width: 0;
+  padding: 12px 15px;
+  border: 1px solid var(--clockit-border);
+  border-radius: var(--clockit-radius-sm);
+  background: var(--clockit-paper);
+  color: var(--clockit-tamarind);
+  font-family: var(--clockit-font-body);
+  font-size: 0.9rem;
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease;
+}
+
+.ck-field::placeholder,
+.ap-field::placeholder,
+.ep-field::placeholder {
+  color: #a39383;
+}
+
+.ck-field:hover,
+.ap-field:hover,
+.ep-field:hover {
+  border-color: var(--clockit-camel);
+}
+
+.ck-field:focus,
+.ap-field:focus,
+.ep-field:focus {
+  outline: none;
+  border-color: var(--clockit-rubine);
+  background: var(--clockit-white);
+}
+
+.ck-drop:focus-within,
+.ap-drop:focus-within {
+  border-color: var(--clockit-rubine);
+  background: #f8ece4;
+}
+
+/* =========================================================
+   7. REUSABLE BUTTONS
+   ========================================================= */
+
+.ck-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: 1px solid transparent;
+  border-radius: var(--clockit-radius-sm);
+  font-family: var(--clockit-font-body);
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.ck-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.ck-btn-wine {
+  background: var(--clockit-rubine);
+  color: var(--clockit-white);
+}
+
+.ck-btn-wine:hover:not(:disabled) {
+  background: var(--clockit-tamarind);
+}
+
+.ck-btn-green {
+  background: #496a53;
+  color: var(--clockit-white);
+}
+
+.ck-btn-green:hover:not(:disabled) {
+  background: #36513e;
+}
+
+.ck-btn-ghost {
+  border-color: var(--clockit-border);
+  background: var(--clockit-paper);
+  color: var(--clockit-tamarind);
+}
+
+.ck-btn-ghost:hover:not(:disabled) {
+  border-color: var(--clockit-camel);
+  background: #f0e3d4;
+}
+
+/* =========================================================
+   8. SHARED KEYBOARD ACCESSIBILITY
+   ========================================================= */
+
+.mk-root :is(button, a, input, select, textarea):focus-visible,
+.ap-root :is(button, a, input, select, textarea):focus-visible,
+.ep-root :is(button, a, input, select, textarea):focus-visible,
+.ml-root :is(button, a, input, select, textarea):focus-visible,
+.pd-root :is(button, a, input, select, textarea):focus-visible,
+.ck-root :is(button, a, input, select, textarea):focus-visible {
+  outline: 3px solid var(--clockit-rubine);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   9. RESPONSIVE SPACING
+   ========================================================= */
+
+@media (max-width: 640px) {
+  :root {
+    --clockit-page-gutter: 16px;
+    --clockit-form-width: 100%;
+  }
+}
+
+/* =========================================================
+   10. REDUCED MOTION ACCESSIBILITY
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .ck-btn,
+  .ck-field,
+  .ap-field,
+  .ep-field {
+    transition: none !important;
+  }
+}

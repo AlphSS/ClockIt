@@ -1,0 +1,22 @@
+[33mcommit fb91fab4cf30ac5a3ed22880590c65f4a1319725[m[33m ([m[1;32mmain[m[33m)[m
+Author: Priya Vandana <vandanapriya528@gmail.com>
+Date:   Tue Oct 27 00:33:16 2026 +0530
+
+    Marketplace ui
+
+ client/src/pages/Marketplace/AddProduct.css       | 1082 [32m+++++++++++++++++++[m
+ client/src/pages/Marketplace/AddProduct.jsx       |  697 [32m+++++++[m[31m------[m
+ client/src/pages/Marketplace/EditProduct.css      |  772 [32m++++++++++++++[m
+ client/src/pages/Marketplace/EditProduct.jsx      |  597 [32m++++++[m[31m-----[m
+ client/src/pages/Marketplace/Marketplace.css      | 1148 [32m+++++++++++++++++++++[m
+ client/src/pages/Marketplace/Marketplace.jsx      |  718 [32m+++++++[m[31m------[m
+ client/src/pages/Marketplace/MarketplaceShell.jsx |  263 [31m-----[m
+ client/src/pages/Marketplace/MarketplaceTheme.css |  325 [32m++++++[m
+ client/src/pages/Marketplace/MyListing.css        |  670 [32m++++++++++++[m
+ client/src/pages/Marketplace/MyListing.jsx        |  382 [32m++++[m[31m---[m
+ client/src/pages/Marketplace/ProductDetails.css   |  815 [32m+++++++++++++++[m
+ client/src/pages/Marketplace/ProductDetails.jsx   |  700 [32m++++++[m[31m-------[m
+ client/src/services/marketplaceApi.js             |    2 [32m+[m[31m-[m
+ server/package-lock.json                          |    8 [32m+[m[31m-[m
+ server/package.json                               |    2 [32m+[m[31m-[m
+ 15 files changed, 6488 insertions(+), 1693 deletions(-)
