@@ -1,0 +1,470 @@
+/* ========================================
+   CLOCKIT — ROOMIE SEARCH
+   ======================================== */
+
+.roomie-search-section {
+  position: relative;
+
+  padding: 110px 8% 120px;
+
+  background: #c6b39a;
+
+  color: #280b0f;
+}
+
+
+/* ========================================
+   SECTION INTRO
+   ======================================== */
+
+.roomie-search-header {
+  max-width: 720px;
+
+  margin: 0 auto;
+
+  text-align: center;
+}
+
+
+.roomie-search-eyebrow {
+  margin-bottom: 18px;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 3px;
+
+  color: #7b694e;
+}
+
+
+.roomie-search-header h2 {
+  margin: 0;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: clamp(42px, 5vw, 68px);
+
+  font-weight: 400;
+
+  line-height: 1;
+
+  letter-spacing: -1.5px;
+
+  color: #280b0f;
+}
+
+
+.roomie-search-description {
+  max-width: 580px;
+
+  margin: 25px auto 0;
+
+  font-size: 16px;
+
+  line-height: 1.7;
+
+  color: #3b1319;
+}
+
+
+/* ========================================
+   SEARCH BOX
+   ======================================== */
+
+.roomie-search-box {
+  max-width: 850px;
+
+  margin: 55px auto 0;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 7px;
+
+  background: #f5eee6;
+
+  border: 1px solid rgba(59, 19, 25, 0.2);
+
+  border-radius: 4px;
+
+  box-shadow:
+    0 15px 40px rgba(40, 11, 15, 0.12);
+}
+
+
+/* ========================================
+   SEARCH INPUT
+   ======================================== */
+
+.roomie-search-input-wrapper {
+  flex: 1;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 0 18px;
+
+  color: #8d3a3c;
+}
+
+
+.roomie-search-input-wrapper input {
+  width: 100%;
+
+  padding: 15px 0;
+
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  font-size: 14px;
+
+  color: #280b0f;
+}
+
+
+.roomie-search-input-wrapper input::placeholder {
+  color: #7b694e;
+}
+
+
+/* ========================================
+   SEARCH BUTTON
+   ======================================== */
+
+.roomie-search-button {
+  padding: 15px 30px;
+
+  border: 1px solid #8d3a3c;
+
+  border-radius: 2px;
+
+  background: #8d3a3c;
+
+  color: #f5eee6;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.8px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+
+.roomie-search-button:hover {
+  background: #3b1319;
+
+  border-color: #3b1319;
+
+  transform: translateY(-1px);
+}
+
+
+/* ========================================
+   FILTERS
+   ======================================== */
+
+.roomie-filter-row {
+  max-width: 850px;
+
+  margin: 20px auto 0;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  justify-content: center;
+
+  gap: 10px;
+}
+
+
+.roomie-filter {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 11px 16px;
+
+  border: 1px solid rgba(59, 19, 25, 0.25);
+
+  border-radius: 2px;
+
+  background: #f5eee6;
+
+  color: #3b1319;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
+}
+
+
+.roomie-filter:hover {
+  background: #8d3a3c;
+
+  border-color: #8d3a3c;
+
+  color: #f5eee6;
+}
+
+
+.roomie-filter svg {
+  color: #8d3a3c;
+
+  transition: color 0.25s ease;
+}
+
+
+.roomie-filter:hover svg {
+  color: #f5eee6;
+}
+
+
+/* ========================================
+   SEARCH NOTE
+   ======================================== */
+
+.roomie-search-note {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 9px;
+
+  margin-top: 38px;
+}
+
+
+.roomie-search-note p {
+  margin: 0;
+
+  font-size: 12px;
+
+  color: #3b1319;
+}
+
+
+.roomie-note-dot {
+  width: 6px;
+
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: #8d3a3c;
+}
+
+
+/* ========================================
+   DECORATIVE CIRCLES
+   ======================================== */
+
+.roomie-search-section::before {
+  content: "";
+
+  position: absolute;
+
+  top: 45px;
+
+  right: 8%;
+
+  width: 90px;
+
+  height: 90px;
+
+  border: 1px solid rgba(59, 19, 25, 0.15);
+
+  border-radius: 50%;
+
+  pointer-events: none;
+}
+
+
+.roomie-search-section::after {
+  content: "";
+
+  position: absolute;
+
+  bottom: 45px;
+
+  left: 8%;
+
+  width: 60px;
+
+  height: 60px;
+
+  border: 1px solid rgba(245, 238, 230, 0.5);
+
+  border-radius: 50%;
+
+  pointer-events: none;
+}
+
+
+/* ========================================
+   RESPONSIVE — TABLET
+   ======================================== */
+
+@media (max-width: 900px) {
+
+  .roomie-search-section {
+    padding: 90px 7% 100px;
+  }
+
+}
+
+
+/* ========================================
+   RESPONSIVE — MOBILE
+   ======================================== */
+
+@media (max-width: 700px) {
+
+  .roomie-search-section {
+    padding: 80px 6% 90px;
+  }
+
+
+  .roomie-search-box {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    padding: 8px;
+  }
+
+
+  .roomie-search-input-wrapper {
+    padding: 0 15px;
+  }
+
+
+  .roomie-search-button {
+    width: 100%;
+  }
+
+
+  .roomie-filter-row {
+    justify-content: flex-start;
+  }
+
+
+  .roomie-filter {
+    flex: 1;
+
+    justify-content: center;
+
+    min-width: 120px;
+  }
+
+
+  .roomie-search-section::before {
+    display: none;
+  }
+
+
+  .roomie-search-section::after {
+    display: none;
+  }
+
+}
+
+
+/* ========================================
+   RESPONSIVE — SMALL MOBILE
+   ======================================== */
+
+@media (max-width: 450px) {
+
+  .roomie-search-header h2 {
+    font-size: 42px;
+  }
+
+
+  .roomie-search-description {
+    font-size: 14px;
+  }
+
+
+  .roomie-filter {
+    width: 100%;
+
+    flex: none;
+  }
+
+}
+
+.roomie-filter-panel {
+  margin-top: 20px;
+  padding: 22px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  border: 1px solid rgba(40, 11, 15, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.roomie-filter-panel input,
+.roomie-filter-panel select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid rgba(40, 11, 15, 0.15);
+  border-radius: 8px;
+  background: #fff;
+  color: #280b0f;
+}
+
+.roomie-clear-filters,
+.roomie-apply-filters {
+  padding: 12px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.roomie-clear-filters {
+  border: 1px solid rgba(40, 11, 15, 0.2);
+  background: transparent;
+}
+
+.roomie-apply-filters {
+  border: none;
+  background: #280b0f;
+  color: white;
+}
+
+@media (max-width: 700px) {
+  .roomie-filter-panel {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,551 @@
+/* ========================================
+   CLOCKIT — ROOMIES PAGE
+   ======================================== */
+
+.roomies-page {
+  min-height: 100vh;
+  background: #f5eee6;
+  color: #280b0f;
+}
+
+
+/* ========================================
+   HERO
+   ======================================== */
+
+.roomies-hero {
+  min-height: calc(100vh - 88px);
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  align-items: center;
+
+  gap: 60px;
+
+  padding: 70px 8% 80px;
+
+  background:
+    radial-gradient(
+      circle at 85% 20%,
+      rgba(198, 179, 154, 0.35),
+      transparent 30%
+    ),
+    #f5eee6;
+}
+
+
+/* ========================================
+   LEFT CONTENT
+   ======================================== */
+
+.roomies-hero-content {
+  max-width: 620px;
+}
+
+.roomies-eyebrow {
+  margin: 0 0 24px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  letter-spacing: 3px;
+
+  color: #8d3a3c;
+}
+
+.roomies-hero h1 {
+  margin: 0;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: clamp(48px, 6vw, 82px);
+
+  font-weight: 400;
+
+  line-height: 0.98;
+
+  letter-spacing: -2px;
+
+  color: #280b0f;
+}
+
+.roomies-description {
+  max-width: 510px;
+
+  margin-top: 32px;
+
+  font-size: 17px;
+
+  line-height: 1.7;
+
+  color: #7b694e;
+}
+
+
+/* ========================================
+   BUTTONS
+   ======================================== */
+
+.roomies-actions {
+  display: flex;
+
+  gap: 14px;
+
+  margin-top: 38px;
+}
+
+.roomies-primary-btn,
+.roomies-secondary-btn {
+  padding: 15px 26px;
+
+  border-radius: 2px;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.5px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+
+/* Primary */
+
+.roomies-primary-btn {
+  border: 1px solid #3b1319;
+
+  background: #3b1319;
+
+  color: #f5eee6;
+}
+
+.roomies-primary-btn:hover {
+  background: #8d3a3c;
+
+  border-color: #8d3a3c;
+
+  transform: translateY(-2px);
+}
+
+
+/* Secondary */
+
+.roomies-secondary-btn {
+  border: 1px solid #7b694e;
+
+  background: transparent;
+
+  color: #3b1319;
+}
+
+.roomies-secondary-btn:hover {
+  background: #c6b39a;
+
+  border-color: #c6b39a;
+
+  transform: translateY(-2px);
+}
+
+
+/* ========================================
+   HERO VISUAL
+   ======================================== */
+
+.roomies-hero-visual {
+  position: relative;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  min-height: 560px;
+}
+
+
+/* ========================================
+   IMAGE FRAME
+   ======================================== */
+
+.roomies-image-frame {
+  position: relative;
+
+  width: min(440px, 90%);
+
+  aspect-ratio: 0.82;
+
+  overflow: hidden;
+
+  background: #8d3a3c;
+
+  border-radius:
+    220px
+    220px
+    12px
+    12px;
+
+  box-shadow:
+    20px 25px 0 rgba(59, 19, 25, 0.14);
+}
+
+
+/* ========================================
+   ACTUAL PHOTO
+   ======================================== */
+
+.roomies-hero-image {
+  position: absolute;
+
+  top: 8px;
+  left: 8px;
+
+  width: calc(100% - 16px);
+
+  height: calc(100% - 16px);
+
+  object-fit: cover;
+
+  object-position: center;
+
+  display: block;
+
+  border-radius:
+    212px
+    212px
+    5px
+    5px;
+}
+
+
+/* ========================================
+   INNER BORDER
+   ======================================== */
+
+.roomies-image-border {
+  position: absolute;
+
+  z-index: 3;
+
+  inset: 18px;
+
+  border: 1px solid
+    rgba(245, 238, 230, 0.85);
+
+  border-radius:
+    202px
+    202px
+    5px
+    5px;
+
+  pointer-events: none;
+}
+
+
+/* ========================================
+   IMAGE LABEL
+   ======================================== */
+
+.roomies-image-label {
+  position: absolute;
+
+  z-index: 4;
+
+  bottom: 42px;
+
+  left: 0;
+
+  width: 100%;
+
+  text-align: center;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 18px;
+
+  letter-spacing: 5px;
+
+  color: #f5eee6;
+
+  text-shadow:
+    0 1px 8px rgba(40, 11, 15, 0.4);
+}
+
+
+/* ========================================
+   HANDWRITTEN DECORATION
+   ======================================== */
+
+.roomies-handwritten {
+  position: absolute;
+
+  z-index: 5;
+
+  top: 95px;
+
+  right: -15px;
+
+  font-family:
+    "Brush Script MT",
+    "Segoe Script",
+    cursive;
+
+  font-size: 23px;
+
+  line-height: 1.25;
+
+  color: #8d3a3c;
+
+  transform: rotate(-5deg);
+
+  text-align: left;
+}
+
+
+/* ========================================
+   DECORATIVE LEAF
+   ======================================== */
+
+.roomies-leaf {
+  position: absolute;
+
+  z-index: 5;
+
+  right: -20px;
+
+  bottom: 30px;
+
+  width: 100px;
+
+  height: 130px;
+
+  pointer-events: none;
+}
+
+.roomies-leaf::before {
+  content: "";
+
+  position: absolute;
+
+  width: 1px;
+
+  height: 125px;
+
+  left: 48px;
+
+  top: 5px;
+
+  background: #7b694e;
+
+  transform: rotate(35deg);
+
+  transform-origin: bottom;
+}
+
+
+/* Individual leaves */
+
+.roomies-leaf span {
+  position: absolute;
+
+  width: 45px;
+
+  height: 20px;
+
+  border: 1px solid #7b694e;
+
+  border-radius: 100% 0;
+
+  transform: rotate(-25deg);
+}
+
+.roomies-leaf span:nth-child(1) {
+  top: 30px;
+  left: 5px;
+}
+
+.roomies-leaf span:nth-child(2) {
+  top: 55px;
+  left: 35px;
+
+  transform: rotate(25deg);
+}
+
+.roomies-leaf span:nth-child(3) {
+  top: 75px;
+  left: 10px;
+
+  transform: rotate(-20deg);
+}
+
+.roomies-leaf span:nth-child(4) {
+  top: 95px;
+  left: 40px;
+
+  transform: rotate(20deg);
+}
+
+
+/* ========================================
+   TABLET
+   ======================================== */
+
+@media (max-width: 1000px) {
+
+  .roomies-hero {
+    gap: 35px;
+
+    padding-left: 6%;
+    padding-right: 6%;
+  }
+
+  .roomies-handwritten {
+    right: -5px;
+  }
+
+  .roomies-leaf {
+    right: -10px;
+  }
+
+}
+
+
+/* ========================================
+   MOBILE
+   ======================================== */
+
+@media (max-width: 900px) {
+
+  .roomies-hero {
+    grid-template-columns: 1fr;
+
+    min-height: auto;
+
+    padding: 70px 7% 90px;
+
+    text-align: center;
+  }
+
+  .roomies-hero-content {
+    margin: 0 auto;
+  }
+
+  .roomies-description {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .roomies-actions {
+    justify-content: center;
+  }
+
+  .roomies-hero-visual {
+    min-height: 520px;
+
+    margin-top: 10px;
+  }
+
+  .roomies-handwritten {
+    right: 4%;
+  }
+
+  .roomies-leaf {
+    right: 2%;
+  }
+
+}
+
+
+/* ========================================
+   SMALL MOBILE
+   ======================================== */
+
+@media (max-width: 600px) {
+
+  .roomies-hero {
+    padding: 55px 6% 70px;
+  }
+
+  .roomies-hero h1 {
+    font-size: 48px;
+
+    letter-spacing: -1.5px;
+  }
+
+  .roomies-description {
+    font-size: 15px;
+  }
+
+  .roomies-actions {
+    flex-direction: column;
+
+    align-items: center;
+  }
+
+  .roomies-primary-btn,
+  .roomies-secondary-btn {
+    width: 100%;
+
+    max-width: 320px;
+  }
+
+  .roomies-hero-visual {
+    min-height: 450px;
+  }
+
+  .roomies-image-frame {
+    width: min(360px, 88%);
+  }
+
+  .roomies-handwritten {
+    top: 65px;
+
+    right: 0;
+
+    font-size: 18px;
+  }
+
+  .roomies-leaf {
+    right: -5px;
+
+    bottom: 15px;
+
+    transform: scale(0.75);
+  }
+
+}
+
+
+/* ========================================
+   EXTRA SMALL
+   ======================================== */
+
+@media (max-width: 400px) {
+
+  .roomies-hero h1 {
+    font-size: 42px;
+  }
+
+  .roomies-hero-visual {
+    min-height: 410px;
+  }
+
+  .roomies-image-frame {
+    width: 90%;
+  }
+
+}

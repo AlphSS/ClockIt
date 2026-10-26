@@ -1,41 +1,40 @@
+import "dotenv/config";
+
 import express from "express";
 import cors from "cors";
 
 import authRoutes from "./routes/authRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
+import roomieRoutes from "./routes/roomieRoutes.js";
 import marketplaceRoutes from "./routes/marketplaceRoutes.js";
-<<<<<<< Updated upstream
-=======
 import stayRoutes from "./routes/stayRoutes.js";
 import areaRoutes from "./routes/areaRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
->>>>>>> Stashed changes
 
 const app = express();
 
 app.use(cors());
-
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
+app.use("/api/roomies", roomieRoutes);
 app.use("/api/marketplace", marketplaceRoutes);
-<<<<<<< Updated upstream
-=======
 app.use("/api/stays", stayRoutes);
 app.use("/api/areas", areaRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/notifications", notificationRoutes);
-
->>>>>>> Stashed changes
+app.use("/api/stays", stayRoutes);
+app.use("/api/areas", areaRoutes);
+app.use("/api/users", userRoutes);
 
 app.get("/", (req, res) => {
   res.json({
     success: true,
-    message: "UniNest API is running",
+    message: "ClockIt API is running",
   });
 });
 
