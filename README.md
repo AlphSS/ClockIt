@@ -1,733 +1,1080 @@
-# ClockIt — Developer README
+# ClockIt
 
-## 1. Project Overview
+ClockIt is a student-focused campus platform that brings multiple
+student-to-student services into one application.
 
-**ClockIt** is a student-focused campus platform. The main idea is to bring useful student-to-student services into one application.
+The platform currently includes:
 
-Current/planned modules include:
+-   **Stays** --- discover, post, manage, save, and review accommodation
+    listings.
+-   **Roomies** --- create and discover roommate listings.
+-   **Marketplace** --- buy and sell products between students.
+-   **Profile** --- manage personal information, university/college
+    information, preferences, and college-email verification.
+-   **Authentication** --- registration, login, OTP verification,
+    protected routes, and Supabase-based sessions.
 
-- **UniMart / Marketplace** — students can buy and sell products.
-- **Roomies** — students can find suitable roommates.
-- **Stays** — students can discover/share accommodation and flat listings.
-- **Home** — central page that surfaces information from the other modules.
-- **Profile** — user information, university selection, and college verification.
+------------------------------------------------------------------------
 
-The project is being developed as a team, so feature code should remain separated and each feature should use the central authenticated user.
+## Live Deployment
 
----
+  Service           Platform   URL
+  ----------------- ---------- ----------------------------------
+  Frontend          Vercel      https://clock-it-murex.vercel.app
+  Backend API       Render     https://clockit-api.onrender.com
+  Database & Auth   Supabase   Add your Supabase project URL
 
-# 2. Current Technology Stack
+> The frontend and backend are deployed separately. The React
+> application communicates with the Express API, while the backend
+> communicates with Supabase.
+
+------------------------------------------------------------------------
+
+## Architecture
+
+``` text
+                    ┌──────────────────────┐
+                    │       Browser        │
+                    │   React + Vite       │
+                    └──────────┬───────────┘
+                               │
+                         REST API / JWT
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │    Express Server    │
+                    │      Node.js         │
+                    └──────────┬───────────┘
+                               │
+                 ┌─────────────┼─────────────┐
+                 │             │             │
+                 ▼             ▼             ▼
+            Authentication  Controllers    Services
+                 │             │
+                 └─────────────┼─────────────┘
+                               ▼
+                    ┌──────────────────────┐
+                    │       Supabase       │
+                    │ Auth + PostgreSQL    │
+                    │ Storage              │
+                    └──────────────────────┘
+
+                    ┌──────────────────────┐
+                    │       Resend         │
+                    │ College OTP Email    │
+                    └──────────────────────┘
+```
+
+### Authentication flow
+
+``` text
+React
+  │
+  │ Login / Register
+  ▼
+Express API
+  │
+  ▼
+Supabase Auth
+  │
+  ▼
+Access Token
+  │
+  ▼
+React stores Supabase session
+  │
+  │ Authorization: Bearer <access_token>
+  ▼
+Protected Express API
+  │
+  ▼
+Supabase
+```
+
+------------------------------------------------------------------------
+
+# Technology Stack
 
 ## Frontend
 
-- React
-- Vite
-- Tailwind CSS
-- Lucide React icons
-- `canvas-confetti` where used by the existing UI
+-   React 19
+-   Vite 6
+-   React Router
+-   Tailwind CSS
+-   Lucide React
+-   Axios
+-   GSAP
+-   Supabase JavaScript client
+-   canvas-confetti
 
 ## Backend
 
-- Node.js
-- Express.js
-- ES Modules
-- REST APIs
+-   Node.js
+-   Express 5
+-   ES Modules
+-   CORS
+-   Multer
+-   Nodemailer
+-   Supabase JavaScript client
 
-## Database / Authentication
+## Database & Authentication
 
-- Supabase
-- Supabase Authentication
-- Supabase PostgreSQL
-- `@supabase/supabase-js`
+-   Supabase Authentication
+-   Supabase PostgreSQL
+-   Supabase Storage where applicable
 
-## Email
+## Deployment
 
-- Resend is currently used for college verification emails.
-- The sender/domain configuration must remain in environment variables/configuration.
-- Do not commit API keys.
+-   **Frontend:** Vercel
+-   **Backend:** Render
+-   **Database/Auth:** Supabase
 
----
+------------------------------------------------------------------------
 
-# 3. Project Structure
+# Project Structure
 
-The project is divided into frontend and backend:
-
-```text
+``` text
 ClockIt/
 │
 ├── client/
+│   ├── public/
+│   │   ├── hero images
+│   │   ├── marketplace images
+│   │   └── roomies assets
+│   │
 │   ├── src/
 │   │   ├── components/
+│   │   │   ├── auth/
+│   │   │   ├── common/
+│   │   │   ├── home/
+│   │   │   ├── roomies/
+│   │   │   └── stays/
+│   │   │
+│   │   ├── context/
+│   │   │   └── AuthContext.jsx
+│   │   │
+│   │   ├── hooks/
+│   │   │
+│   │   ├── lib/
+│   │   │
 │   │   ├── pages/
+│   │   │   ├── About/
+│   │   │   ├── Home/
+│   │   │   ├── Marketplace/
+│   │   │   ├── Registration/
+│   │   │   ├── Roomies/
+│   │   │   └── stays/
+│   │   │
 │   │   ├── services/
+│   │   │   ├── authApi.js
+│   │   │   ├── marketplaceApi.js
+│   │   │   ├── profileApi.js
+│   │   │   ├── roomieApi.js
+│   │   │   └── staysApi.js
+│   │   │
+│   │   ├── utils/
 │   │   ├── App.jsx
-│   │   └── ...
+│   │   └── main.jsx
+│   │
 │   ├── package.json
-│   └── ...
+│   └── vite.config.js
 │
 ├── server/
 │   ├── config/
 │   │   └── supabase.js
+│   │
 │   ├── controllers/
+│   │   ├── areaController.js
 │   │   ├── authController.js
+│   │   ├── marketplaceController.js
+│   │   ├── otpController.js
 │   │   ├── profileController.js
-│   │   └── ...
+│   │   ├── roomieController.js
+│   │   └── stayController.js
+│   │
 │   ├── middleware/
-│   │   └── authMiddleware.js
+│   │   └── auth.js
+│   │
 │   ├── routes/
+│   │   ├── areaRoutes.js
 │   │   ├── authRoutes.js
+│   │   ├── marketplaceRoutes.js
 │   │   ├── profileRoutes.js
-│   │   └── ...
+│   │   ├── roomieRoutes.js
+│   │   ├── stayRoutes.js
+│   │   └── userRoutes.js
+│   │
 │   ├── services/
+│   │   └── otpService.js
+│   │
 │   ├── utils/
 │   │   └── email.js
+│   │
 │   ├── server.js
-│   ├── .env
 │   └── package.json
 │
+├── docs/
+│   ├── Design_System.md
+│   └── stays_migration.sql
+│
+├── .gitignore
 └── README.md
 ```
 
-Feature-specific logic should stay inside its own controllers/routes/services instead of being added to authentication files.
+------------------------------------------------------------------------
 
----
+# Features
 
-# 4. Supabase Authentication
+## 1. Authentication
 
-Supabase Auth is responsible for the actual authenticated user identity.
+ClockIt uses Supabase Authentication with an Express backend.
 
-The authenticated user is available through:
+Available authentication endpoints:
 
-```text
-auth.users
+``` text
+POST /api/auth/send-otp
+POST /api/auth/verify-otp
+POST /api/auth/register
+POST /api/auth/login
 ```
 
-Application-specific information is stored in:
+The frontend obtains the Supabase session and sends the access token to
+protected backend endpoints.
 
-```text
-profiles
-```
+Protected requests use:
 
-The relationship is:
-
-```text
-Supabase Auth User
-       │
-       │ id
-       ▼
-   profiles
-       │
-       │ university_id
-       ▼
-   colleges
-```
-
-The backend protects authenticated endpoints using the user's Supabase access token.
-
----
-
-# 5. Authentication Middleware
-
-Protected backend routes use:
-
-```text
-requireAuth
-```
-
-The middleware:
-
-1. Reads the `Authorization` header.
-2. Expects:
-
-```http
+``` http
 Authorization: Bearer <access_token>
 ```
 
-3. Extracts the token.
-4. Uses Supabase Auth to validate the token.
-5. Gets the authenticated user.
-6. Stores it on:
+The backend authentication middleware validates the token and exposes
+the authenticated user through:
 
-```javascript
-req.user;
+``` javascript
+req.user
 ```
 
-Example:
+The authenticated user's ID should be obtained with:
 
-```javascript
-const userId = req.user.id;
+``` javascript
+req.user.id
 ```
 
-Therefore feature controllers should use:
+Do not trust a user ID supplied by the frontend for ownership-sensitive
+operations.
 
-```javascript
-req.user.id;
+------------------------------------------------------------------------
+
+# 2. Profile
+
+The profile module supports:
+
+-   Profile information
+-   Username
+-   Bio
+-   Phone number
+-   University/college selection
+-   College email
+-   College email verification
+-   Profile preferences
+
+Profile endpoints:
+
+``` text
+GET    /api/profile
+PUT    /api/profile
+
+GET    /api/profile/colleges
+
+POST   /api/profile/college/send-otp
+POST   /api/profile/college/verify-otp
+
+GET    /api/profile/preferences
+PUT    /api/profile/preferences
 ```
 
-instead of trusting a user ID sent by the frontend.
+All profile endpoints are authenticated.
 
----
+### University relationship
 
-# 6. Profile Feature — COMPLETED
+The profile stores the selected college through:
 
-The profile page is currently implemented.
-
-It supports displaying:
-
-- Profile picture
-- Full name
-- Username
-- Bio
-- Phone number
-- University
-- College email
-- College verification status
-
-The profile can be edited **in place**.
-
-When the user clicks:
-
-```text
-Edit Profile
-```
-
-the existing fields change into editable inputs/dropdowns.
-
-The user can:
-
-```text
-Edit
-  ↓
-Change fields
-  ↓
-Save Changes / Cancel
-```
-
----
-
-# 7. University Selection
-
-University is **not stored as plain text** in the profile.
-
-The profile stores:
-
-```text
-university_id
-```
-
-which references:
-
-```text
-colleges.id
-```
-
-This prevents spelling inconsistencies.
-
-For example, the UI displays:
-
-```text
-MIT WPU
-```
-
-but the selected value is actually the college UUID.
-
-The flow is:
-
-```text
-Dropdown
-   ↓
-User selects MIT WPU
-   ↓
-Frontend stores college.id
-   ↓
-PUT /api/profile
-   ↓
+``` text
 profiles.university_id
-   ↓
-colleges.id
+        │
+        ▼
+     colleges.id
 ```
 
-When displaying the profile, the university name comes from the related college record.
+College email domains are stored separately in:
 
----
-
-# 8. College Database Tables
-
-The current college schema is:
-
-```sql
-create table public.colleges (
-    id uuid primary key default gen_random_uuid(),
-    name text not null unique,
-    is_active boolean not null default true,
-    created_at timestamptz not null default now()
-);
+``` text
+college_domains
 ```
 
-College email domains are stored separately:
+Do not treat the university name as the foreign-key value.
 
-```sql
-create table public.college_domains (
-    id uuid primary key default gen_random_uuid(),
-    college_id uuid not null
-        references public.colleges(id)
-        on delete cascade,
-    domain text not null unique,
-    is_active boolean not null default true,
-    created_at timestamptz not null default now()
-);
+------------------------------------------------------------------------
+
+# 3. Stays
+
+The Stays module provides accommodation discovery and management.
+
+Users can:
+
+-   Browse stays
+-   View stay details
+-   View featured stays
+-   Post a stay
+-   Edit a stay
+-   Delete a stay
+-   Manage their listings
+-   Save/unsave stays
+-   Record views
+-   Send inquiries
+-   Write reviews
+-   Edit reviews
+-   Delete reviews
+-   Upload stay images
+
+### Public endpoints
+
+``` text
+GET /api/stays
+GET /api/stays/featured
+GET /api/stays/:id
+GET /api/stays/:id/reviews
+GET /api/stays/seed
 ```
 
-Important:
+### Protected endpoints
 
-`email_domain` is **not a column in `colleges`**.
+``` text
+GET    /api/stays/my/listings
 
-Do not write queries such as:
+POST   /api/stays
+POST   /api/stays/upload/image
 
-```javascript
-colleges.email_domain;
+PUT    /api/stays/:id
+PATCH  /api/stays/:id/status
+DELETE /api/stays/:id
+
+POST   /api/stays/:id/save
+DELETE /api/stays/:id/save
+
+POST   /api/stays/:id/view
+POST   /api/stays/:id/inquiries
+
+POST   /api/stays/:id/reviews
+PUT    /api/stays/:id/reviews/:reviewId
+DELETE /api/stays/:id/reviews/:reviewId
 ```
 
-Use the `college_domains` table when domain information is required.
+Stay image uploads are handled using Multer and are limited to image
+files with a maximum size of 10 MB.
 
----
+------------------------------------------------------------------------
 
-# 9. Profile API
+# 4. Roomies
 
-The profile feature uses protected API endpoints.
+The Roomies module allows students to create and discover roommate
+listings.
 
-Conceptually:
+Users can:
 
-```text
-GET /api/profile
+-   Browse roommate listings
+-   View a listing
+-   Create a listing
+-   View their own listings
+-   Edit a listing
+-   Delete a listing
+
+Endpoints:
+
+``` text
+GET    /api/roomies
+GET    /api/roomies/:id
+
+GET    /api/roomies/user/me/listings
+
+POST   /api/roomies
+PUT    /api/roomies/:id
+DELETE /api/roomies/:id
 ```
 
-returns the authenticated user's profile.
+Creating, editing, deleting, and viewing personal listings require
+authentication.
 
-The backend gets the user ID from:
+------------------------------------------------------------------------
 
-```javascript
-req.user.id;
+# 5. Marketplace
+
+The Marketplace allows users to list and manage products.
+
+Users can:
+
+-   Browse products
+-   View product details
+-   Create product listings
+-   View their own products
+-   Edit listings
+-   Delete listings
+-   Mark products as sold
+-   Upload product images
+
+Endpoints:
+
+``` text
+GET    /api/marketplace/products
+GET    /api/marketplace/products/:id
+
+GET    /api/marketplace/my-products
+
+POST   /api/marketplace/products
+PUT    /api/marketplace/products/:id
+DELETE /api/marketplace/products/:id
+
+PATCH  /api/marketplace/products/:id/sold
+
+POST   /api/marketplace/products/:id/images
 ```
 
-and queries the `profiles` table.
+Product image uploads:
 
-Profile update uses:
+-   JPEG
+-   PNG
+-   WebP
+-   Maximum size: 5 MB
 
-```text
-PUT /api/profile
+------------------------------------------------------------------------
+
+# 6. Areas
+
+The Areas module provides location/area information and reviews.
+
+Endpoints:
+
+``` text
+GET  /api/areas
+GET  /api/areas/:id
+GET  /api/areas/:id/reviews
+POST /api/areas/:id/reviews
 ```
 
-The frontend sends:
+Creating an area review requires authentication.
 
-```json
-{
-  "fullName": "...",
-  "username": "...",
-  "universityId": "...",
-  "bio": "..."
-}
+------------------------------------------------------------------------
+
+# 7. User-Specific Data
+
+User-related stay information is available through:
+
+``` text
+GET /api/users/me/saved-stays
+GET /api/users/me/recently-viewed
+GET /api/users/me/inquiries
 ```
 
-The backend maps these to:
+These endpoints require authentication.
 
-```text
-full_name
-username
-university_id
-bio
+------------------------------------------------------------------------
+
+# Frontend Routes
+
+The current React application contains routes including:
+
+``` text
+/
+ /login
+ /register
+ /verify-email
+ /email-confirmed
+ /account-created
+ /profile
+ /about
+
+ /roomies
+ /roomies/create
+
+ /marketplace
+ /marketplace/add
+ /marketplace/my-listing
+ /marketplace/product/:id
+ /marketplace/product/:id/edit
+
+ /stays
+ /stay
+ /stays/post
+ /stays/create
+ /stays/my-listings
+ /stays/saved
+ /stays/inquiries
+ /stays/:id
+ /stays/:id/edit
 ```
 
-The university value must be the UUID from `colleges.id`, not the university name.
+Some routes are protected using the frontend `ProtectedRoute` component.
 
----
+------------------------------------------------------------------------
 
-# 10. College Email Verification — CURRENTLY IMPLEMENTED
+# Environment Variables
 
-College email verification has been added to the profile flow.
+## Frontend
 
-The user provides a college email address.
+Create:
 
-The backend:
-
-1. Receives the college email.
-2. Validates the relevant college/domain information.
-3. Generates the verification OTP.
-4. Sends the OTP through the configured email service.
-5. The user enters the OTP.
-6. The backend verifies it.
-7. The profile is marked as college verified.
-
-The frontend displays:
-
-```text
-College Email
-Verification Code
-Verify
-Resend Code
+``` text
+client/.env.local
 ```
 
-After successful verification:
+For local development:
 
-```text
-✓ Verified
+``` env
+VITE_API_URL=http://localhost:5800/api
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
 ```
 
-The verification state is associated with the user's profile.
+For Vercel production, configure the same variables in the Vercel
+project settings, but use the deployed API:
 
----
+``` env
+VITE_API_URL=https://clockit-api.onrender.com/api
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
+```
 
-# 11. Resend Configuration
+> Vite variables prefixed with `VITE_` are exposed to the browser. Only
+> use public/client-safe values there.
 
-Resend is currently used to send college verification emails.
+## Backend
 
-The API key must be stored in the backend environment.
+Create:
 
-Example:
+``` text
+server/.env
+```
 
-```env
+The backend requires Supabase configuration similar to:
+
+``` env
+SUPABASE_URL=your_supabase_url
+SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
+SUPABASE_SECRET_KEY=your_supabase_secret_key
 RESEND_API_KEY=your_resend_api_key
 ```
 
-Never commit the real key to GitHub.
+Never expose `SUPABASE_SECRET_KEY` or other backend secrets to the
+frontend.
 
-If Resend is in testing mode, it may restrict recipients until a sending domain is verified.
+Never commit `.env` files.
 
----
+------------------------------------------------------------------------
 
-# 12. Important Frontend API Rule
+# Local Development
 
-Frontend code should not directly use:
+## Prerequisites
 
-```text
-supabaseAdmin
-```
+Install:
 
-The admin Supabase client belongs on the backend.
+-   Node.js
+-   npm
+-   Git
+-   A Supabase project
 
-Frontend services should call the Express API.
+------------------------------------------------------------------------
 
-For authenticated requests, the frontend gets the current Supabase session/access token and sends:
+## 1. Clone the repository
 
-```http
-Authorization: Bearer <access_token>
-```
-
-Example architecture:
-
-```text
-React
-  ↓
-profileApi.js
-  ↓
-Express API
-  ↓
-requireAuth
-  ↓
-profileController
-  ↓
-supabaseAdmin
-  ↓
-PostgreSQL
-```
-# 13. Home Page
-
-The Home page is the base platform.
-
-It should **not** contain all feature-specific business logic.
-
-Instead, it should surface selected information from the major modules.
-
-Conceptual navigation:
-
-```text
-Home
-Marketplace
-Roomies
-Stays
-Profile
-```
-
-Possible routes:
-
-```text
-/
-├── /unimart
-├── /roomies
-├── /stays
-└── /profile
-```
-
-Exact route names can change as development continues.
-
----
-
-# 14. User Ownership Rule
-
-Every feature record that belongs to a user should reference the authenticated user.
-
-Examples:
-
-```text
-products.user_id
-roommate_profile.user_id
-flat_listing.user_id
-messages.sender_id
-```
-
-Do not accept an arbitrary user ID from the frontend for ownership.
-
-Use:
-
-```javascript
-req.user.id;
-```
-
-on the backend.
-
-This makes authorization and editing safer.
-
----
-
-# 15. Git Workflow
-
-Always create a feature branch.
-
-```bash
-git checkout -b feature/<feature-name>
-```
-
-Examples:
-
-```bash
-git checkout -b feature/unimart
-git checkout -b feature/roomies
-git checkout -b feature/stays
-```
-
-After implementation:
-
-```bash
-git add .
-git commit -m "message"
-git push origin feature/<feature-name>
-```
-
-Create a Pull Request before merging into the shared branch.
-
----
-
-# 16. Team Rules
-
-### Never commit secrets
-
-Do not push:
-
-```text
-.env
-SUPABASE_URL
-SUPABASE_KEY
-SUPABASE_SERVICE_ROLE_KEY
-RESEND_API_KEY
-```
-
-or any other credentials.
-
-### Don't create another authentication system
-
-Use the existing Supabase authentication system.
-
-### Don't duplicate user identities
-
-Feature records should reference the authenticated Supabase user.
-
-### Keep feature code isolated
-
-For example:
-
-```text
-UniMart
-  → unimart routes
-  → unimart controller
-  → unimart services
-
-Roomies
-  → roomies routes
-  → roomies controller
-  → roomies services
-
-Stays
-  → stays routes
-  → stays controller
-  → stays services
-```
-
-Do not put these inside:
-
-```text
-authController.js
-profileController.js
-```
-
-unless the logic genuinely belongs there.
-
----
-
-# 17. New Teammate Setup
-
-## Clone
-
-```bash
+``` bash
 git clone <REPOSITORY_URL>
 cd ClockIt
 ```
 
-## Frontend
+------------------------------------------------------------------------
 
-```bash
+## 2. Install frontend dependencies
+
+``` bash
 cd client
 npm install
 ```
 
-## Backend
+------------------------------------------------------------------------
 
-```bash
-cd ../server
+## 3. Install backend dependencies
+
+From the project root:
+
+``` bash
+cd server
 npm install
 ```
 
-## Environment
+------------------------------------------------------------------------
 
-Create:
+## 4. Configure environment variables
 
-```text
+Create the required:
+
+``` text
+client/.env.local
 server/.env
 ```
 
-Use the environment variable names expected by the existing Supabase and email configuration.
+Use your local API URL for the frontend and your Supabase/Resend
+credentials for the backend.
 
-Never copy real credentials into the README.
+------------------------------------------------------------------------
 
----
+## 5. Start the backend
 
-# 18. Running the Project
+From `server`:
 
-Backend development script currently uses Node's environment-file support:
-
-```bash
+``` bash
 npm run dev
 ```
 
-Production/start script:
+The backend uses:
 
-```bash
+``` text
+http://localhost:5800
+```
+
+when configured with the project's local development port.
+
+The production/start command is:
+
+``` bash
 npm start
 ```
 
-The backend server is configured through:
+------------------------------------------------------------------------
 
-```text
-server/server.js
+## 6. Start the frontend
+
+From `client`:
+
+``` bash
+npm run dev
 ```
 
-The frontend is run from the `client` directory using its package scripts.
+Vite will display the local development URL in the terminal.
 
----
+------------------------------------------------------------------------
 
-# 19. Before Starting a Feature
+# Frontend Commands
 
-A new teammate should:
+From `client`:
 
-1. Pull the latest shared branch.
-2. Install dependencies.
-3. Configure `.env`.
-4. Start frontend and backend.
-5. Test login/authentication.
-6. Open the profile page and confirm the authenticated user works.
-7. Create a feature branch.
-8. Read the existing routes/controllers before adding new ones.
-9. Build the feature using `req.user.id` for ownership.
-10. Test both successful and failed API requests.
-11. Commit to the feature branch.
-12. Open a Pull Request.
+``` bash
+npm run dev
+```
 
----
+Start the Vite development server.
 
-# 20. Current Progress
+``` bash
+npm run build
+```
 
-## Authentication / Common Platform
+Create a production build.
 
-- [x] Supabase authentication integration
-- [x] Backend authentication middleware
-- [x] Bearer-token authentication for protected API routes
-- [x] User profile integration
-- [x] College database structure
-- [x] College dropdown
-- [x] University stored through `university_id`
-- [x] In-place profile editing
-- [x] Profile update API
-- [x] College email OTP flow
-- [x] College verification status
-- [x] Resend email integration
+``` bash
+npm run preview
+```
 
----
+Preview the production build locally.
 
-# 21. Important Development Notes
+``` bash
+npm run lint
+```
 
-### University
+Run ESLint.
+
+------------------------------------------------------------------------
+
+# Backend Commands
+
+From `server`:
+
+``` bash
+npm run dev
+```
+
+Start the backend with nodemon.
+
+``` bash
+npm start
+```
+
+Start the backend using Node.
+
+------------------------------------------------------------------------
+
+# Production Deployment
+
+## Frontend --- Vercel
+
+The frontend is deployed from the `client` directory.
+
+Recommended Vercel settings:
+
+``` text
+Root Directory: client
+Framework: Vite
+Build Command: npm run build
+Output Directory: dist
+Install Command: npm install
+```
+
+Production frontend environment variables should include:
+
+``` env
+VITE_API_URL=https://clockit-api.onrender.com/api
+VITE_SUPABASE_URL=...
+VITE_SUPABASE_PUBLISHABLE_KEY=...
+```
+
+------------------------------------------------------------------------
+
+## Backend --- Render
+
+The backend is deployed from the `server` directory.
+
+Typical settings:
+
+``` text
+Root Directory: server
+Build Command: npm install
+Start Command: npm start
+```
+
+Backend environment variables should be configured in Render rather than
+committed to Git.
+
+The deployed API currently runs at:
+
+``` text
+https://clockit-api.onrender.com
+```
+
+API routes are available under:
+
+``` text
+https://clockit-api.onrender.com/api
+```
+
+------------------------------------------------------------------------
+
+# Security Rules
+
+### Never commit secrets
+
+Never commit:
+
+``` text
+.env
+.env.local
+SUPABASE_SECRET_KEY
+RESEND_API_KEY
+```
+
+### Keep admin credentials server-side
+
+The Supabase admin client uses the secret key and must only run on the
+backend.
+
+### Use authenticated identity for ownership
 
 Use:
 
-```text
-college.id
+``` javascript
+req.user.id
 ```
 
-as the dropdown value.
+for user-owned resources.
 
-Do not store:
+Do not trust:
 
-```text
-"MIT WPU"
+``` javascript
+req.body.userId
 ```
 
-as the foreign-key value.
+for authorization.
 
-### Authentication
+### Protected routes
 
-Protected APIs should use:
+Protected Express routes should use:
 
-```http
+``` javascript
+requireAuth
+```
+
+and public routes should only omit authentication when the operation is
+intentionally public.
+
+------------------------------------------------------------------------
+
+# API Authentication Example
+
+Authenticated frontend requests should include the Supabase access
+token:
+
+``` http
 Authorization: Bearer <access_token>
 ```
 
-and backend controllers should use:
+Backend middleware validates the token and makes the user available
+through:
 
-```javascript
-req.user.id;
+``` javascript
+req.user
 ```
 
-### Supabase Admin
+Controllers can then safely use:
 
-`supabaseAdmin` is a backend-only client.
-
-Never expose the service-role/admin key to React.
-
-### College Domains
-
-The schema uses:
-
-```text
-colleges
-college_domains
+``` javascript
+const userId = req.user.id;
 ```
 
-not:
+------------------------------------------------------------------------
 
-```text
-colleges.email_domain
+# Development Workflow
+
+For new development:
+
+``` text
+1. Pull latest code
+       ↓
+2. Create a feature branch
+       ↓
+3. Make changes locally
+       ↓
+4. Run frontend + backend locally
+       ↓
+5. Test the feature
+       ↓
+6. Run npm run lint
+       ↓
+7. Run npm run build
+       ↓
+8. Commit changes
+       ↓
+9. Push branch
+       ↓
+10. Create/merge Pull Request
+       ↓
+11. Deploy
 ```
 
-### Feature Isolation
+Example:
 
-Build new modules independently so that Marketplace, Roomies, and Stays do not break authentication/profile functionality.
----
+``` bash
+git checkout main
+git pull
+
+git checkout -b feature/new-feature
+
+# Make and test changes
+
+cd client
+npm run lint
+npm run build
+
+git add .
+git commit -m "Add new feature"
+git push origin feature/new-feature
+```
+
+------------------------------------------------------------------------
+
+# Team Development Guidelines
+
+### Keep feature logic separated
+
+Prefer:
+
+``` text
+roomieController.js
+marketplaceController.js
+stayController.js
+profileController.js
+```
+
+rather than placing unrelated functionality inside authentication code.
+
+### Reuse the existing authentication system
+
+Do not create a second authentication mechanism for individual modules.
+
+### Keep frontend API calls in services
+
+Examples:
+
+``` text
+authApi.js
+profileApi.js
+roomieApi.js
+marketplaceApi.js
+staysApi.js
+```
+
+### Validate ownership on the backend
+
+A frontend button being hidden is not sufficient authorization.
+
+The backend must verify that the authenticated user is allowed to modify
+the requested resource.
+
+------------------------------------------------------------------------
+
+# Testing Checklist
+
+Before deploying a new version, verify:
+
+-   [ ] Frontend starts locally
+-   [ ] Backend starts locally
+-   [ ] Registration works
+-   [ ] Login works
+-   [ ] Logout works
+-   [ ] Protected routes redirect unauthenticated users
+-   [ ] Profile loads correctly
+-   [ ] Profile updates correctly
+-   [ ] College selection works
+-   [ ] College OTP verification works
+-   [ ] Marketplace listing creation works
+-   [ ] Marketplace image upload works
+-   [ ] Roomie listing creation works
+-   [ ] Stays can be browsed
+-   [ ] Stays can be created/edited/deleted
+-   [ ] Stay save/unsave works
+-   [ ] Stay inquiries work
+-   [ ] Stay reviews work
+-   [ ] Production API calls reach Render
+-   [ ] Supabase authentication works in production
+-   [ ] Page refreshes work on deployed routes
+-   [ ] No secrets are exposed in the frontend build
+
+------------------------------------------------------------------------
+
+# Troubleshooting
+
+## Frontend cannot reach the API
+
+Check:
+
+``` env
+VITE_API_URL
+```
+
+Local:
+
+``` text
+http://localhost:5800/api
+```
+
+Production:
+
+``` text
+https://clockit-api.onrender.com/api
+```
+
+After changing a Vite environment variable, restart the frontend
+development server or redeploy the frontend.
+
+------------------------------------------------------------------------
+
+## Authentication fails
+
+Check:
+
+1.  Supabase URL
+2.  Frontend publishable key
+3.  Backend Supabase variables
+4.  Access token in the `Authorization` header
+5.  Supabase Auth configuration
+6.  Production redirect URLs
+
+------------------------------------------------------------------------
+
+## Profile returns an authentication error
+
+Make sure the request contains:
+
+``` http
+Authorization: Bearer <access_token>
+```
+
+and that the backend `requireAuth` middleware can validate the token.
+
+------------------------------------------------------------------------
+
+## Production build fails but local development works
+
+Check:
+
+-   Import path capitalization
+-   File names
+-   Case-sensitive paths
+-   Missing environment variables
+-   Missing dependencies
+-   `npm run build` locally
+
+Linux-based deployment environments are case-sensitive, so:
+
+``` javascript
+import Login from "./pages/Registration/Login";
+```
+
+and:
+
+``` javascript
+import Login from "./pages/Registration/login";
+```
+
+are not necessarily equivalent.
+
+------------------------------------------------------------------------
+
+# Documentation
+
+Additional project documentation is available in:
+
+``` text
+docs/
+├── Design_System.md
+└── stays_migration.sql
+```
+
+------------------------------------------------------------------------
+
+# Project Status
+
+ClockIt is an actively developed project.
+
+Current major modules:
+
+-   [x] Authentication
+-   [x] User profile
+-   [x] College selection
+-   [x] College email OTP verification
+-   [x] Marketplace
+-   [x] Roomies
+-   [x] Stays
+-   [x] Stay saving
+-   [x] Stay inquiries
+-   [x] Stay reviews
+-   [x] Area reviews
+-   [x] Production backend deployment
+-   [x] Production frontend deployment
+
+Future functionality may change as the project continues to evolve.
+
+------------------------------------------------------------------------
+
+# License
+
+No open-source license is currently specified for this project.
+
+If this repository will be publicly distributed or reused, add an
+appropriate license.
