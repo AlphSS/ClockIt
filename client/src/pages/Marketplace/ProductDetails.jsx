@@ -18,17 +18,17 @@ import "./ProductDetails.css";
 
 import NavBar from "../../components/common/NavBar";
 import Footer from "../../components/common/Footer";
-
-import {
-  getProductById,
-  getProducts,
-} from "../../services/marketplaceApi";
+import { startConversation } from "../../services/chatApi";
+import { supabase } from "../../services/supabase";
+import { getProductById, getProducts } from "../../services/marketplaceApi";
 
 function ProductDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const [product, setProduct] = useState(null);
+  const [chatError, setChatError] = useState("");
+  const [startingChat, setStartingChat] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -59,36 +59,57 @@ function ProductDetails() {
       }
 
       const otherProducts = (productsData.products || []).filter(
-        (item) =>
-          item.id !== currentProduct.id &&
-          item.status === "active"
+        (item) => item.id !== currentProduct.id && item.status === "active",
       );
 
-      const shuffled = [...otherProducts].sort(
-        () => Math.random() - 0.5
-      );
+      const shuffled = [...otherProducts].sort(() => Math.random() - 0.5);
 
       setRelatedProducts(shuffled.slice(0, 4));
     } catch (err) {
       console.error("Product details error:", err);
       setError(
-        err.response?.data?.message ||
-          err.message ||
-          "Unable to load product."
+        err.response?.data?.message || err.message || "Unable to load product.",
       );
     } finally {
       setLoading(false);
     }
   }
 
-  const formatPrice = (price) =>
-    Number(price).toLocaleString("en-IN");
+  const formatPrice = (price) => Number(price).toLocaleString("en-IN");
 
   const openProduct = (productId) => {
     navigate(`/marketplace/product/${productId}`);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+  async function handleChatWithSeller() {
+    try {
+      setChatError("");
 
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        navigate("/login");
+        return;
+      }
+
+      if (user.id === product.seller_id) {
+        setChatError("You cannot chat with yourself about your own listing.");
+        return;
+      }
+
+      setStartingChat(true);
+
+      const result = await startConversation(product.seller_id);
+
+      navigate(`/chat?conversation=${result.conversation.id}`);
+    } catch (error) {
+      setChatError(error.message || "Unable to start the conversation.");
+    } finally {
+      setStartingChat(false);
+    }
+  }
   const images = product?.product_images || [];
 
   return (
@@ -150,9 +171,7 @@ function ProductDetails() {
 
                           {product.status === "sold" && (
                             <div className="pd-sold-overlay">
-                              <span className="pd-sold-stamp">
-                                SOLD
-                              </span>
+                              <span className="pd-sold-stamp">SOLD</span>
                             </div>
                           )}
                         </div>
@@ -173,13 +192,9 @@ function ProductDetails() {
                                   ? "pd-thumbnail-active"
                                   : ""
                               }`}
-                              onClick={() =>
-                                setSelectedImage(image.image_url)
-                              }
+                              onClick={() => setSelectedImage(image.image_url)}
                               aria-label={`View product image ${index + 1}`}
-                              aria-pressed={
-                                selectedImage === image.image_url
-                              }
+                              aria-pressed={selectedImage === image.image_url}
                             >
                               <img
                                 src={image.image_url}
@@ -192,10 +207,7 @@ function ProductDetails() {
                     </>
                   ) : (
                     <div className="pd-no-image">
-                      <PackageOpen
-                        size={52}
-                        strokeWidth={1.2}
-                      />
+                      <PackageOpen size={52} strokeWidth={1.2} />
                       <p>No image available</p>
                     </div>
                   )}
@@ -204,18 +216,14 @@ function ProductDetails() {
                 {/* Product information */}
                 <section className="pd-details">
                   <div className="pd-meta-row">
-                    <span className="pd-category">
-                      {product.category}
-                    </span>
+                    <span className="pd-category">{product.category}</span>
 
                     {product.status === "sold" && (
                       <span className="pd-sold-label">Sold</span>
                     )}
                   </div>
 
-                  <h1 className="pd-display pd-title">
-                    {product.title}
-                  </h1>
+                  <h1 className="pd-display pd-title">{product.title}</h1>
 
                   <div className="pd-price-block">
                     <span className="pd-price-label">ASKING PRICE</span>
@@ -225,9 +233,7 @@ function ProductDetails() {
                       </span>
 
                       {product.is_negotiable && (
-                        <span className="pd-negotiable">
-                          Negotiable
-                        </span>
+                        <span className="pd-negotiable">Negotiable</span>
                       )}
                     </div>
                   </div>
@@ -309,26 +315,23 @@ function ProductDetails() {
                   </div>
 
                   {product.status === "active" && (
-                    <div className="pd-contact-area">
+                    <>
                       <button
                         type="button"
-                        className="pd-button pd-button-primary pd-contact-button"
-                        onClick={() => {
-                          // Connect this action to your existing chat flow
-                          // when the messaging route/API is available.
-                        }}
-                        title="Messaging functionality is not connected yet"
+                        onClick={handleChatWithSeller}
+                        disabled={startingChat}
+                        className="w-full mt-6 flex items-center justify-center gap-2 py-3.5 rounded-xl bg-[#a51f3d] hover:bg-[#A83A54] text-white font-medium shadow-lg shadow-[#8F2942]/20 transition-all duration-300 disabled:opacity-60"
                       >
-                        <MessageCircle size={18} />
-                        Chat with Seller
-                        <ArrowUpRight size={17} />
+                        <MessageCircle size={19} />
+                        {startingChat ? "Opening chat..." : "Chat with Seller"}
                       </button>
 
-                      <p className="pd-contact-note">
-                        Interested? Get in touch with the seller to
-                        discuss the item.
-                      </p>
-                    </div>
+                      {chatError && (
+                        <p className="mt-3 text-sm text-red-600" role="alert">
+                          {chatError}
+                        </p>
+                      )}
+                    </>
                   )}
                 </section>
               </div>
@@ -338,9 +341,7 @@ function ProductDetails() {
                 <section className="pd-related">
                   <div className="pd-related-heading">
                     <div>
-                      <span className="pd-eyebrow">
-                        A FEW MORE FINDS
-                      </span>
+                      <span className="pd-eyebrow">A FEW MORE FINDS</span>
                       <h2 className="pd-display">
                         You may also like<span>.</span>
                       </h2>
@@ -358,8 +359,7 @@ function ProductDetails() {
 
                   <div className="pd-related-grid">
                     {relatedProducts.map((item) => {
-                      const image =
-                        item.product_images?.[0]?.image_url;
+                      const image = item.product_images?.[0]?.image_url;
 
                       return (
                         <button

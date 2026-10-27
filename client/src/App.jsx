@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Register from "./components/auth/RegistrationForm";
-import Login from "./pages/Registration/login";
+import Login from "./pages/Registration/Login";
 import Home from "./pages/Home/Home";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import EmailConfirmed from "./components/auth/EmailConfirmed";
@@ -56,8 +56,22 @@ function App() {
 
         <Route path="/login" element={<Login />} />
 
-        <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
-        <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
+        <Route
+          path="/chat"
+          element={
+            <ProtectedRoute>
+              <Chat />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            <ProtectedRoute>
+              <Notifications />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/profile"
@@ -124,16 +138,45 @@ function App() {
         <Route path="/marketplace" element={<Marketplace />} />
         <Route path="/marketplace/product/:id" element={<ProductDetails />} />
 
-        <Route path="/marketplace/my-listing" element={<MyListing />} />
+        <Route
+          path="/marketplace/my-listing"
+          element={
+            <ProtectedRoute>
+              <MyListing />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/marketplace/product/:id/edit" element={<EditProduct />} />
+        <Route
+          path="/marketplace/add"
+          element={
+            <ProtectedRoute>
+              <AddProduct />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/marketplace/add" element={<AddProduct />} />
+        <Route
+          path="/marketplace/product/:id/edit"
+          element={
+            <ProtectedRoute>
+              <EditProduct />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/roomies"
           element={
-            <ProtectedRoute>
               <Roomies />
+          }
+        />
+
+        <Route
+          path="/roomies/create"
+          element={
+            <ProtectedRoute>
+              <CreateListing />
             </ProtectedRoute>
           }
         />
@@ -147,8 +190,6 @@ function App() {
         />
 
         <Route path="/about" element={<About />} />
-
-        <Route path="/roomies/create" element={<CreateListing />} />
       </Routes>
 
       <GoToTop />

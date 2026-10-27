@@ -76,20 +76,32 @@ export default function Chat() {
         const requested = new URLSearchParams(location.search).get(
           "conversation",
         );
-        setSelectedId((current) => {
-          if (requested && result.conversations.some((c) => c.id === requested))
-            return requested;
-          if (current && result.conversations.some((c) => c.id === current))
-            return current;
-          return result.conversations[0]?.id || "";
-        });
+        const validRequested = result.conversations.some(
+          (c) => c.id === requested,
+        );
+
+        const validCurrent = result.conversations.some(
+          (c) => c.id === selectedId,
+        );
+
+        const nextId = validRequested
+          ? requested
+          : validCurrent
+            ? selectedId
+            : result.conversations[0]?.id || "";
+
+        setSelectedId(nextId);
+
+        if (requested && !validRequested) {
+          navigate("/chat", { replace: true });
+        }
       } catch (e) {
         setError(e.message);
       } finally {
         if (!silent) setLoading(false);
       }
     },
-    [location.search],
+    [location.search, selectedId, navigate],
   );
 
   useEffect(() => {
@@ -330,7 +342,10 @@ export default function Chat() {
                 <header className="chat-thread-header">
                   <button
                     className="chat-back"
-                    onClick={() => setShowMobileChats(true)}
+                    onClick={() => {
+                      setShowMobileChats(true);
+                      navigate("/chat", { replace: true });
+                    }}
                     aria-label="Back to conversations"
                   >
                     <ArrowLeft size={19} />

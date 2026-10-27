@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { loginUser } from "../../services/authApi";
 import { supabase } from "../../services/supabase";
 
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,7 +39,13 @@ function Login() {
         throw new Error("Unable to create login session.");
       }
 
-      navigate("/");
+      const from = location.state?.from;
+
+      const redirectTo = from
+        ? `${from.pathname}${from.search || ""}${from.hash || ""}`
+        : "/";
+
+      navigate(redirectTo, { replace: true });
     } catch (error) {
       setError(error.message);
     } finally {

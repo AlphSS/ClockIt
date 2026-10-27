@@ -51,7 +51,7 @@ function NavBar({ theme = "dark" }) {
             data?.username ||
               user.user_metadata?.username ||
               user.email?.split("@")[0] ||
-              "User"
+              "User",
           );
         }
       } catch (error) {
@@ -81,19 +81,52 @@ function NavBar({ theme = "dark" }) {
   }, []);
 
   // Keep the navbar badge connected to the signed-in user's stored notifications.
+
+  // Keep the navbar badge synchronized with authentication and notifications.
   useEffect(() => {
     let active = true;
+
     const loadUnread = async () => {
       try {
         const result = await getNotifications("all");
-        if (active) setUnreadNotifications(result.unreadCount || 0);
-      } catch {
-        if (active) setUnreadNotifications(0);
+
+        if (active) {
+          setUnreadNotifications(result.unreadCount || 0);
+        }
+      } catch (error) {
+        if (active) {
+          setUnreadNotifications(0);
+        }
       }
     };
+
+    // Load the initial unread count.
     loadUnread();
+
+    // Refresh immediately when authentication changes.
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!session || event === "SIGNED_OUT") {
+        setUnreadNotifications(0);
+        return;
+      }
+
+      window.setTimeout(() => {
+        if (active) {
+          loadUnread();
+        }
+      }, 0);
+    });
+
+    // Keep the count updated periodically as well.
     const timer = window.setInterval(loadUnread, 30000);
-    return () => { active = false; window.clearInterval(timer); };
+
+    return () => {
+      active = false;
+      window.clearInterval(timer);
+      subscription.unsubscribe();
+    };
   }, []);
 
   // ==================== LOGOUT ====================
@@ -137,7 +170,6 @@ function NavBar({ theme = "dark" }) {
       }
     >
       <div className="mx-auto flex h-[88px] max-w-6xl items-center justify-between px-6">
-
         {/* ==================== LOGO ==================== */}
         <button
           onClick={() => navigate("/")}
@@ -150,7 +182,6 @@ function NavBar({ theme = "dark" }) {
 
         {/* ==================== NAVIGATION ==================== */}
         <div className="flex items-center gap-1">
-
           <NavLink to="/" className={navLinkStyle}>
             Home
           </NavLink>
@@ -170,12 +201,10 @@ function NavBar({ theme = "dark" }) {
           <NavLink to="/about" className={navLinkStyle}>
             About Us
           </NavLink>
-
         </div>
 
         {/* ==================== RIGHT SIDE ==================== */}
         <div className="flex items-center gap-5">
-
           {/* ==================== CHAT ==================== */}
           <button
             onClick={() => navigate("/chat")}
@@ -228,7 +257,6 @@ function NavBar({ theme = "dark" }) {
               <path d="M13.73 21a2 2 0 0 1-3.46 0" />
             </svg>
 
-
             {unreadNotifications > 0 && (
               <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#8D3A3C] px-1 text-[10px] font-semibold text-white shadow-[0_0_8px_rgba(141,58,60,0.5)]">
                 {unreadNotifications > 99 ? "99+" : unreadNotifications}
@@ -249,7 +277,6 @@ function NavBar({ theme = "dark" }) {
           >
             {username ? username.charAt(0).toUpperCase() : "?"}
           </button>
-
         </div>
       </div>
     </nav>

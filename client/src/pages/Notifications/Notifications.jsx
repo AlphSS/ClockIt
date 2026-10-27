@@ -55,6 +55,40 @@ const sectionName = (value) => {
   if (date.toDateString() === yesterday.toDateString()) return "Yesterday";
   return "Earlier";
 };
+const getSafeActionUrl = (actionUrl) => {
+  if (typeof actionUrl !== "string") return null;
+
+  // Allow only internal ClockIt paths.
+  if (!actionUrl.startsWith("/") || actionUrl.startsWith("//")) {
+    return null;
+  }
+
+  try {
+    const url = new URL(actionUrl, window.location.origin);
+
+    if (url.origin !== window.location.origin) {
+      return null;
+    }
+
+    const allowedPaths = [
+      "/chat",
+      "/notifications",
+      "/marketplace",
+      "/stays",
+      "/stay",
+      "/roomies",
+      "/profile",
+    ];
+
+    const isAllowed = allowedPaths.some(
+      (path) => url.pathname === path || url.pathname.startsWith(`${path}/`),
+    );
+
+    return isAllowed ? `${url.pathname}${url.search}${url.hash}` : null;
+  } catch {
+    return null;
+  }
+};
 
 export default function Notifications() {
   const navigate = useNavigate();
@@ -108,7 +142,9 @@ export default function Notifications() {
 
   async function handleMarkRead(notification) {
     if (notification.is_read || busyId) {
-      if (notification.action_url) navigate(notification.action_url);
+      const target = getSafeActionUrl(notification.action_url);
+
+      if (target) navigate(target);
       return;
     }
     setBusyId(notification.id);
@@ -121,7 +157,9 @@ export default function Notifications() {
         ),
       );
       setUnreadCount((count) => Math.max(0, count - 1));
-      if (notification.action_url) navigate(notification.action_url);
+      const target = getSafeActionUrl(notification.action_url);
+
+      if (target) navigate(target);
     } catch (e) {
       setError(e.message);
     } finally {
