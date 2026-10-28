@@ -1,0 +1,1195 @@
+/* =========================================================
+   CLOCKIT CHAT — DESIGN SYSTEM
+   Palette: Ivory Linen / Biscotti / Driftwood / Charcoal
+========================================================= */
+
+.clockit-chat-page {
+  --chat-ivory: #ede9e3;
+  --chat-biscotti: #c7b8a2;
+  --chat-driftwood: #8b7765;
+  --chat-charcoal: #4a4a47;
+  --chat-onyx: #2a2a29;
+  --chat-card: #f7f4ef;
+  --chat-border: rgba(74, 74, 71, 0.13);
+  --chat-muted: #918477;
+  --chat-green: #71836d;
+
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--chat-ivory);
+  color: var(--chat-charcoal);
+  font-family: inherit;
+}
+
+.clockit-chat-page *,
+.clockit-chat-page *::before,
+.clockit-chat-page *::after {
+  box-sizing: border-box;
+}
+
+.clockit-chat-page button,
+.clockit-chat-page input,
+.clockit-chat-page textarea {
+  font: inherit;
+}
+
+.clockit-chat-page button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.clockit-chat-page button:focus-visible,
+.clockit-chat-page input:focus-visible,
+.clockit-chat-page textarea:focus-visible {
+  outline: 2px solid var(--chat-driftwood);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   MAIN PAGE
+========================================================= */
+
+.clockit-chat-page > .chat-page {
+  flex: 1;
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 34px clamp(18px, 4vw, 58px) 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+  background: transparent;
+}
+
+/* =========================================================
+   PAGE HEADING
+========================================================= */
+
+.clockit-chat-page .chat-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.clockit-chat-page .chat-eyebrow {
+  display: inline-block;
+  margin-bottom: 9px;
+  color: var(--chat-driftwood);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 2px;
+}
+
+.clockit-chat-page .chat-heading h1 {
+  margin: 0;
+  color: var(--chat-onyx);
+  font-size: clamp(28px, 3vw, 36px);
+  line-height: 1.15;
+  font-weight: 750;
+  letter-spacing: -1.2px;
+}
+
+.clockit-chat-page .chat-heading p {
+  margin: 9px 0 0;
+  color: var(--chat-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.clockit-chat-page .chat-heading-icon {
+  width: 54px;
+  height: 54px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--chat-driftwood);
+  background: rgba(199, 184, 162, 0.35);
+  border: 1px solid rgba(139, 119, 101, 0.13);
+  border-radius: 17px;
+}
+
+/* =========================================================
+   ERROR / ALERT
+========================================================= */
+
+.clockit-chat-page .chat-alert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  color: #783f3f;
+  background: #f5e7e3;
+  border: 1px solid #e6c9c2;
+  border-radius: 11px;
+  font-size: 12px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.clockit-chat-page .chat-alert button {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.clockit-chat-page .chat-alert button:hover {
+  background: rgba(120, 63, 63, 0.08);
+}
+
+/* =========================================================
+   CHAT SHELL
+========================================================= */
+
+.clockit-chat-page .chat-shell {
+  width: 100%;
+  min-width: 0;
+  height: min(680px, 72vh);
+  min-height: 470px;
+  display: flex;
+  overflow: hidden;
+  background: var(--chat-card);
+  border: 1px solid var(--chat-border);
+  border-radius: 19px;
+  box-shadow:
+    0 14px 45px rgba(42, 42, 41, 0.055),
+    0 2px 7px rgba(42, 42, 41, 0.025);
+}
+
+/* =========================================================
+   CONVERSATION SIDEBAR
+========================================================= */
+
+.clockit-chat-page .chat-sidebar {
+  position: relative;
+  width: 340px;
+  min-width: 300px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: #f8f5f0;
+  border-right: 1px solid var(--chat-border);
+  min-height: 0;
+}
+
+.clockit-chat-page .chat-sidebar-head {
+  min-height: 85px;
+  padding: 21px 21px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--chat-driftwood);
+  border-bottom: 1px solid rgba(74, 74, 71, 0.07);
+}
+
+.clockit-chat-page .chat-sidebar-head h2 {
+  margin: 0;
+  color: var(--chat-onyx);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.clockit-chat-page .chat-sidebar-head span {
+  display: inline-block;
+  margin-top: 5px;
+  color: var(--chat-muted);
+  font-size: 11px;
+}
+
+.clockit-chat-page .chat-sidebar-head > svg {
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+
+/* =========================================================
+   SEARCH INPUT
+========================================================= */
+
+.clockit-chat-page .chat-search {
+  min-height: 43px;
+  margin: 17px 16px 13px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--chat-driftwood);
+  background: var(--chat-ivory);
+  border: 1px solid rgba(139, 119, 101, 0.14);
+  border-radius: 11px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.clockit-chat-page .chat-search:focus-within {
+  background: #fbf9f5;
+  border-color: var(--chat-driftwood);
+  box-shadow: 0 0 0 3px rgba(139, 119, 101, 0.08);
+}
+
+.clockit-chat-page .chat-search > svg {
+  flex-shrink: 0;
+}
+
+.clockit-chat-page .chat-search input {
+  width: 100%;
+  min-width: 0;
+  height: 40px;
+  padding: 0;
+  color: var(--chat-onyx);
+  background: transparent;
+  border: 0;
+  outline: none;
+  box-shadow: none;
+  font-size: 12px;
+}
+
+.clockit-chat-page .chat-search input::placeholder {
+  color: #a09588;
+}
+
+.clockit-chat-page .chat-search input:focus-visible {
+  outline: none;
+}
+
+.clockit-chat-page .chat-search button {
+  flex-shrink: 0;
+  width: 25px;
+  height: 25px;
+  display: grid;
+  place-items: center;
+  color: var(--chat-muted);
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.clockit-chat-page .chat-search button:hover {
+  color: var(--chat-onyx);
+  background: rgba(139, 119, 101, 0.12);
+}
+
+.clockit-chat-page .chat-search button[hidden] {
+  display: none;
+}
+
+/* =========================================================
+   SEARCH RESULTS
+========================================================= */
+
+.clockit-chat-page .chat-search-results {
+  position: relative;
+  z-index: 3;
+  margin: 0 12px 12px;
+  padding: 9px;
+  background: #fffdf9;
+  border: 1px solid var(--chat-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(42, 42, 41, 0.08);
+  max-height: 210px;
+  overflow-y: auto;
+}
+
+.clockit-chat-page .chat-search-results > p {
+  margin: 4px 7px 8px;
+  color: var(--chat-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+}
+
+.clockit-chat-page .chat-search-results > button {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 8px;
+  text-align: left;
+  color: var(--chat-charcoal);
+  background: transparent;
+  border: 0;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.clockit-chat-page .chat-search-results > button:hover {
+  background: var(--chat-ivory);
+}
+
+.clockit-chat-page .chat-search-results > button > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.clockit-chat-page .chat-search-results b {
+  overflow: hidden;
+  color: var(--chat-onyx);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clockit-chat-page .chat-search-results small {
+  color: var(--chat-muted);
+  font-size: 10px;
+}
+
+.clockit-chat-page .chat-search-results > button > svg {
+  flex-shrink: 0;
+  color: var(--chat-driftwood);
+}
+
+/* =========================================================
+   USER AVATARS
+========================================================= */
+
+.clockit-chat-page .chat-avatar {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fffdf9;
+  background: linear-gradient(145deg, #a38d77, #776452);
+  border: 2px solid rgba(199, 184, 162, 0.35);
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  box-shadow: 0 2px 5px rgba(42, 42, 41, 0.06);
+}
+
+.clockit-chat-page .chat-avatar.small {
+  width: 36px;
+  height: 36px;
+  font-size: 11px;
+}
+
+.clockit-chat-page .chat-avatar.large {
+  width: 52px;
+  height: 52px;
+  font-size: 15px;
+}
+
+/* =========================================================
+   CONVERSATION LIST
+========================================================= */
+
+.clockit-chat-page .chat-conversation-list {
+  flex: 1;
+  min-height: 0;
+  padding: 0 10px 12px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--chat-biscotti) transparent;
+}
+
+.clockit-chat-page .chat-conversation-list::-webkit-scrollbar,
+.clockit-chat-page .chat-messages::-webkit-scrollbar,
+.clockit-chat-page .chat-search-results::-webkit-scrollbar {
+  width: 5px;
+}
+
+.clockit-chat-page .chat-conversation-list::-webkit-scrollbar-thumb,
+.clockit-chat-page .chat-messages::-webkit-scrollbar-thumb,
+.clockit-chat-page .chat-search-results::-webkit-scrollbar-thumb {
+  background: var(--chat-biscotti);
+  border-radius: 10px;
+}
+
+.clockit-chat-page .chat-conversation {
+  width: 100%;
+  min-width: 0;
+  padding: 12px 10px;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  text-align: left;
+  color: var(--chat-charcoal);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.clockit-chat-page .chat-conversation:hover {
+  background: #eee9e1;
+}
+
+.clockit-chat-page .chat-conversation.active {
+  background: #eae1d5;
+  border-color: rgba(139, 119, 101, 0.14);
+}
+
+.clockit-chat-page .chat-conversation.active .chat-avatar {
+  border-color: rgba(139, 119, 101, 0.28);
+}
+
+.clockit-chat-page .chat-conversation-copy {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.clockit-chat-page .chat-conversation-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+}
+
+.clockit-chat-page .chat-conversation-title b {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--chat-onyx);
+  font-size: 12px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clockit-chat-page .chat-conversation-title time {
+  flex-shrink: 0;
+  color: var(--chat-muted);
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.clockit-chat-page .chat-preview {
+  display: block;
+  overflow: hidden;
+  color: var(--chat-muted);
+  font-size: 11px;
+  line-height: 1.45;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clockit-chat-page .chat-unread-count {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fffdf9;
+  background: var(--chat-driftwood);
+  border-radius: 50px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* =========================================================
+   LOADING AND EMPTY STATES
+========================================================= */
+
+.clockit-chat-page .chat-state {
+  min-height: 140px;
+  padding: 22px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  color: var(--chat-muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.clockit-chat-page .chat-state > svg {
+  color: var(--chat-driftwood);
+}
+
+.clockit-chat-page .chat-state b {
+  color: var(--chat-charcoal);
+  font-size: 12px;
+}
+
+.clockit-chat-page .chat-state span {
+  max-width: 225px;
+}
+
+.clockit-chat-page .spin {
+  animation: clockit-chat-spin 1s linear infinite;
+}
+
+@keyframes clockit-chat-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   CHAT THREAD
+========================================================= */
+
+.clockit-chat-page .chat-thread {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--chat-ivory);
+}
+
+/* =========================================================
+   CHAT HEADER
+========================================================= */
+
+.clockit-chat-page .chat-thread-header {
+  min-height: 82px;
+  padding: 14px 22px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  background: #fbf9f5;
+  border-bottom: 1px solid var(--chat-border);
+}
+
+.clockit-chat-page .chat-thread-user {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.clockit-chat-page .chat-thread-user b {
+  overflow: hidden;
+  color: var(--chat-onyx);
+  font-size: 14px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clockit-chat-page .chat-thread-user span {
+  overflow: hidden;
+  color: var(--chat-muted);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clockit-chat-page .chat-thread-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.clockit-chat-page .chat-thread-actions button,
+.clockit-chat-page .chat-back {
+  width: 37px;
+  height: 37px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--chat-driftwood);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.clockit-chat-page .chat-thread-actions button:disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
+}
+
+.clockit-chat-page .chat-thread-actions button:not(:disabled) {
+  cursor: pointer;
+}
+
+.clockit-chat-page .chat-thread-actions button:not(:disabled):hover,
+.clockit-chat-page .chat-back:hover {
+  color: var(--chat-onyx);
+  background: var(--chat-ivory);
+}
+
+.clockit-chat-page .chat-back {
+  display: none;
+}
+
+/* =========================================================
+   MESSAGE HISTORY
+========================================================= */
+
+.clockit-chat-page .chat-messages {
+  flex: 1;
+  min-height: 0;
+  padding: 27px clamp(18px, 4vw, 45px);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background-color: var(--chat-ivory);
+  background-image: radial-gradient(
+    rgba(139, 119, 101, 0.07) 0.7px,
+    transparent 0.7px
+  );
+  background-size: 18px 18px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--chat-biscotti) transparent;
+}
+
+/* =========================================================
+   MESSAGE ROWS
+========================================================= */
+
+.clockit-chat-page .chat-message-row {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+}
+
+.clockit-chat-page .chat-message-row.received {
+  justify-content: flex-start;
+}
+
+.clockit-chat-page .chat-message-row.sent {
+  justify-content: flex-end;
+}
+
+/* =========================================================
+   MESSAGE BUBBLES
+========================================================= */
+
+.clockit-chat-page .chat-bubble {
+  width: fit-content;
+  max-width: min(76%, 470px);
+  min-width: 65px;
+  padding: 11px 14px 8px;
+  color: var(--chat-charcoal);
+  background: #fbf9f5;
+  border: 1px solid rgba(139, 119, 101, 0.12);
+  border-radius: 15px 15px 15px 4px;
+  box-shadow: 0 3px 9px rgba(42, 42, 41, 0.025);
+  overflow-wrap: anywhere;
+}
+
+.clockit-chat-page .chat-message-row.sent .chat-bubble {
+  color: #fffdf9;
+  background: var(--chat-driftwood);
+  border-color: var(--chat-driftwood);
+  border-radius: 15px 15px 4px 15px;
+  box-shadow: 0 3px 10px rgba(139, 119, 101, 0.13);
+}
+
+.clockit-chat-page .chat-bubble p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.clockit-chat-page .chat-bubble > span {
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  color: inherit;
+  opacity: 0.7;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.clockit-chat-page .chat-message-row.sent .chat-bubble > span {
+  color: #fffdf9;
+}
+
+.clockit-chat-page .chat-bubble .message-read {
+  color: #e9e0d2;
+  opacity: 1;
+}
+
+/* =========================================================
+   EMPTY THREAD
+========================================================= */
+
+.clockit-chat-page .chat-empty-thread {
+  flex: 1;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 25px;
+  text-align: center;
+}
+
+.clockit-chat-page .chat-empty-thread .chat-avatar {
+  margin-bottom: 17px;
+}
+
+.clockit-chat-page .chat-empty-thread h3 {
+  margin: 0;
+  color: var(--chat-onyx);
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+}
+
+.clockit-chat-page .chat-empty-thread p {
+  margin: 9px 0 0;
+  color: var(--chat-muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+/* =========================================================
+   MESSAGE COMPOSER
+========================================================= */
+
+.clockit-chat-page .chat-composer {
+  min-height: 69px;
+  padding: 12px 18px 7px;
+  display: flex;
+  align-items: flex-end;
+  gap: 9px;
+  background: #fbf9f5;
+  border-top: 1px solid var(--chat-border);
+}
+
+.clockit-chat-page .chat-composer > button {
+  width: 39px;
+  height: 41px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--chat-driftwood);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.clockit-chat-page .chat-composer > button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.clockit-chat-page .chat-composer > button:not(:disabled) {
+  cursor: pointer;
+}
+
+.clockit-chat-page .chat-composer > button:not(:disabled):hover {
+  color: var(--chat-onyx);
+  background: var(--chat-ivory);
+}
+
+/* Text area */
+
+.clockit-chat-page .chat-composer textarea {
+  flex: 1;
+  min-width: 0;
+  min-height: 43px;
+  max-height: 125px;
+  padding: 12px 15px;
+  resize: vertical;
+  color: var(--chat-onyx);
+  background: var(--chat-ivory);
+  border: 1px solid rgba(139, 119, 101, 0.15);
+  border-radius: 12px;
+  outline: none;
+  box-shadow: none;
+  font-size: 12px;
+  line-height: 1.5;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.clockit-chat-page .chat-composer textarea:focus {
+  background: #fffdf9;
+  border-color: var(--chat-driftwood);
+  box-shadow: 0 0 0 3px rgba(139, 119, 101, 0.08);
+}
+
+.clockit-chat-page .chat-composer textarea::placeholder {
+  color: #a09588;
+}
+
+/* Send button */
+
+.clockit-chat-page .chat-composer > .chat-send-button {
+  width: 43px;
+  height: 43px;
+  color: #fffdf9;
+  background: var(--chat-charcoal);
+  border: 1px solid var(--chat-charcoal);
+  border-radius: 12px;
+  box-shadow: 0 3px 7px rgba(42, 42, 41, 0.12);
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.clockit-chat-page .chat-composer > .chat-send-button:not(:disabled):hover {
+  color: #fffdf9;
+  background: var(--chat-onyx);
+  transform: translateY(-1px);
+}
+
+.clockit-chat-page .chat-composer > .chat-send-button:disabled {
+  color: #fffdf9;
+  background: var(--chat-charcoal);
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Keyboard hint */
+
+.clockit-chat-page .chat-composer-hint {
+  padding: 0 20px 12px;
+  color: #a09588;
+  background: #fbf9f5;
+  text-align: right;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+/* =========================================================
+   NO CONVERSATION SELECTED
+========================================================= */
+
+.clockit-chat-page .chat-no-selection {
+  flex: 1;
+  min-height: 300px;
+  padding: 35px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.clockit-chat-page .chat-no-selection-icon {
+  width: 76px;
+  height: 76px;
+  margin-bottom: 21px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--chat-driftwood);
+  background: rgba(199, 184, 162, 0.35);
+  border: 1px solid rgba(139, 119, 101, 0.13);
+  border-radius: 24px;
+}
+
+.clockit-chat-page .chat-no-selection h2 {
+  margin: 0;
+  color: var(--chat-onyx);
+  font-size: 23px;
+  font-weight: 750;
+  letter-spacing: -0.7px;
+}
+
+.clockit-chat-page .chat-no-selection p {
+  max-width: 300px;
+  margin: 10px 0 0;
+  color: var(--chat-muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+/* =========================================================
+   RESPONSIVE — TABLETS
+========================================================= */
+
+@media (max-width: 950px) {
+  .clockit-chat-page > .chat-page {
+    padding: 28px 22px 38px;
+    gap: 20px;
+  }
+
+  .clockit-chat-page .chat-shell {
+    height: min(650px, 70vh);
+  }
+
+  .clockit-chat-page .chat-sidebar {
+    width: 290px;
+    min-width: 260px;
+  }
+
+  .clockit-chat-page .chat-sidebar-head {
+    padding-left: 17px;
+    padding-right: 17px;
+  }
+
+  .clockit-chat-page .chat-messages {
+    padding: 23px 22px;
+  }
+
+  .clockit-chat-page .chat-thread-header {
+    padding: 12px 16px;
+  }
+
+  .clockit-chat-page .chat-bubble {
+    max-width: 82%;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+========================================================= */
+
+@media (max-width: 680px) {
+  .clockit-chat-page > .chat-page {
+    padding: 23px 12px 28px;
+    gap: 17px;
+  }
+
+  .clockit-chat-page .chat-heading {
+    gap: 12px;
+  }
+
+  .clockit-chat-page .chat-eyebrow {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+  }
+
+  .clockit-chat-page .chat-heading h1 {
+    font-size: 27px;
+  }
+
+  .clockit-chat-page .chat-heading p {
+    max-width: 270px;
+    font-size: 11px;
+  }
+
+  .clockit-chat-page .chat-heading-icon {
+    width: 43px;
+    height: 43px;
+    border-radius: 13px;
+  }
+
+  .clockit-chat-page .chat-shell {
+    position: relative;
+    height: min(690px, 72dvh);
+    min-height: 430px;
+    border-radius: 15px;
+  }
+
+  .clockit-chat-page .chat-sidebar {
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    border-right: 0;
+  }
+
+  .clockit-chat-page .chat-sidebar.mobile-hidden {
+    display: none;
+  }
+
+  .clockit-chat-page .chat-sidebar.mobile-visible {
+    display: flex;
+  }
+
+  .clockit-chat-page .chat-thread {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+  }
+
+  .clockit-chat-page .chat-thread.mobile-hidden {
+    display: none;
+  }
+
+  .clockit-chat-page .chat-thread.mobile-visible {
+    display: flex;
+  }
+
+  .clockit-chat-page .chat-sidebar-head {
+    min-height: 74px;
+    padding: 16px 17px;
+  }
+
+  .clockit-chat-page .chat-search {
+    margin: 13px 13px 10px;
+  }
+
+  .clockit-chat-page .chat-conversation-list {
+    padding: 0 8px 10px;
+  }
+
+  .clockit-chat-page .chat-conversation {
+    padding: 12px 10px;
+  }
+
+  .clockit-chat-page .chat-thread-header {
+    min-height: 73px;
+    padding: 10px 11px;
+    gap: 9px;
+  }
+
+  .clockit-chat-page .chat-back {
+    width: 32px;
+    height: 35px;
+    display: inline-flex;
+  }
+
+  .clockit-chat-page .chat-thread-header > .chat-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 12px;
+  }
+
+  .clockit-chat-page .chat-thread-user b {
+    font-size: 12px;
+  }
+
+  .clockit-chat-page .chat-thread-user span {
+    font-size: 10px;
+  }
+
+  .clockit-chat-page .chat-thread-actions {
+    gap: 0;
+  }
+
+  .clockit-chat-page .chat-thread-actions button {
+    width: 30px;
+    height: 34px;
+  }
+
+  .clockit-chat-page .chat-messages {
+    padding: 19px 12px;
+    gap: 12px;
+  }
+
+  .clockit-chat-page .chat-bubble {
+    max-width: 86%;
+    padding: 10px 12px 8px;
+  }
+
+  .clockit-chat-page .chat-bubble p {
+    font-size: 12px;
+  }
+
+  .clockit-chat-page .chat-composer {
+    padding: 10px 8px 6px;
+    gap: 4px;
+  }
+
+  .clockit-chat-page .chat-composer > button {
+    width: 32px;
+    height: 40px;
+  }
+
+  .clockit-chat-page .chat-composer textarea {
+    padding: 11px 10px;
+    min-height: 40px;
+    font-size: 12px;
+  }
+
+  .clockit-chat-page .chat-composer > .chat-send-button {
+    width: 39px;
+    height: 40px;
+    border-radius: 10px;
+  }
+
+  .clockit-chat-page .chat-composer-hint {
+    padding: 0 10px 9px;
+    font-size: 8px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — SMALL PHONES
+========================================================= */
+
+@media (max-width: 380px) {
+  .clockit-chat-page > .chat-page {
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+
+  .clockit-chat-page .chat-heading h1 {
+    font-size: 24px;
+  }
+
+  .clockit-chat-page .chat-heading-icon {
+    width: 39px;
+    height: 39px;
+  }
+
+  .clockit-chat-page .chat-thread-header {
+    gap: 6px;
+    padding-right: 7px;
+    padding-left: 7px;
+  }
+
+  .clockit-chat-page .chat-thread-actions button {
+    width: 27px;
+  }
+
+  .clockit-chat-page .chat-avatar {
+    width: 39px;
+    height: 39px;
+    font-size: 11px;
+  }
+
+  .clockit-chat-page .chat-bubble {
+    max-width: 90%;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION ACCESSIBILITY
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .clockit-chat-page *,
+  .clockit-chat-page *::before,
+  .clockit-chat-page *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

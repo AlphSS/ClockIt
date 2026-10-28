@@ -1,6 +1,6 @@
 import { supabase } from "./supabase";
 
-const API_URL = "http://localhost:5800/api";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5800/api";
 
 export async function getProfile() {
   const {
@@ -149,7 +149,6 @@ export async function verifyCollegeOtp(otp) {
   return result;
 }
 
-
 // ==========================================
 // PREFERENCES APIs
 // ==========================================
@@ -178,17 +177,15 @@ export async function getPreferences() {
       .maybeSingle(),
   ]);
 
-  
-
   if (flatResult.error) {
     throw new Error(
-      flatResult.error.message || "Unable to fetch flat preferences."
+      flatResult.error.message || "Unable to fetch flat preferences.",
     );
   }
 
   if (flatmateResult.error) {
     throw new Error(
-      flatmateResult.error.message || "Unable to fetch flatmate preferences."
+      flatmateResult.error.message || "Unable to fetch flatmate preferences.",
     );
   }
 
@@ -221,15 +218,13 @@ export async function updatePreferences(preferencesData) {
         },
         {
           onConflict: "user_id",
-        }
+        },
       )
       .select()
       .single();
 
     if (error) {
-      throw new Error(
-        error.message || "Unable to save flat preferences."
-      );
+      throw new Error(error.message || "Unable to save flat preferences.");
     }
 
     results.push({ flatPreferences: data });
@@ -246,15 +241,13 @@ export async function updatePreferences(preferencesData) {
         },
         {
           onConflict: "user_id",
-        }
+        },
       )
       .select()
       .single();
 
     if (error) {
-      throw new Error(
-        error.message || "Unable to save flatmate preferences."
-      );
+      throw new Error(error.message || "Unable to save flatmate preferences.");
     }
 
     results.push({ flatmatePreferences: data });

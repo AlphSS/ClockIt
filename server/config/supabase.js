@@ -1,5 +1,10 @@
 import "dotenv/config";
 import { createClient } from "@supabase/supabase-js";
+import ws from "ws";
+
+if (!globalThis.WebSocket) {
+  globalThis.WebSocket = ws;
+}
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabasePublishableKey = process.env.SUPABASE_PUBLISHABLE_KEY;
@@ -27,6 +32,17 @@ export const supabase = createClient(
 export const supabaseAdmin = createClient(
   supabaseUrl,
   supabaseSecretKey,
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  }
+);
+
+export const supabaseAuth = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_PUBLISHABLE_KEY,
   {
     auth: {
       autoRefreshToken: false,

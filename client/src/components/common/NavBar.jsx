@@ -1,12 +1,14 @@
 import { useNavigate, NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../../services/supabase";
+import { getNotifications } from "../../services/notificationApi";
 
-function Navbar({ theme = "dark" }) {
+function NavBar({ theme = "dark" }) {
   const navigate = useNavigate();
 
   // ==================== USERNAME STATE ====================
   const [username, setUsername] = useState("");
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
 
   // ==================== FETCH USERNAME ====================
   useEffect(() => {
@@ -78,6 +80,22 @@ function Navbar({ theme = "dark" }) {
     };
   }, []);
 
+  // Keep the navbar badge connected to the signed-in user's stored notifications.
+  useEffect(() => {
+    let active = true;
+    const loadUnread = async () => {
+      try {
+        const result = await getNotifications("all");
+        if (active) setUnreadNotifications(result.unreadCount || 0);
+      } catch {
+        if (active) setUnreadNotifications(0);
+      }
+    };
+    loadUnread();
+    const timer = window.setInterval(loadUnread, 30000);
+    return () => { active = false; window.clearInterval(timer); };
+  }, []);
+
   // ==================== LOGOUT ====================
   async function handleLogout() {
     const { error } = await supabase.auth.signOut();
@@ -137,7 +155,7 @@ function Navbar({ theme = "dark" }) {
             Home
           </NavLink>
 
-          <NavLink to="/marketplace" className={navLinkStyle}>
+          <NavLink to="/stays" className={navLinkStyle}>
             Stay
           </NavLink>
 
@@ -145,7 +163,7 @@ function Navbar({ theme = "dark" }) {
             Roomies
           </NavLink>
 
-          <NavLink to="/stay" className={navLinkStyle}>
+          <NavLink to="/marketplace" className={navLinkStyle}>
             Marketplace
           </NavLink>
 
@@ -186,6 +204,7 @@ function Navbar({ theme = "dark" }) {
 
           {/* ==================== NOTIFICATIONS ==================== */}
           <button
+            onClick={() => navigate("/notifications")}
             aria-label="Notifications"
             className={`group relative flex h-9 w-9 items-center justify-center rounded-full transition-all duration-300 ${
               isRoomies
@@ -209,10 +228,12 @@ function Navbar({ theme = "dark" }) {
               <path d="M13.73 21a2 2 0 0 1-3.46 0" />
             </svg>
 
-            {/* Notification Badge */}
-            <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#8D3A3C] text-[10px] font-semibold text-white shadow-[0_0_8px_rgba(141,58,60,0.5)]">
-              3
-            </span>
+
+            {unreadNotifications > 0 && (
+              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#8D3A3C] px-1 text-[10px] font-semibold text-white shadow-[0_0_8px_rgba(141,58,60,0.5)]">
+                {unreadNotifications > 99 ? "99+" : unreadNotifications}
+              </span>
+            )}
           </button>
 
           {/* ==================== PROFILE AVATAR ==================== */}
@@ -235,4 +256,4 @@ function Navbar({ theme = "dark" }) {
   );
 }
 
-export default Navbar;
+export default NavBar;

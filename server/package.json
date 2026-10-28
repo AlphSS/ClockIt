@@ -6,7 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --exec \"node --env-file=.env\" server.js",
+<<<<<<< HEAD
     "start": "node server.js"
+=======
+    "start": "node server.js",
+    "build": "eslint ."
+>>>>>>> main
   },
   "keywords": [],
   "author": "",
@@ -19,11 +24,18 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "multer": "^2.4.0",
+<<<<<<< HEAD
     "nodemailer": "^10.1.7",
+=======
+    "nodemailer": "^10.0.15",
+>>>>>>> main
     "resend": "^6.25.0",
     "ws": "^8.21.3"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.13.0",
+    "globals": "^17.13.0",
     "nodemon": "^3.1.14"
   }
 }

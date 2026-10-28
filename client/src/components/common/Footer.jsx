@@ -79,7 +79,7 @@ function Footer({ theme = "dark" }) {
 
               <li>
                 <a
-                  href="#"
+                  href="stays"
                   className="transition-colors hover:text-[#EDE9E3]"
                 >
                   Find Flats
@@ -88,7 +88,7 @@ function Footer({ theme = "dark" }) {
 
               <li>
                 <a
-                  href="#"
+                  href="roomies"
                   className="transition-colors hover:text-[#EDE9E3]"
                 >
                   Find Roommates
@@ -97,22 +97,14 @@ function Footer({ theme = "dark" }) {
 
               <li>
                 <a
-                  href="#"
+                  href="marketplace"
                   className="transition-colors hover:text-[#EDE9E3]"
                 >
                   Marketplace
                 </a>
               </li>
 
-              <li>
-                <a
-                  href="#"
-                  className="transition-colors hover:text-[#EDE9E3]"
-                >
-                  Post a Listing
-                </a>
-              </li>
-
+             
             </ul>
 
           </div>
@@ -129,7 +121,7 @@ function Footer({ theme = "dark" }) {
 
               <li>
                 <a
-                  href="#"
+                  href="about"
                   className="transition-colors hover:text-[#EDE9E3]"
                 >
                   About ClockIt
@@ -179,7 +171,7 @@ function Footer({ theme = "dark" }) {
 
               <li>
                 <a
-                  href="#"
+                  href="stays"
                   className="transition-colors hover:text-[#EDE9E3]"
                 >
                   Flat Hunting Guide
@@ -188,7 +180,7 @@ function Footer({ theme = "dark" }) {
 
               <li>
                 <a
-                  href="#"
+                  href="roomies"
                   className="transition-colors hover:text-[#EDE9E3]"
                 >
                   Roommate Guide
@@ -197,7 +189,7 @@ function Footer({ theme = "dark" }) {
 
               <li>
                 <a
-                  href="#"
+                  href="marketplace"
                   className="transition-colors hover:text-[#EDE9E3]"
                 >
                   Buying & Selling

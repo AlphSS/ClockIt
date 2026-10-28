@@ -5,7 +5,6 @@ import { sendCollegeVerificationEmail } from "../utils/email.js";
 export async function getProfile(req, res) {
   try {
     const userId = req.user.id;
-
     const { data: profile, error } = await supabaseAdmin
       .from("profiles")
       .select(
@@ -305,9 +304,9 @@ export async function sendCollegeOtp(req, res) {
     console.log(`College OTP for ${email}: ${otp}`);
 
     try {
-      // await sendCollegeVerificationEmail(email, otp);
+      await sendCollegeVerificationEmail(email, otp);
     } catch (emailError) {
-      console.log("Email could not be sent. Continuing in development mode.");
+      console.error("Email verification failed:", emailError);
     }
 
     return res.status(200).json({
@@ -473,10 +472,7 @@ export async function getPreferences(req, res) {
     }
 
     if (flatmateResult.error) {
-      console.error(
-        "Get flatmate preferences error:",
-        flatmateResult.error,
-      );
+      console.error("Get flatmate preferences error:", flatmateResult.error);
 
       return res.status(500).json({
         success: false,
@@ -498,7 +494,6 @@ export async function getPreferences(req, res) {
     });
   }
 }
-
 
 // ==========================================
 // UPDATE USER PREFERENCES
@@ -551,10 +546,7 @@ export async function updatePreferences(req, res) {
         );
 
       if (flatmateError) {
-        console.error(
-          "Update flatmate preferences error:",
-          flatmateError,
-        );
+        console.error("Update flatmate preferences error:", flatmateError);
 
         return res.status(500).json({
           success: false,

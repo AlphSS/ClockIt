@@ -182,11 +182,33 @@ function MyListings() {
               </button>
             </div>
 
-            <span className="ml-hero-decoration" aria-hidden="true">
-              yours to
-              <br />
-              rehome ♡
-            </span>
+            
+<div className="ml-hero-artwork" aria-hidden="true">
+  <div className="ml-artwork-ring" />
+
+  <div className="ml-artwork-card">
+    <span className="ml-artwork-label">PRE-LOVED</span>
+
+    <span className="ml-artwork-star">✳</span>
+
+    <div className="ml-artwork-message">
+      Yours to
+      <br />
+      <em>rehome.</em>
+    </div>
+
+    <div className="ml-artwork-footer">
+      THE CAMPUS EDIT
+    </div>
+  </div>
+
+  <div className="ml-artwork-sticker">
+    A NEW
+    <br />
+    CHAPTER
+  </div>
+</div>
+
           </div>
         </section>
 

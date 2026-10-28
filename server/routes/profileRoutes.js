@@ -10,7 +10,7 @@ import {
   updatePreferences,
 } from "../controllers/profileController.js";
 
-import { requireAuth } from "../middleware/authMiddleware.js";
+import { requireAuth } from "../middleware/auth.js";
 
 
 

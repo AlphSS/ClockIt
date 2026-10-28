@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Register from "./components/auth/RegistrationForm";
-import Login from "./pages/Registration/login";
+import Login from "./pages/Registration/Login";
 import Home from "./pages/Home/Home";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import EmailConfirmed from "./components/auth/EmailConfirmed";
@@ -13,6 +13,25 @@ import Roomies from "./pages/Roomies/Roomies";
 import GoToTop from "./components/common/GoToTop";
 import About from "./pages/About/About";
 import CreateListing from "./pages/Roomies/CreateListing";
+import MyRoomieListings from "./pages/Roomies/MyRoomieListings";
+
+import Marketplace from "./pages/Marketplace/Marketplace";
+import ProductDetails from "./pages/Marketplace/ProductDetails";
+import MyListing from "./pages/Marketplace/MyListing";
+import EditProduct from "./pages/Marketplace/EditProduct";
+import AddProduct from "./pages/Marketplace/AddProduct";
+
+// Stays Pages
+import StaysHome from "./pages/stays/StaysHome";
+import StayDetails from "./pages/stays/StayDetails";
+import PostStay from "./pages/stays/PostStay";
+import EditStay from "./pages/stays/EditStay";
+import MyListings from "./pages/stays/MyListings";
+import SavedStays from "./pages/stays/SavedStays";
+import MyInquiries from "./pages/stays/MyInquiries";
+
+import Chat from "./pages/Chat/Chat";
+import Notifications from "./pages/Notifications/Notifications";
 
 function App() {
   return (
@@ -40,6 +59,23 @@ function App() {
         <Route path="/login" element={<Login />} />
 
         <Route
+          path="/chat"
+          element={
+            <ProtectedRoute>
+              <Chat />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            <ProtectedRoute>
+              <Notifications />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
           path="/profile"
           element={
             <ProtectedRoute>
@@ -47,14 +83,110 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Stays Routes */}
+        <Route path="/stays" element={<StaysHome />} />
+        <Route path="/stay" element={<StaysHome />} />
         <Route
-          path="/roomies"
+          path="/stays/post"
           element={
-           <ProtectedRoute>
-             <Roomies />
+            <ProtectedRoute>
+              <PostStay />
             </ProtectedRoute>
-           }
+          }
         />
+        <Route
+          path="/stays/create"
+          element={
+            <ProtectedRoute>
+              <PostStay />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/stays/my-listings"
+          element={
+            <ProtectedRoute>
+              <MyListings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/stays/saved"
+          element={
+            <ProtectedRoute>
+              <SavedStays />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/stays/inquiries"
+          element={
+            <ProtectedRoute>
+              <MyInquiries />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/stays/:id" element={<StayDetails />} />
+        <Route
+          path="/stays/:id/edit"
+          element={
+            <ProtectedRoute>
+              <EditStay />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="/marketplace" element={<Marketplace />} />
+        <Route path="/marketplace/product/:id" element={<ProductDetails />} />
+
+        <Route
+          path="/marketplace/my-listing"
+          element={
+            <ProtectedRoute>
+              <MyListing />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/marketplace/add"
+          element={
+            <ProtectedRoute>
+              <AddProduct />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/marketplace/product/:id/edit"
+          element={
+            <ProtectedRoute>
+              <EditProduct />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="/roomies" element={<Roomies />} />
+
+        <Route
+          path="/roomies/create"
+          element={
+            <ProtectedRoute>
+              <CreateListing />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/roomies/my-listings"
+          element={
+            <ProtectedRoute>
+              <MyRoomieListings />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/"
           element={
@@ -64,19 +196,10 @@ function App() {
           }
         />
 
-          <Route path="/about" element={<About />} />
-
-          <Route
-            path="/roomies/create"
-            element={<CreateListing />}
-          />
-
+        <Route path="/about" element={<About />} />
       </Routes>
 
-      
-
       <GoToTop />
-
     </BrowserRouter>
   );
 }

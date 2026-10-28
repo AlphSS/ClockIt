@@ -60,6 +60,7 @@ function QuickActions() {
   ];
 
   return (
+    <section id="quickaction">
     <section className="font-body bg-[#EDE9E3] px-6 py-24 text-[#2A2A29]">
       <FontImports />
       <div className="mx-auto max-w-6xl">
@@ -271,6 +272,7 @@ function QuickActions() {
           ))}
         </div>
       </div>
+    </section>
     </section>
   );
 }

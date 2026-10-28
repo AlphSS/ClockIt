@@ -1,4 +1,5 @@
 import DepthCarousel from "./DepthCarousel";
+import { Link } from "react-router-dom";
 
 function HeroSection() {
   return (
@@ -33,8 +34,9 @@ function HeroSection() {
             </p>
 
             {/* CTA */}
-            <div className="mt-10 flex flex-wrap gap-4">
-              <button
+           <div className="mt-10 flex flex-wrap gap-4">
+              <a
+                href="#quickaction"
                 className="
                   rounded-full
                   bg-[#2A2A29]
@@ -50,7 +52,7 @@ function HeroSection() {
                 "
               >
                 Explore ClockIt
-              </button>
+              </a>
             </div>
 
           </div>

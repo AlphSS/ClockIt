@@ -101,7 +101,7 @@ function EditProduct() {
         location: formData.location.trim(),
       });
 
-      navigate("/marketplace/my-listings");
+      navigate("/marketplace/my-listing");
     } catch (err) {
       console.error(err);
       setError(err.message || "Unable to update product.");
@@ -139,7 +139,7 @@ function EditProduct() {
               <div className="ep-hero-inner">
                 <button
                   type="button"
-                  onClick={() => navigate("/marketplace/my-listings")}
+                  onClick={() => navigate("/marketplace/my-listing")}
                   className="ep-back-button"
                 >
                   <ArrowLeft size={16} />
@@ -387,7 +387,7 @@ function EditProduct() {
                   <div className="ep-form-actions">
                     <button
                       type="button"
-                      onClick={() => navigate("/marketplace/my-listings")}
+                      onClick={() => navigate("/marketplace/my-listing")}
                       className="ep-button ep-button-outline"
                       disabled={saving}
                     >
