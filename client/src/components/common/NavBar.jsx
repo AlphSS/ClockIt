@@ -51,7 +51,7 @@ function NavBar({ theme = "dark" }) {
             data?.username ||
               user.user_metadata?.username ||
               user.email?.split("@")[0] ||
-              "User",
+              "User"
           );
         }
       } catch (error) {
