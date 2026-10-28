@@ -304,9 +304,9 @@ export async function sendCollegeOtp(req, res) {
     console.log(`College OTP for ${email}: ${otp}`);
 
     try {
-      // await sendCollegeVerificationEmail(email, otp);
+      await sendCollegeVerificationEmail(email, otp);
     } catch (emailError) {
-      console.log("Email could not be sent. Continuing in development mode.");
+      console.error("Email verification failed:", emailError);
     }
 
     return res.status(200).json({

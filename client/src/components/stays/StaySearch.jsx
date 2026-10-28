@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Search, SlidersHorizontal, ChevronDown, Plus, Sparkles } from "lucide-react";
+import {
+  Search,
+  SlidersHorizontal,
+  ChevronDown,
+  Plus,
+  Sparkles,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
@@ -13,11 +19,17 @@ const SORT_OPTIONS = [
   { value: "rating", label: "Highest Rated" },
 ];
 
-export default function StaySearch({ filters, updateFilter, updateFilters, onMoreFilters }) {
+export default function StaySearch({
+  filters,
+  updateFilter,
+  updateFilters,
+  onMoreFilters,
+}) {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [showSortMenu, setShowSortMenu] = useState(false);
-  const currentSort = SORT_OPTIONS.find((o) => o.value === filters.sort) || SORT_OPTIONS[0];
+  const currentSort =
+    SORT_OPTIONS.find((o) => o.value === filters.sort) || SORT_OPTIONS[0];
 
   const inputStyle = {
     backgroundColor: "#FDFAF5",
@@ -31,8 +43,12 @@ export default function StaySearch({ filters, updateFilter, updateFilters, onMor
     transition: "all 0.2s ease",
   };
 
-  function focusInput(e) { e.target.style.borderColor = "#7B3045"; }
-  function blurInput(e) { e.target.style.borderColor = "#E8E0D8"; }
+  function focusInput(e) {
+    e.target.style.borderColor = "#7B3045";
+  }
+  function blurInput(e) {
+    e.target.style.borderColor = "#E8E0D8";
+  }
 
   function handleListYourPlace() {
     if (user) {
@@ -68,8 +84,14 @@ export default function StaySearch({ filters, updateFilter, updateFilters, onMor
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
           {/* Left Text Column */}
           <div className="lg:col-span-7 space-y-5">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold tracking-[0.2em] uppercase"
-                 style={{ backgroundColor: "rgba(123,48,69,0.25)", color: "#F3EEE7", border: "1px solid rgba(123,48,69,0.4)" }}>
+            <div
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold tracking-[0.2em] uppercase"
+              style={{
+                backgroundColor: "rgba(123,48,69,0.25)",
+                color: "#F3EEE7",
+                border: "1px solid rgba(123,48,69,0.4)",
+              }}
+            >
               <Sparkles size={12} style={{ color: "#F3EEE7" }} />
               CLOCKIT STAYS
             </div>
@@ -83,11 +105,18 @@ export default function StaySearch({ filters, updateFilter, updateFilters, onMor
               }}
             >
               Find a place <br />
-              <span className="italic font-normal" style={{ color: "#E8E0D8" }}>that feels like</span> home.
+              <span className="italic font-normal" style={{ color: "#E8E0D8" }}>
+                that feels like
+              </span>{" "}
+              home.
             </h1>
 
-            <p className="text-base sm:text-lg max-w-xl leading-relaxed" style={{ color: "#9CA3AF" }}>
-              Discover student-friendly flats, rooms, and shared spaces close to campus with verified pricing and zero brokerage hassle.
+            <p
+              className="text-base sm:text-lg max-w-xl leading-relaxed"
+              style={{ color: "#9CA3AF" }}
+            >
+              Discover student-friendly flats, rooms, and shared spaces close to
+              campus with verified pricing and zero brokerage hassle.
             </p>
 
             {/* CTAs */}
@@ -96,11 +125,30 @@ export default function StaySearch({ filters, updateFilter, updateFilters, onMor
                 onClick={scrollToGrid}
                 className="px-6 py-3.5 rounded-xl text-sm font-bold tracking-wide transition-all shadow-md"
                 style={{ backgroundColor: "#7B3045", color: "#F3EEE7" }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#6a2638"}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "#7B3045"}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.backgroundColor = "#6a2638")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.backgroundColor = "#7B3045")
+                }
               >
                 Explore stays
               </button>
+
+              {/* My Listings shortcut */}
+              <div className="flex flex-wrap items-center gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => navigate("/stays/my-listings")}
+                  className="inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-bold shadow-sm transition hover:opacity-90"
+                  style={{
+                    backgroundColor: "#7B3045",
+                    color: "#FDFAF5",
+                  }}
+                >
+                  My Listings
+                </button>
+              </div>
 
               <button
                 onClick={handleListYourPlace}
@@ -110,8 +158,14 @@ export default function StaySearch({ filters, updateFilter, updateFilters, onMor
                   border: "1.5px solid rgba(243,238,231,0.18)",
                   color: "#F3EEE7",
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "rgba(243,238,231,0.16)"}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "rgba(243,238,231,0.08)"}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.backgroundColor =
+                    "rgba(243,238,231,0.16)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.backgroundColor =
+                    "rgba(243,238,231,0.08)")
+                }
               >
                 <Plus size={16} /> List your place
               </button>
@@ -140,12 +194,19 @@ export default function StaySearch({ filters, updateFilter, updateFilters, onMor
                 color: "#18100E",
               }}
             >
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg" style={{ backgroundColor: "#7B3045", color: "#FDFAF5" }}>
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg"
+                style={{ backgroundColor: "#7B3045", color: "#FDFAF5" }}
+              >
                 100%
               </div>
               <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Student Verified</p>
-                <p className="text-xs font-medium text-gray-800">Close to Pune Campuses</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-500">
+                  Student Verified
+                </p>
+                <p className="text-xs font-medium text-gray-800">
+                  Close to Pune Campuses
+                </p>
               </div>
             </div>
           </div>
@@ -156,11 +217,18 @@ export default function StaySearch({ filters, updateFilter, updateFilters, onMor
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-3 items-end">
             {/* Search Input */}
             <div className="md:col-span-5">
-              <label className="block text-xs font-semibold uppercase tracking-widest mb-1.5" style={{ color: "#9CA3AF" }}>
+              <label
+                className="block text-xs font-semibold uppercase tracking-widest mb-1.5"
+                style={{ color: "#9CA3AF" }}
+              >
                 Keyword Search
               </label>
               <div className="relative">
-                <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: "#9CA3AF" }} />
+                <Search
+                  size={16}
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2"
+                  style={{ color: "#9CA3AF" }}
+                />
                 <input
                   type="text"
                   placeholder="Search title, area, college, locality..."
@@ -175,7 +243,10 @@ export default function StaySearch({ filters, updateFilter, updateFilters, onMor
 
             {/* Location Input */}
             <div className="md:col-span-3">
-              <label className="block text-xs font-semibold uppercase tracking-widest mb-1.5" style={{ color: "#9CA3AF" }}>
+              <label
+                className="block text-xs font-semibold uppercase tracking-widest mb-1.5"
+                style={{ color: "#9CA3AF" }}
+              >
                 Location / Area
               </label>
               <input
@@ -191,7 +262,10 @@ export default function StaySearch({ filters, updateFilter, updateFilters, onMor
 
             {/* BHK Select */}
             <div className="md:col-span-2">
-              <label className="block text-xs font-semibold uppercase tracking-widest mb-1.5" style={{ color: "#9CA3AF" }}>
+              <label
+                className="block text-xs font-semibold uppercase tracking-widest mb-1.5"
+                style={{ color: "#9CA3AF" }}
+              >
                 BHK
               </label>
               <select
@@ -219,8 +293,14 @@ export default function StaySearch({ filters, updateFilter, updateFilters, onMor
                   border: "1.5px solid rgba(243,238,231,0.18)",
                   color: "#F3EEE7",
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "rgba(243,238,231,0.16)"}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "rgba(243,238,231,0.08)"}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.backgroundColor =
+                    "rgba(243,238,231,0.16)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.backgroundColor =
+                    "rgba(243,238,231,0.08)")
+                }
               >
                 <SlidersHorizontal size={15} />
                 Filters
@@ -230,7 +310,10 @@ export default function StaySearch({ filters, updateFilter, updateFilters, onMor
         </div>
 
         {/* Sort Bar */}
-        <div className="mt-4 flex items-center justify-between text-xs" style={{ color: "#9CA3AF" }}>
+        <div
+          className="mt-4 flex items-center justify-between text-xs"
+          style={{ color: "#9CA3AF" }}
+        >
           <span>Find housing tailored for university life</span>
           <div className="relative">
             <button
@@ -243,25 +326,41 @@ export default function StaySearch({ filters, updateFilter, updateFilters, onMor
               }}
             >
               <span>Sort: {currentSort.label}</span>
-              <ChevronDown size={11} className={showSortMenu ? "rotate-180" : ""} />
+              <ChevronDown
+                size={11}
+                className={showSortMenu ? "rotate-180" : ""}
+              />
             </button>
             {showSortMenu && (
               <div
                 className="absolute right-0 top-full mt-1.5 w-48 rounded-xl py-1 z-30 shadow-2xl"
-                style={{ backgroundColor: "#FDFAF5", border: "1px solid #E8E0D8" }}
+                style={{
+                  backgroundColor: "#FDFAF5",
+                  border: "1px solid #E8E0D8",
+                }}
               >
                 {SORT_OPTIONS.map((opt) => (
                   <button
                     key={opt.value}
-                    onClick={() => { updateFilter("sort", opt.value); setShowSortMenu(false); }}
+                    onClick={() => {
+                      updateFilter("sort", opt.value);
+                      setShowSortMenu(false);
+                    }}
                     className="w-full text-left px-4 py-2 text-sm transition-colors"
                     style={{
                       color: filters.sort === opt.value ? "#7B3045" : "#18100E",
-                      backgroundColor: filters.sort === opt.value ? "#F3EEE7" : "transparent",
+                      backgroundColor:
+                        filters.sort === opt.value ? "#F3EEE7" : "transparent",
                       fontWeight: filters.sort === opt.value ? "600" : "400",
                     }}
-                    onMouseEnter={(e) => { if (filters.sort !== opt.value) e.currentTarget.style.backgroundColor = "#F8F4EF"; }}
-                    onMouseLeave={(e) => { if (filters.sort !== opt.value) e.currentTarget.style.backgroundColor = "transparent"; }}
+                    onMouseEnter={(e) => {
+                      if (filters.sort !== opt.value)
+                        e.currentTarget.style.backgroundColor = "#F8F4EF";
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.sort !== opt.value)
+                        e.currentTarget.style.backgroundColor = "transparent";
+                    }}
                   >
                     {opt.label}
                   </button>

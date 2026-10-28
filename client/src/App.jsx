@@ -8,10 +8,12 @@ import EmailConfirmed from "./components/auth/EmailConfirmed";
 import VerifyEmail from "./components/auth/VerifyEmail";
 import AccountCreated from "./components/auth/AccountCreated";
 import Profile from "./components/common/Profile";
+
 import Roomies from "./pages/Roomies/Roomies";
 import GoToTop from "./components/common/GoToTop";
 import About from "./pages/About/About";
 import CreateListing from "./pages/Roomies/CreateListing";
+import MyRoomieListings from "./pages/Roomies/MyRoomieListings";
 
 import Marketplace from "./pages/Marketplace/Marketplace";
 import ProductDetails from "./pages/Marketplace/ProductDetails";
@@ -27,6 +29,7 @@ import EditStay from "./pages/stays/EditStay";
 import MyListings from "./pages/stays/MyListings";
 import SavedStays from "./pages/stays/SavedStays";
 import MyInquiries from "./pages/stays/MyInquiries";
+
 import Chat from "./pages/Chat/Chat";
 import Notifications from "./pages/Notifications/Notifications";
 
@@ -56,6 +59,23 @@ function App() {
         <Route path="/login" element={<Login />} />
 
         <Route
+          path="/chat"
+          element={
+            <ProtectedRoute>
+              <Chat />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            <ProtectedRoute>
+              <Notifications />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
           path="/profile"
           element={
             <ProtectedRoute>
@@ -64,7 +84,6 @@ function App() {
           }
         />
 
-       
         {/* Stays Routes */}
         <Route path="/stays" element={<StaysHome />} />
         <Route path="/stay" element={<StaysHome />} />
@@ -121,19 +140,53 @@ function App() {
         <Route path="/marketplace" element={<Marketplace />} />
         <Route path="/marketplace/product/:id" element={<ProductDetails />} />
 
-        <Route path="/marketplace/my-listing" element={<MyListing />} />
-
-        <Route path="/marketplace/product/:id/edit" element={<EditProduct />} />
-
-        <Route path="/marketplace/add" element={<AddProduct />} />
         <Route
-          path="/roomies"
+          path="/marketplace/my-listing"
           element={
             <ProtectedRoute>
-              <Roomies />
+              <MyListing />
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/marketplace/add"
+          element={
+            <ProtectedRoute>
+              <AddProduct />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/marketplace/product/:id/edit"
+          element={
+            <ProtectedRoute>
+              <EditProduct />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="/roomies" element={<Roomies />} />
+
+        <Route
+          path="/roomies/create"
+          element={
+            <ProtectedRoute>
+              <CreateListing />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/roomies/my-listings"
+          element={
+            <ProtectedRoute>
+              <MyRoomieListings />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/"
           element={
@@ -144,17 +197,7 @@ function App() {
         />
 
         <Route path="/about" element={<About />} />
-
-        <Route path="/roomies/create" element={<CreateListing />} />
-
-        <Route path="/chat" element={<Chat />} />
-
-        <Route
-          path="/notifications"
-          element={<Notifications />}
-        />
       </Routes>
-      
 
       <GoToTop />
     </BrowserRouter>

@@ -1,8 +1,5 @@
 import "dotenv/config";
 
-console.log("SERVER FILE STARTED");
-console.log("RESEND KEY LOADED:", !!process.env.RESEND_API_KEY);
-
 import express from "express";
 import cors from "cors";
 
@@ -13,6 +10,8 @@ import marketplaceRoutes from "./routes/marketplaceRoutes.js";
 import stayRoutes from "./routes/stayRoutes.js";
 import areaRoutes from "./routes/areaRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import chatRoutes from "./routes/chatRoutes.js";
+import notificationRoutes from "./routes/notificationRoutes.js";
 
 const app = express();
 
@@ -26,7 +25,11 @@ app.use("/api/marketplace", marketplaceRoutes);
 app.use("/api/stays", stayRoutes);
 app.use("/api/areas", areaRoutes);
 app.use("/api/users", userRoutes);
-
+app.use("/api/chat", chatRoutes);
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/stays", stayRoutes);
+app.use("/api/areas", areaRoutes);
+app.use("/api/users", userRoutes);
 
 app.get("/", (req, res) => {
   res.json({

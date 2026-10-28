@@ -1,490 +1,342 @@
-import { useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Bell,
   MessageCircle,
-  Home,
-  ShoppingBag,
-  Users,
   CalendarDays,
   CheckCircle2,
   Heart,
   Eye,
-  Settings,
-  MoreVertical,
+  LoaderCircle,
+  BellRing,
 } from "lucide-react";
-
 import NavBar from "../../components/common/NavBar";
 import Footer from "../../components/common/Footer";
-
+import {
+  getNotifications,
+  markAllNotificationsRead,
+  markNotificationRead,
+} from "../../services/notificationApi";
 import "./Notifications.css";
 
-
-const initialNotifications = [
-  {
-    id: 1,
-    type: "roomies",
-    icon: Heart,
-    title: "Sarah liked your Roomie profile",
-    description: "You have a new potential roommate match.",
-    time: "10:42 AM",
-    section: "Today",
-    unread: true,
-  },
-
-  {
-    id: 2,
-    type: "chat",
-    icon: MessageCircle,
-    title: "New message from Rahul",
-    description: "Hey, is the room still available?",
-    time: "9:18 AM",
-    section: "Today",
-    unread: true,
-  },
-
-  {
-    id: 3,
-    type: "marketplace",
-    icon: Eye,
-    title: "Your marketplace listing was viewed",
-    description: "Your study table listing received 8 new views.",
-    time: "8:45 AM",
-    section: "Today",
-    unread: true,
-  },
-
-  {
-    id: 4,
-    type: "stays",
-    icon: CalendarDays,
-    title: "Stay request received",
-    description: "Ananya has requested to book your listed stay.",
-    time: "Yesterday",
-    section: "Earlier",
-    unread: false,
-  },
-
-  {
-    id: 5,
-    type: "roomies",
-    icon: Users,
-    title: "New roomie match",
-    description: "You have a new match based on your preferences.",
-    time: "Yesterday",
-    section: "Earlier",
-    unread: false,
-  },
-
-  {
-    id: 6,
-    type: "marketplace",
-    icon: ShoppingBag,
-    title: "Your item was saved",
-    description: "Someone saved your desk lamp listing.",
-    time: "Monday",
-    section: "Earlier",
-    unread: false,
-  },
-
-  {
-    id: 7,
-    type: "system",
-    icon: CheckCircle2,
-    title: "Profile updated successfully",
-    description: "Your ClockIt profile information has been saved.",
-    time: "Monday",
-    section: "Earlier",
-    unread: false,
-  },
+const filters = [
+  { id: "all", label: "All" },
+  { id: "unread", label: "Unread" },
+  { id: "roomies", label: "Roomies" },
+  { id: "marketplace", label: "Marketplace" },
+  { id: "chat", label: "Chat" },
+  { id: "stays", label: "Stays" },
+  { id: "system", label: "System" },
 ];
+const icons = {
+  chat: MessageCircle,
+  roomies: Heart,
+  marketplace: Eye,
+  stays: CalendarDays,
+  system: CheckCircle2,
+};
+const relativeTime = (value) => {
+  const date = new Date(value);
+  const seconds = Math.max(0, Math.floor((Date.now() - date.getTime()) / 1000));
+  if (!Number.isFinite(seconds)) return "";
+  if (seconds < 60) return "Just now";
+  if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+  if (seconds < 172800) return "Yesterday";
+  if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
+  return date.toLocaleDateString([], { month: "short", day: "numeric" });
+};
+const sectionName = (value) => {
+  const date = new Date(value);
+  const now = new Date();
+  if (date.toDateString() === now.toDateString()) return "Today";
+  const yesterday = new Date(now);
+  yesterday.setDate(now.getDate() - 1);
+  if (date.toDateString() === yesterday.toDateString()) return "Yesterday";
+  return "Earlier";
+};
+const getSafeActionUrl = (actionUrl) => {
+  if (typeof actionUrl !== "string") return null;
 
+  // Allow only internal ClockIt paths.
+  if (!actionUrl.startsWith("/") || actionUrl.startsWith("//")) {
+    return null;
+  }
 
-function Notifications() {
+  try {
+    const url = new URL(actionUrl, window.location.origin);
 
-  const [notifications, setNotifications] =
-    useState(initialNotifications);
-
-  const [activeFilter, setActiveFilter] = useState("all");
-
-
-  const unreadCount = notifications.filter(
-    (notification) => notification.unread
-  ).length;
-
-
-  const markAllAsRead = () => {
-
-    setNotifications(
-      notifications.map((notification) => ({
-        ...notification,
-        unread: false,
-      }))
-    );
-
-  };
-
-
-  const markAsRead = (id) => {
-
-    setNotifications(
-      notifications.map((notification) =>
-        notification.id === id
-          ? { ...notification, unread: false }
-          : notification
-      )
-    );
-
-  };
-
-
-  const filteredNotifications = notifications.filter(
-    (notification) => {
-
-      if (activeFilter === "all") {
-        return true;
-      }
-
-      if (activeFilter === "unread") {
-        return notification.unread;
-      }
-
-      return notification.type === activeFilter;
-
+    if (url.origin !== window.location.origin) {
+      return null;
     }
-  );
 
+    const allowedPaths = [
+      "/chat",
+      "/notifications",
+      "/marketplace",
+      "/stays",
+      "/stay",
+      "/roomies",
+      "/profile",
+    ];
 
-  const todayNotifications = filteredNotifications.filter(
-    (notification) => notification.section === "Today"
-  );
-
-
-  const earlierNotifications = filteredNotifications.filter(
-    (notification) => notification.section === "Earlier"
-  );
-
-
-  const renderNotification = (notification) => {
-
-    const Icon = notification.icon;
-
-    return (
-      <button
-        key={notification.id}
-        className={`notification-card ${
-          notification.unread ? "unread" : ""
-        }`}
-        onClick={() => markAsRead(notification.id)}
-      >
-
-        {/* Notification Icon */}
-
-        <div className={`notification-icon ${notification.type}`}>
-
-          <Icon size={19} />
-
-        </div>
-
-
-        {/* Content */}
-
-        <div className="notification-content">
-
-          <div className="notification-main">
-
-            <h3>
-              {notification.title}
-            </h3>
-
-            <span className="notification-time">
-              {notification.time}
-            </span>
-
-          </div>
-
-
-          <p>
-            {notification.description}
-          </p>
-
-        </div>
-
-
-        {/* Unread indicator */}
-
-        {notification.unread && (
-          <span className="notification-unread-dot"></span>
-        )}
-
-      </button>
+    const isAllowed = allowedPaths.some(
+      (path) => url.pathname === path || url.pathname.startsWith(`${path}/`),
     );
-  };
 
+    return isAllowed ? `${url.pathname}${url.search}${url.hash}` : null;
+  } catch {
+    return null;
+  }
+};
+
+export default function Notifications() {
+  const navigate = useNavigate();
+  const [notifications, setNotifications] = useState([]);
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [busyId, setBusyId] = useState("");
+  const [error, setError] = useState("");
+
+  const loadNotifications = useCallback(async (silent = false) => {
+    try {
+      if (!silent) setLoading(true);
+      const result = await getNotifications("all");
+      setNotifications(result.notifications || []);
+      setUnreadCount(result.unreadCount || 0);
+      setError("");
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      if (!silent) setLoading(false);
+    }
+  }, []);
+  useEffect(() => {
+    loadNotifications();
+  }, [loadNotifications]);
+  useEffect(() => {
+    const timer = window.setInterval(() => loadNotifications(true), 15000);
+    return () => window.clearInterval(timer);
+  }, [loadNotifications]);
+
+  const filteredNotifications = useMemo(
+    () =>
+      notifications.filter((n) => {
+        if (activeFilter === "unread") return !n.is_read;
+        return activeFilter === "all" || n.type === activeFilter;
+      }),
+    [notifications, activeFilter],
+  );
+  const groups = useMemo(() => {
+    const order = ["Today", "Yesterday", "Earlier"];
+    return order
+      .map((name) => ({
+        name,
+        items: filteredNotifications.filter(
+          (n) => sectionName(n.created_at) === name,
+        ),
+      }))
+      .filter((group) => group.items.length);
+  }, [filteredNotifications]);
+
+  async function handleMarkRead(notification) {
+    if (notification.is_read || busyId) {
+      const target = getSafeActionUrl(notification.action_url);
+
+      if (target) navigate(target);
+      return;
+    }
+    setBusyId(notification.id);
+    setError("");
+    try {
+      await markNotificationRead(notification.id);
+      setNotifications((current) =>
+        current.map((n) =>
+          n.id === notification.id ? { ...n, is_read: true } : n,
+        ),
+      );
+      setUnreadCount((count) => Math.max(0, count - 1));
+      const target = getSafeActionUrl(notification.action_url);
+
+      if (target) navigate(target);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setBusyId("");
+    }
+  }
+  async function handleMarkAllRead() {
+    if (!unreadCount || busyId) return;
+    setBusyId("all");
+    setError("");
+    try {
+      await markAllNotificationsRead();
+      setNotifications((current) =>
+        current.map((n) => ({ ...n, is_read: true })),
+      );
+      setUnreadCount(0);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setBusyId("");
+    }
+  }
 
   return (
-
-    <div className="notifications-page-wrapper">
-
-      {/* ================= NAVBAR ================= */}
-
+    <div className="clockit-notifications-page">
       <NavBar />
-
-
-      {/* ================= NOTIFICATIONS ================= */}
-
       <main className="notifications-page">
-
         <div className="notifications-container">
-
-
-          {/* ================= HEADER ================= */}
-
-          <div className="notifications-header">
-
-            <div>
-
-              <div className="notifications-title">
-
-                <div className="notification-title-icon">
-
-                  <Bell size={23} />
-
-                </div>
-
-                <div>
-
-                  <h1>Notifications</h1>
-
-                  <p>
-                    Stay updated with everything happening on ClockIt.
-                  </p>
-
-                </div>
-
+          <header className="notifications-header">
+            <div className="notifications-title">
+              <div className="notification-title-icon">
+                <Bell size={23} />
               </div>
-
+              <div>
+                <span className="notifications-eyebrow">
+                  YOUR CLOCKIT ACTIVITY
+                </span>
+                <h1>Notifications</h1>
+                <p>
+                  Stay updated with everything happening in your campus
+                  community.
+                </p>
+              </div>
             </div>
-
-
             <button
               className="mark-all-btn"
-              onClick={markAllAsRead}
-              disabled={unreadCount === 0}
+              onClick={handleMarkAllRead}
+              disabled={!unreadCount || busyId === "all"}
             >
-
-              <CheckCircle2 size={17} />
-
+              {busyId === "all" ? (
+                <LoaderCircle size={17} className="spin" />
+              ) : (
+                <CheckCircle2 size={17} />
+              )}{" "}
               Mark all as read
-
             </button>
-
-          </div>
-
-
-          {/* ================= SUMMARY ================= */}
-
-          <div className="notification-summary">
-
-            <div className="summary-item">
-
-              <span className="summary-number">
-                {notifications.length}
-              </span>
-
-              <span className="summary-label">
-                Total
-              </span>
-
+          </header>
+          {error && (
+            <div className="notifications-error" role="alert">
+              {error}
+              <button onClick={() => setError("")}>Dismiss</button>
             </div>
-
-
-            <div className="summary-divider"></div>
-
-
+          )}
+          <div className="notification-summary">
             <div className="summary-item">
-
+              <span className="summary-number">{notifications.length}</span>
+              <span className="summary-label">Recent notifications</span>
+            </div>
+            <div className="summary-divider" />
+            <div className="summary-item">
               <span className="summary-number unread-number">
                 {unreadCount}
               </span>
-
-              <span className="summary-label">
-                Unread
-              </span>
-
+              <span className="summary-label">Unread</span>
             </div>
-
+            <div className="summary-divider" />
+            <div className="summary-item">
+              <span className="summary-number">
+                {notifications.length - unreadCount}
+              </span>
+              <span className="summary-label">Read</span>
+            </div>
           </div>
-
-
-          {/* ================= FILTERS ================= */}
-
-          <div className="notification-filters">
-
-            <button
-              className={
-                activeFilter === "all"
-                  ? "active"
-                  : ""
-              }
-              onClick={() => setActiveFilter("all")}
-            >
-              All
-            </button>
-
-
-            <button
-              className={
-                activeFilter === "unread"
-                  ? "active"
-                  : ""
-              }
-              onClick={() => setActiveFilter("unread")}
-            >
-              Unread
-
-              {unreadCount > 0 && (
-                <span className="filter-count">
-                  {unreadCount}
-                </span>
-              )}
-
-            </button>
-
-
-            <button
-              className={
-                activeFilter === "roomies"
-                  ? "active"
-                  : ""
-              }
-              onClick={() => setActiveFilter("roomies")}
-            >
-              Roomies
-            </button>
-
-
-            <button
-              className={
-                activeFilter === "marketplace"
-                  ? "active"
-                  : ""
-              }
-              onClick={() =>
-                setActiveFilter("marketplace")
-              }
-            >
-              Marketplace
-            </button>
-
-
-            <button
-              className={
-                activeFilter === "chat"
-                  ? "active"
-                  : ""
-              }
-              onClick={() => setActiveFilter("chat")}
-            >
-              Chat
-            </button>
-
-
-            <button
-              className={
-                activeFilter === "stays"
-                  ? "active"
-                  : ""
-              }
-              onClick={() =>
-                setActiveFilter("stays")
-              }
-            >
-              Stays
-            </button>
-
+          <div
+            className="notification-filters"
+            role="tablist"
+            aria-label="Filter notifications"
+          >
+            {filters.map((filter) => (
+              <button
+                key={filter.id}
+                role="tab"
+                aria-selected={activeFilter === filter.id}
+                className={activeFilter === filter.id ? "active" : ""}
+                onClick={() => setActiveFilter(filter.id)}
+              >
+                {filter.label}
+                {filter.id === "unread" && unreadCount > 0 && (
+                  <span className="filter-count">{unreadCount}</span>
+                )}
+              </button>
+            ))}
           </div>
-
-
-          {/* ================= NOTIFICATION LIST ================= */}
-
           <div className="notifications-list">
-
-
-            {/* TODAY */}
-
-            {todayNotifications.length > 0 && (
-
-              <section className="notification-section">
-
-                <div className="section-heading">
-
-                  <span>Today</span>
-
-                </div>
-
-                {todayNotifications.map(renderNotification)}
-
-              </section>
-
-            )}
-
-
-            {/* EARLIER */}
-
-            {earlierNotifications.length > 0 && (
-
-              <section className="notification-section">
-
-                <div className="section-heading">
-
-                  <span>Earlier</span>
-
-                </div>
-
-                {earlierNotifications.map(renderNotification)}
-
-              </section>
-
-            )}
-
-
-            {/* EMPTY STATE */}
-
-            {filteredNotifications.length === 0 && (
-
-              <div className="empty-notifications">
-
-                <div className="empty-icon">
-
-                  <Bell size={30} />
-
-                </div>
-
-                <h2>No notifications here</h2>
-
-                <p>
-                  You're all caught up. New activity will
-                  appear here.
-                </p>
-
+            {loading ? (
+              <div className="notifications-state">
+                <LoaderCircle className="spin" size={25} />
+                <span>Loading your notifications...</span>
               </div>
-
+            ) : groups.length ? (
+              groups.map((group) => (
+                <section className="notification-section" key={group.name}>
+                  <div className="section-heading">
+                    <span>{group.name}</span>
+                    <span>{group.items.length}</span>
+                  </div>
+                  {group.items.map((notification) => {
+                    const Icon = icons[notification.type] || BellRing;
+                    return (
+                      <button
+                        key={notification.id}
+                        className={`notification-card ${notification.is_read ? "" : "unread"}`}
+                        onClick={() => handleMarkRead(notification)}
+                        disabled={busyId === notification.id}
+                      >
+                        <div
+                          className={`notification-icon ${notification.type}`}
+                        >
+                          <Icon size={19} />
+                        </div>
+                        <div className="notification-content">
+                          <div className="notification-main">
+                            <h3>{notification.title}</h3>
+                            <span className="notification-time">
+                              {relativeTime(notification.created_at)}
+                            </span>
+                          </div>
+                          <p>
+                            {notification.description ||
+                              "There's new activity in your ClockIt account."}
+                          </p>
+                        </div>
+                        {!notification.is_read && (
+                          <span
+                            className="notification-unread-dot"
+                            aria-label="Unread"
+                          />
+                        )}
+                        {notification.action_url && (
+                          <span className="notification-open-hint">Open</span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </section>
+              ))
+            ) : (
+              <div className="empty-notifications">
+                <div className="empty-icon">
+                  <Bell size={29} />
+                </div>
+                <h2>
+                  {activeFilter === "unread"
+                    ? "You're all caught up"
+                    : "No notifications here"}
+                </h2>
+                <p>
+                  {activeFilter === "unread"
+                    ? "New activity will appear here when you receive it."
+                    : "When something happens in your ClockIt community, you'll see it here."}
+                </p>
+              </div>
             )}
-
           </div>
-
         </div>
-
       </main>
-
-
-      {/* ================= FOOTER ================= */}
-
       <Footer />
-
     </div>
   );
 }
-
-
-export default Notifications;

@@ -1,13 +1,14 @@
 import { useNavigate, NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../../services/supabase";
-import { Link } from "react-router-dom";
+import { getNotifications } from "../../services/notificationApi";
 
 function NavBar({ theme = "dark" }) {
   const navigate = useNavigate();
 
   // ==================== USERNAME STATE ====================
   const [username, setUsername] = useState("");
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
 
   // ==================== FETCH USERNAME ====================
   useEffect(() => {
@@ -77,6 +78,22 @@ function NavBar({ theme = "dark" }) {
       isMounted = false;
       subscription.unsubscribe();
     };
+  }, []);
+
+  // Keep the navbar badge connected to the signed-in user's stored notifications.
+  useEffect(() => {
+    let active = true;
+    const loadUnread = async () => {
+      try {
+        const result = await getNotifications("all");
+        if (active) setUnreadNotifications(result.unreadCount || 0);
+      } catch {
+        if (active) setUnreadNotifications(0);
+      }
+    };
+    loadUnread();
+    const timer = window.setInterval(loadUnread, 30000);
+    return () => { active = false; window.clearInterval(timer); };
   }, []);
 
   // ==================== LOGOUT ====================
@@ -185,40 +202,39 @@ function NavBar({ theme = "dark" }) {
             </svg>
           </button>
 
-        {/* ==================== NOTIFICATIONS ==================== */}
+          {/* ==================== NOTIFICATIONS ==================== */}
+          <button
+            onClick={() => navigate("/notifications")}
+            aria-label="Notifications"
+            className={`group relative flex h-9 w-9 items-center justify-center rounded-full transition-all duration-300 ${
+              isRoomies
+                ? "text-[#C6B39A] hover:text-[#F5EEE6]"
+                : "text-gray-400 hover:text-white"
+            }`}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="19"
+              height="19"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.7"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="transition-transform duration-300 group-hover:scale-110"
+            >
+              <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
+              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+            </svg>
 
-<Link
-  to="/notifications"
-  aria-label="Notifications"
-  className={`group relative flex h-9 w-9 items-center justify-center rounded-full transition-all duration-300 ${
-    isRoomies
-      ? "text-[#C6B39A] hover:text-[#F5EEE6]"
-      : "text-gray-400 hover:text-white"
-  }`}
->
-  
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="19"
-    height="19"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.7"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="transition-transform duration-300 group-hover:scale-110"
-  >
-    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
-    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-  </svg>
 
-  {/* Notification Badge */}
-  <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#8D3A3C] text-[10px] font-semibold text-white shadow-[0_0_8px_rgba(141,58,60,0.5)]">
-    3
-  </span>
-
-</Link>
+            {unreadNotifications > 0 && (
+              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#8D3A3C] px-1 text-[10px] font-semibold text-white shadow-[0_0_8px_rgba(141,58,60,0.5)]">
+                {unreadNotifications > 99 ? "99+" : unreadNotifications}
+              </span>
+            )}
+          </button>
 
           {/* ==================== PROFILE AVATAR ==================== */}
           <button
