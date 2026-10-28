@@ -13,6 +13,7 @@ import Roomies from "./pages/Roomies/Roomies";
 import GoToTop from "./components/common/GoToTop";
 import About from "./pages/About/About";
 import CreateListing from "./pages/Roomies/CreateListing";
+import MyRoomieListings from "./pages/Roomies/MyRoomieListings";
 
 import Marketplace from "./pages/Marketplace/Marketplace";
 import ProductDetails from "./pages/Marketplace/ProductDetails";
@@ -28,6 +29,7 @@ import EditStay from "./pages/stays/EditStay";
 import MyListings from "./pages/stays/MyListings";
 import SavedStays from "./pages/stays/SavedStays";
 import MyInquiries from "./pages/stays/MyInquiries";
+
 import Chat from "./pages/Chat/Chat";
 import Notifications from "./pages/Notifications/Notifications";
 
@@ -165,12 +167,7 @@ function App() {
           }
         />
 
-        <Route
-          path="/roomies"
-          element={
-              <Roomies />
-          }
-        />
+        <Route path="/roomies" element={<Roomies />} />
 
         <Route
           path="/roomies/create"
@@ -180,6 +177,16 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/roomies/my-listings"
+          element={
+            <ProtectedRoute>
+              <MyRoomieListings />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/"
           element={

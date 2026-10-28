@@ -19,9 +19,16 @@ export default function StaysHome() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   const {
-    stays, loading, error, filters,
-    updateFilter, updateFilters, resetFilters,
-    loadMore, hasMore, total,
+    stays,
+    loading,
+    error,
+    filters,
+    updateFilter,
+    updateFilters,
+    resetFilters,
+    loadMore,
+    hasMore,
+    total,
   } = useStays();
 
   const { isSaved, toggle: toggleSave, loading: saveLoading } = useSavedStays();
@@ -46,7 +53,9 @@ export default function StaysHome() {
   };
 
   const isSearching = Object.values(filters).some((v) =>
-    Array.isArray(v) ? v.length > 0 : v && v !== "any" && v !== "all" && v !== "recommended"
+    Array.isArray(v)
+      ? v.length > 0
+      : v && v !== "any" && v !== "all" && v !== "recommended",
   );
 
   return (
@@ -54,6 +63,7 @@ export default function StaysHome() {
       <NavBar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-8">
+        
         {/* Search hero */}
         <StaySearch
           filters={filters}
@@ -89,21 +99,29 @@ export default function StaysHome() {
               <button
                 onClick={() => setMobileFiltersOpen(true)}
                 className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all"
-                style={{ backgroundColor: "#FDFAF5", border: "1.5px solid #E8E0D8", color: "#18100E", boxShadow: "0 2px 8px rgba(24,16,14,0.06)" }}
+                style={{
+                  backgroundColor: "#FDFAF5",
+                  border: "1.5px solid #E8E0D8",
+                  color: "#18100E",
+                  boxShadow: "0 2px 8px rgba(24,16,14,0.06)",
+                }}
               >
                 <SlidersHorizontal size={15} />
                 Filters
                 {total > 0 && (
-                  <span className="text-xs font-bold" style={{ color: "#7B3045" }}>({total})</span>
+                  <span
+                    className="text-xs font-bold"
+                    style={{ color: "#7B3045" }}
+                  >
+                    ({total})
+                  </span>
                 )}
               </button>
               <PostFlatCard />
             </div>
 
             {/* Featured flats (only when not searching) */}
-            {!isSearching && (
-              <FeaturedStays {...sharedCardProps} />
-            )}
+            {!isSearching && <FeaturedStays {...sharedCardProps} />}
 
             {/* All / Filtered flats */}
             <StayGrid
@@ -112,7 +130,11 @@ export default function StaysHome() {
               error={error}
               hasMore={hasMore}
               onLoadMore={loadMore}
-              title={isSearching ? `Search Results ${total > 0 ? `(${total})` : ""}` : "All Flats"}
+              title={
+                isSearching
+                  ? `Search Results ${total > 0 ? `(${total})` : ""}`
+                  : "All Flats"
+              }
               {...sharedCardProps}
             />
 
@@ -134,13 +156,22 @@ export default function StaysHome() {
             style={{ backgroundColor: "#F3EEE7" }}
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-sm uppercase tracking-widest" style={{ color: "#18100E" }}>Filters</h3>
+              <h3
+                className="font-bold text-sm uppercase tracking-widest"
+                style={{ color: "#18100E" }}
+              >
+                Filters
+              </h3>
               <button
                 onClick={() => setMobileFiltersOpen(false)}
                 className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
                 style={{ color: "#9CA3AF" }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#E8E0D8"}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.backgroundColor = "#E8E0D8")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.backgroundColor = "transparent")
+                }
               >
                 <X size={16} />
               </button>

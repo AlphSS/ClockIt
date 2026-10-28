@@ -23,18 +23,18 @@ function Roomies() {
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
-      loadProfile();
-      loadRoomies();
+    loadProfile();
+    loadRoomies();
   }, []);
-  
+
   async function loadProfile() {
-  try {
-    const data = await getProfile();
-    setProfile(data);
-  } catch (err) {
-    console.error("Profile loading error:", err);
+    try {
+      const data = await getProfile();
+      setProfile(data);
+    } catch (err) {
+      console.error("Profile loading error:", err);
+    }
   }
-}
 
   async function loadRoomies(filters = {}) {
     try {
@@ -54,18 +54,13 @@ function Roomies() {
 
         const tags = [
           ...(listing.amenities || []),
-          ...(listing.furnishing
-            ? [listing.furnishing]
-            : []),
+          ...(listing.furnishing ? [listing.furnishing] : []),
         ];
 
         return {
           id: listing.id,
 
-          name:
-            profile?.full_name ||
-            profile?.username ||
-            "ClockIt User",
+          name: profile?.full_name || profile?.username || "ClockIt User",
 
           age: null,
 
@@ -81,12 +76,13 @@ function Roomies() {
           budget,
 
           moveIn: listing.available_from
-            ? new Date(
-                `${listing.available_from}T00:00:00`
-              ).toLocaleDateString("en-IN", {
-                month: "short",
-                year: "numeric",
-              })
+            ? new Date(`${listing.available_from}T00:00:00`).toLocaleDateString(
+                "en-IN",
+                {
+                  month: "short",
+                  year: "numeric",
+                },
+              )
             : "Flexible",
 
           image: profile?.profile_picture,
@@ -107,40 +103,30 @@ function Roomies() {
     } catch (err) {
       console.error("Roomies loading error:", err);
 
-      setError(
-        err.message || "Unable to load roomies."
-      );
+      setError(err.message || "Unable to load roomies.");
     } finally {
       setLoading(false);
     }
   }
 
   function handleCreateListing() {
-  if (!profile?.college_verified) {
-    alert(
-      "Please verify your college email before creating a listing."
-    );
+    if (!profile?.college_verified) {
+      alert("Please verify your college email before creating a listing.");
 
-    return;
+      return;
+    }
+
+    navigate("/roomies/create");
   }
-
-  navigate("/roomies/create");
-}
 
   return (
     <div className="roomies-page">
-
       <NavBar theme="roomies" />
 
       <main>
-
         <section className="roomies-hero">
-
           <div className="roomies-hero-content">
-
-            <p className="roomies-eyebrow">
-              CLOCKIT • ROOMIES
-            </p>
+            <p className="roomies-eyebrow">CLOCKIT • ROOMIES</p>
 
             <h1>
               Find a roomie
@@ -149,21 +135,17 @@ function Roomies() {
             </h1>
 
             <p className="roomies-description">
-              Discover compatible roommates, comfortable
-              spaces, and people looking for a place to
-              call home.
+              Discover compatible roommates, comfortable spaces, and people
+              looking for a place to call home.
             </p>
 
             <div className="roomies-actions">
-
               <button
                 className="roomies-primary-btn"
                 onClick={() =>
-                  document
-                    .getElementById("roomie-search")
-                    ?.scrollIntoView({
-                      behavior: "smooth",
-                    })
+                  document.getElementById("roomie-search")?.scrollIntoView({
+                    behavior: "smooth",
+                  })
                 }
               >
                 Find a Roomie
@@ -176,14 +158,17 @@ function Roomies() {
                 Create a Listing
               </button>
 
+              <button
+                className="roomies-secondary-btn"
+                onClick={() => navigate("/roomies/my-listings")}
+              >
+                My Listings
+              </button>
             </div>
-
           </div>
 
           <div className="roomies-hero-visual">
-
             <div className="roomies-image-frame">
-
               <img
                 src="/roomies-hero.jpg"
                 alt="Friends spending time together"
@@ -192,10 +177,7 @@ function Roomies() {
 
               <div className="roomies-image-border"></div>
 
-              <div className="roomies-image-label">
-                ROOMIES
-              </div>
-
+              <div className="roomies-image-label">ROOMIES</div>
             </div>
 
             <div className="roomies-handwritten">
@@ -214,41 +196,25 @@ function Roomies() {
               <span></span>
               <span></span>
             </div>
-
           </div>
-
         </section>
 
         <section id="roomie-search">
-          <RoomieSearch
-            onSearch={loadRoomies}
-          />
+          <RoomieSearch onSearch={loadRoomies} />
         </section>
 
-        {loading && (
-          <div className="roomies-loading">
-            Loading roomies...
-          </div>
-        )}
+        {loading && <div className="roomies-loading">Loading roomies...</div>}
 
-        {error && (
-          <div className="roomies-error">
-            {error}
-          </div>
-        )}
+        {error && <div className="roomies-error">{error}</div>}
 
-        {!loading && !error && (
-          <FeaturedRoomies roomies={roomies} />
-        )}
+        {!loading && !error && <FeaturedRoomies roomies={roomies} />}
 
         <RoomieHowItWorks />
 
         <RoomieCTA />
-
       </main>
 
       <Footer theme="roomies" />
-
     </div>
   );
 }
